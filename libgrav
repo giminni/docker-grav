@@ -1,0 +1,252 @@
+#!/usr/bin/env bash
+
+#
+# usage function for all shell scripts
+#
+usage() {
+   local _RC=${1}
+   local _TEXT="${2}"
+   local _ARGS="${3:-""}"
+   local _NOTE="${4:-""}"
+   local _INFO="${5:-""}"
+   local _ARG1="${6:-""}"
+   local _ARG2="${7:-""}"
+   local _ARG3="${8:-""}"
+   local _ARG4="${9:-""}"
+   local _ARG5="${10:-""}"
+   local _ARG6="${11:-""}"
+   local _ARG7="${12:-""}"
+
+   case ${_RC}  in
+      1)
+         echo ${_TEXT}
+         echo ""
+         echo "${_ARGS}"
+         echo "${_NOTE}"
+         echo ""
+         test ! -z "${_ARG1}" && echo "${_ARG1}"
+         test ! -z "${_ARG2}" && echo "${_ARG2}"
+         test ! -z "${_ARG3}" && echo "${_ARG3}"
+         test ! -z "${_ARG4}" && echo "${_ARG4}"
+         test ! -z "${_ARG5}" && echo "${_ARG5}"
+         test ! -z "${_ARG6}" && echo "${_ARG6}"
+         test ! -z "${_ARG7}" && echo "${_ARG7}"
+         echo ""
+         echo "${_INFO}"
+      ;;
+
+      *)
+         echo ""
+         echo ${_TEXT}
+      ;;
+   
+   esac
+   
+   exit ${_RC}
+}
+
+#
+# build function for grav_build.sh script
+#
+build() {
+   local _RC=0
+   local _GRAV_KIND="${1}"
+   local _GRAV_USER="${2}"
+   local _GRAV_NAME="${3}"
+   local _GRAV_TAG="${4}"
+   local _GRAV_SECS="${5}"
+   local _GRAV_PRIV="${6}"
+   local _GRAV_PUB="${7}"
+   local _GRAV_DIST="${8}"
+   local _GRAV_ARCH="${9}"
+   local _GRAV_SSH="${10}"
+   local _GRAV_VER="${11}"
+
+   local _GRAV_CMD="${FUNCNAME[0]}"
+ 
+   sudo docker ps | grep "${_GRAV_NAME}" | awk '{print $1}' | xargs -r sudo docker rm -f
+   _RC=$?
+
+   case "${_GRAV_CMD}" in
+      build)
+         sudo docker buildx create \
+            --name grav_builder \
+            --node grav_builder0 \
+            --platform linux/amd64 \
+            --use
+
+         sudo docker buildx ${_GRAV_CMD} \
+            --progress=auto \
+            --load \
+            --cache-from=type=local,id=${_GRAV_NAME},src=${PWD}/.cache/${_GRAV_NAME} \
+            --cache-to=type=local,id=${_GRAV_NAME},dest=${PWD}/.cache/${_GRAV_NAME} \
+            --secret id=grav_pwd.key,src=${_GRAV_SECS} \
+            --secret id=grav_rsa,src=${_GRAV_PRIV} \
+            --secret id=grav_rsa.pub,src=${_GRAV_PUB} \
+            --build-arg GRAV_VER=${_GRAV_VER} \
+            --build-arg GRAV_USER=${_GRAV_USER} \
+            --tag ${_GRAV_USER}/${_GRAV_NAME}:${_GRAV_TAG} \
+            --file ${PWD}/${_GRAV_SSH} \
+            ${PWD}
+      ;;
+
+      *)
+         usage 2 "FAIL: Build command not found: ${_GRAV_CMD}!"
+      ;;
+   esac
+           
+    _RC=$?
+
+
+   return ${_RC}
+}
+
+#
+# dovol function for grav_dovol.sh script
+#
+dovol() {
+   local _RC=0
+   local _GRAV_CMD="${1}"
+   local _GRAV_NAME="${2}"
+   local _GRAV_VOL="${3}"
+ 
+   case "${_GRAV_CMD}" in
+      create)
+         sudo docker volume "${_GRAV_CMD}" \
+            --driver local \
+            --opt type=none \
+            --opt device="${_GRAV_VOL}" \
+            --opt o=bind "${_GRAV_NAME}" 1>/dev/stderr
+         
+         mkdir -vp ${_GRAV_VOL}
+         echo "GRAV_VOL=${_GRAV_VOL}" > ${PWD}/.context.vol
+
+      ;;
+
+      inspect)
+         sudo docker volume inspect \
+            "${_GRAV_NAME}" 1>/dev/stderr
+      ;;
+
+      list)
+         sudo docker volume ls 1>/dev/stderr 
+      ;;
+
+      remove)
+         sudo docker volume rm \
+            "${_GRAV_NAME}" 1>/dev/stderr
+         
+         sudo rm -rf "${_GRAV_VOL}"
+         rm -f ${PWD}/.context.vol
+      ;;
+
+      *)
+         usage 2 "FAIL: Volume command not found: ${_GRAV_CMD}"
+      ;;
+   esac
+   
+   echo _RC=$?
+
+   return ${_RC}
+}
+
+#
+# mkpwd function for grav_mkpwd.sh script
+#
+mkpwd() {
+   local _RC=0
+   local _GRAV_PASS="${1}"
+   local _GRAV_USER="${2}"
+   local _GRAV_SECS="${3}"
+   local _GRAV_PW
+
+   _GRAV_PW="$(openssl passwd -6 -salt $(openssl rand -base64 32) ${_GRAV_PASS})"
+   
+   _RC=$?
+
+   chmod 600 ${_GRAV_SECS}
+
+   echo ${_GRAV_USER}:${_GRAV_PW} > ${_GRAV_SECS}
+   _RC=$?
+   
+   chmod 400 ${_GRAV_SECS}
+
+   return ${_RC}
+}
+
+#
+# mkssh function for grav_mkssh.sh script
+#
+mkssh() {
+   local _RC=0
+   local _GRAV_EMAIL="${1}"
+   local _GRAV_TYPE="${2}"
+   local _GRAV_LENGTH="${3}"
+   local _GRAV_SSH="${4}"
+
+   ssh-keygen -C "${_GRAV_EMAIL}" -t ${_GRAV_TYPE} -b ${_GRAV_LENGTH} -f "${_GRAV_SSH}" -N ''
+
+   _RC=$?
+
+   return ${_RC}
+}
+
+#
+# Purge function for grav_clean.sh script
+#
+purge() {
+   local _RC=0
+   local _GRAV_NAME="${1}"
+
+   sudo docker ps -a | grep ${_GRAV_NAME} | awk '{print $1}' | xargs -r sudo docker rm -f
+   RC=$?
+   sudo docker images | grep ${_GRAV_NAME} | awk '{print $1}' | xargs -r sudo docker rmi -f
+   RC=$?
+   sudo docker system prune -f
+   RC=$?
+
+   return ${_RC}
+}
+
+#
+# run function for grav_run.sh script
+#
+run() {
+   local _GRAV_USER="${1}"
+   local _GRAV_NAME="${2}"
+   local _GRAV_TAG="${3}"
+   local _GRAV_VOL="${4}"
+
+   sudo docker ps -a | grep ${_GRAV_NAME} | awk '{print $1}' | xargs -r sudo docker rm -f
+
+   sudo docker run -d \
+      --name ${_GRAV_NAME} \
+      --hostname ${_GRAV_NAME}p01 \
+      --restart always \
+      --publish 0.0.0.0:80:80/tcp \
+      --publish 0.0.0.0:2222:22/tcp \
+      --publish 0.0.0.0:9222:9003/tcp \
+      --mount type=volume,src=${_GRAV_VOL},dst=/var/www/html \
+      ${_GRAV_USER}/${_GRAV_NAME}:${_GRAV_TAG}
+
+      _RC=$?
+
+   return ${_RC}
+}
+
+#
+# shell function for grav_shell.sh script
+#
+shell() {
+   local _RC=0
+   local _GRAV_NAME="${1}"
+   local _GRAV_SHELL="${2}"
+
+   sudo docker exec -ti \
+      ${_GRAV_NAME} \
+      ${_GRAV_SHELL}
+
+   _RC=$?
+
+   return ${_RC}
+}

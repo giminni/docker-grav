@@ -1,0 +1,11 @@
+**/.cache
+**/.context**
+**/.volumes
+**/.DS_store
+**/node_modules
+**/*.org
+
+# Only in .gitignore
+**/*_rsa**
+**/*key
+**/*zip
