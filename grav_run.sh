@@ -37,11 +37,10 @@ main() {
 
    if [ ${_ARGC} -lt 1 ]; then usage 1 "${_GRAV_TEXT}" "${_GRAV_ARGS}" "${_GRAV_NOTE}" "${_GRAV_INFO}" "${_GRAV_ARG1}" "${_GRAV_ARG2}" "${_GRAV_ARG3}" "${_GRAV_ARG4}"; fi
 
-   # Check if keys and volume are available
-   if [ ! -f ${PWD}/.context.secs ]; then usage 2 "FAIL: User and password not provided! Please run grav_mkpwd.sh first.";
-      elif [ ! -f ${PWD}/.context.ssh ]; then usage 2 "FAIL: SSH files not provided! Please run grav_mkssh.sh first.";
-      elif [ ! -f ${PWD}/.context.cache ]; then usage 2 "FAIL: Cache volume not provided! Please run grav_dovol.sh first.";
-      elif [ ! -f ${PWD}/.context.vol ]; then usage 2 "FAIL: Data volume not provided! Please run grav_dovol.sh first."; 
+   # Check if keys and volumes are available
+   if [ ! -f ${PWD}/.context.secs ]; then usage 2 "FAIL: User and password not provided! Please run grav_mkpwd.sh ... first.";
+      elif [ ! -f ${PWD}/.context.ssh ]; then usage 2 "FAIL: SSH files not provided! Please run grav_mkssh.sh ... first.";
+      elif [ ! -f ${PWD}/.context.vol ]; then usage 2 "FAIL: Data volume not provided! Please run grav_dovol.sh mkvol ... first."; 
    fi
 
    run "${_GRAV_USER}" "${_GRAV_NAME}" "${_GRAV_TAG}" "${_GRAV_VOL}"

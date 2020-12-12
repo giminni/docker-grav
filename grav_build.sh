@@ -50,14 +50,24 @@ main() {
 
    if [ ${_ARGC} -lt 1 ]; then usage 1 "${_GRAV_TEXT}" "${_GRAV_ARGS}" "${_GRAV_NOTE}" "${_GRAV_INFO}" "${_GRAV_ARG1}" "${_GRAV_ARG2}" "${_GRAV_ARG3}" "${_GRAV_ARG4}" "${_GRAV_ARG5}"  "${_GRAV_ARG6}" "${_GRAV_ARG7}"; fi
 
-   if [ ! -f ${PWD}/.context.secs ]; then usage 2 "FAIL: User and password not provided! Please run grav_mkpwd.sh first.";
-      elif [ ! -f ${PWD}/.context.ssh ]; then usage 2 "FAIL: SSH files not provided! Please run grav_mkssh.sh first.";
-      elif [ ! -f ${PWD}/.context.cache ]; then usage 2 "FAIL: Cache volume not provided! Please run grav_dovol.sh first.";
+   if [ ! -f ${PWD}/.context.secs ]; then usage 2 "FAIL: User and password not provided! Please run grav_mkpwd.sh ... first.";
+      elif [ ! -f ${PWD}/.context.ssh ]; then usage 2 "FAIL: SSH files not provided! Please run grav_mkssh.sh ... first.";
    fi
 
    if [ "${_GRAV_KIND}" == "testing" ]; then _GRAV_VER="${GRAV_DEV}?${_GRAV_KIND}"; fi
 
-   build "${_GRAV_KIND}" "${_GRAV_USER}" "${_GRAV_NAME}" "${_GRAV_TAG}" "${_GRAV_SECS}" "${_GRAV_PRIV}" "${_GRAV_PUB}" "${_GRAV_DIST}" "${_GRAV_ARCH}" "${_GRAV_FILE}" "${_GRAV_VER}"
+   build \
+      "${_GRAV_KIND}" \
+      "${_GRAV_USER}" \
+      "${_GRAV_NAME}" \
+      "${_GRAV_TAG}" \
+      "${_GRAV_SECS}" \
+      "${_GRAV_PRIV}" \
+      "${_GRAV_PUB}" \
+      "${_GRAV_DIST}" \
+      "${_GRAV_ARCH}" \
+      "${_GRAV_FILE}" \
+      "${_GRAV_VER}"
 
    RC=$?
 
