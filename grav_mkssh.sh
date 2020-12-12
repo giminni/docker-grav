@@ -32,8 +32,8 @@ main() {
    local _GRAV_ARG1="ARG1:     grav_email: any"
    local _GRAV_ARG2="ARG2: [grav_keytype]: rsa|dsa|ecdsa - (*=rsa)"
    local _GRAV_ARG3="ARG3:  [grav_keylen]: 2048-8192     - (*=4096)"
-   local _GRAV_ARG4="ARG4:    [grav_user]: any|(*)       - (*=current-user)"
-   local _GRAV_ARG5="ARG5: [grav_keyfile]: any|(*)       - (*=${PWD}/grav_<grav-keytype>.key)"
+   local _GRAV_ARG4="ARG4:    [grav_user]: any|(*)       - (*=<current-user>)"
+   local _GRAV_ARG5="ARG5: [grav_keyfile]: any|(*)       - (*=<current-dir>/grav_<grav-keytype>.key)"
    local _GRAV_INFO="INFO: ${_CMD} grav@grav.org rsa 4096 grav ${PWD}/grav_rsa.key"
 
    if [ ${_ARGC} -lt 1 ]; then usage 1 "${_GRAV_TEXT}" "${_GRAV_ARGS}" "${_GRAV_NOTE}" "${_GRAV_INFO}" "${_GRAV_ARG1}" "${_GRAV_ARG2}" "${_GRAV_ARG3}" "${_GRAV_ARG4}" "${_GRAV_ARG5}"; fi

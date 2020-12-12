@@ -29,8 +29,8 @@ main() {
    local _GRAV_ARGS="ARGS: ${_CMD} grav_pwd [grav_user] [grav_pwdfile]"
    local _GRAV_NOTE="NOTE: (*) are default values, (#) are recommended values"
    local _GRAV_ARG1="ARG1:     grav_pwd: any|(#) - (#=min 12 chars length)"
-   local _GRAV_ARG2="ARG2:    grav_user: any|(*) - (*=current-user,#=grav)"
-   local _GRAV_ARG3="ARG3: grav_pwdfile: any|(*) - (*=${PWD}/grav_pwd.key]"
+   local _GRAV_ARG2="ARG2:    grav_user: any|(*) - (*=<current-user>,#=grav)"
+   local _GRAV_ARG3="ARG3: grav_pwdfile: any|(*) - (*=<current-dir>/grav_pwd.key]"
    local _GRAV_INFO="INFO: ${_CMD} mypassword grav ${PWD}/grav_pwd.key"
 
    if [ ${_ARGC} -lt 1 ]; then usage 1 "${_GRAV_TEXT}" "${_GRAV_ARGS}" "${_GRAV_NOTE}" "${_GRAV_INFO}" "${_GRAV_ARG1}" "${_GRAV_ARG2}" "${_GRAV_ARG3}"; fi

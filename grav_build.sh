@@ -40,18 +40,19 @@ main() {
    local _GRAV_ARGS="ARGS: ${_CMD} grav_kind [grav_user] [grav_imgname] [grav_tagname] [grav_pwdfile] [grav_privfile] [grav_pubfile]"
    local _GRAV_NOTE="NOTE: (*) are default values, (#) are recommended values"
    local _GRAV_ARG1="ARG1:       grav_kind: latest|testing"
-   local _GRAV_ARG2="ARG2:     [grav_user]: any|(*) - (*=current-user,#=grav)"
+   local _GRAV_ARG2="ARG2:     [grav_user]: any|(*) - (*=<current-user>,#=grav)"
    local _GRAV_ARG3="ARG3:  [grav_imgname]: any|(*) - (*=grav)"
    local _GRAV_ARG4="ARG4:  [grav_tagname]: any|(*) - (*=latest)"
-   local _GRAV_ARG5="ARG5:  [grav_pwdfile]: any|(*) - (*=${PWD}/grav_pwd.key)"
-   local _GRAV_ARG6="ARG6: [grav_privfile]: any|(*) - (*=${PWD}/grav_rsa)"
-   local _GRAV_ARG7="ARG7:  [grav_pubfile]: any|(*) - (*=${PWD}/grav_rsa.pub)"
+   local _GRAV_ARG5="ARG5:  [grav_pwdfile]: any|(*) - (*=<current-dir>/grav_pwd.key)"
+   local _GRAV_ARG6="ARG6: [grav_privfile]: any|(*) - (*=<current-dir>/grav_rsa)"
+   local _GRAV_ARG7="ARG7:  [grav_pubfile]: any|(*) - (*=<current-dir>/grav_rsa.pub)"
    local _GRAV_INFO="INFO: ${_CMD} latest grav grav latest ${PWD}/grav_pwd.key ${PWD}/grav_rsa ${PWD}/grav_rsa.pub"
 
    if [ ${_ARGC} -lt 1 ]; then usage 1 "${_GRAV_TEXT}" "${_GRAV_ARGS}" "${_GRAV_NOTE}" "${_GRAV_INFO}" "${_GRAV_ARG1}" "${_GRAV_ARG2}" "${_GRAV_ARG3}" "${_GRAV_ARG4}" "${_GRAV_ARG5}"  "${_GRAV_ARG6}" "${_GRAV_ARG7}"; fi
 
    if [ ! -f ${PWD}/.context.secs ]; then usage 2 "FAIL: User and password not provided! Please run grav_mkpwd.sh first.";
       elif [ ! -f ${PWD}/.context.ssh ]; then usage 2 "FAIL: SSH files not provided! Please run grav_mkssh.sh first.";
+      elif [ ! -f ${PWD}/.context.cache ]; then usage 2 "FAIL: Cache volume not provided! Please run grav_dovol.sh first.";
    fi
 
    if [ "${_GRAV_KIND}" == "testing" ]; then _GRAV_VER="${GRAV_DEV}?${_GRAV_KIND}"; fi
