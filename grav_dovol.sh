@@ -28,10 +28,10 @@ main() {
    local _GRAV_TEXT="FAIL: Arguments are not provided!"
    local _GRAV_ARGS="ARGS: ${_CMD} grav_volcmd [grav_volname] [grav_volfile]"
    local _GRAV_NOTE="NOTE: (*) are default values, (#) are recommended values"
-   local _GRAV_ARG1="ARG1:    grav_volcmd: create|remove"
+   local _GRAV_ARG1="ARG1:    grav_volcmd: mkvol|rmvol|mkcache|rmcache"
    local _GRAV_ARG2="ARG2: [grav_volname]: any|(*) - (*=grav_data)"
-   local _GRAV_ARG3="ARG3: [grav_volfile]: any|(*) - (*=${PWD}/.volumes/[grav_volname])"
-   local _GRAV_INFO="INFO: ${_CMD} create grav_data ${PWD}/.volumes/${_GRAV_NAME}"
+   local _GRAV_ARG3="ARG3: [grav_volfile]: any|(*) - (*=<current-dir>/.volumes/<grav_volname>)"
+   local _GRAV_INFO="INFO: ${_CMD} mkvol grav_data ${PWD}/.volumes/${_GRAV_NAME}"
 
    if [ ${_ARGC} -lt 1 ]; then usage 1 "${_GRAV_TEXT}" "${_GRAV_ARGS}" "${_GRAV_NOTE}" "${_GRAV_INFO}" "${_GRAV_ARG1}" "${_GRAV_ARG2}"  "${_GRAV_ARG3}"; fi
 

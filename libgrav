@@ -68,7 +68,7 @@ build() {
    _RC=$?
 
    case "${_GRAV_CMD}" in
-      build)
+      "build")
          sudo docker buildx create \
             --name grav_builder \
             --node grav_builder0 \
@@ -78,8 +78,8 @@ build() {
          sudo docker buildx ${_GRAV_CMD} \
             --progress=auto \
             --load \
-            --cache-from=type=local,id=${_GRAV_NAME},src=${PWD}/.cache/${_GRAV_NAME} \
-            --cache-to=type=local,id=${_GRAV_NAME},dest=${PWD}/.cache/${_GRAV_NAME} \
+            --cache-from=type=local,id=${_GRAV_NAME},src=${PWD}/.cache/docker/${_GRAV_NAME} \
+            --cache-to=type=local,id=${_GRAV_NAME},dest=${PWD}/.cache/docker/${_GRAV_NAME} \
             --secret id=grav_pwd.key,src=${_GRAV_SECS} \
             --secret id=grav_rsa,src=${_GRAV_PRIV} \
             --secret id=grav_rsa.pub,src=${_GRAV_PUB} \
@@ -111,8 +111,8 @@ dovol() {
    local _GRAV_VOL="${3}"
  
    case "${_GRAV_CMD}" in
-      create)
-         sudo docker volume "${_GRAV_CMD}" \
+      "mkvol")
+         sudo docker volume create \
             --driver local \
             --opt type=none \
             --opt device="${_GRAV_VOL}" \
@@ -120,19 +120,37 @@ dovol() {
          
          mkdir -vp ${_GRAV_VOL}
          echo "GRAV_VOL=${_GRAV_VOL}" > ${PWD}/.context.vol
-
       ;;
 
-      inspect)
+      "inspect")
          sudo docker volume inspect \
             "${_GRAV_NAME}" 1>/dev/stderr
       ;;
 
-      list)
+      "mkcache")
+         sudo docker volume create \
+            --driver local \
+            --opt type=none \
+            --opt device="${_GRAV_VOL}" \
+            --opt o=bind "${_GRAV_NAME}" 1>/dev/stderr
+         
+         mkdir -vp ${_GRAV_VOL}
+         echo "GRAV_CACHE=${_GRAV_VOL}" > ${PWD}/.context.cache
+      ;;
+
+      "rmcache")
+         sudo docker volume rm \
+            "${_GRAV_NAME}" 1>/dev/stderr
+         
+         sudo rm -rf "${_GRAV_VOL}"
+         rm -f ${PWD}/.context.cache
+      ;;
+
+      "list")
          sudo docker volume ls 1>/dev/stderr 
       ;;
 
-      remove)
+      "rmvol")
          sudo docker volume rm \
             "${_GRAV_NAME}" 1>/dev/stderr
          
