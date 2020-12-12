@@ -16,15 +16,15 @@ source ${PWD}/libgrav
 # ##### #
 main() {
    local _ARGC=${1}
-   local _ARGV="${2}"
+   local _ARGV=("${@}")
    
    local _RC=0
    local _CMD=$(basename ${0})
 
-   local _GRAV_USER="${_ARGV[0]}"
-   local _GRAV_NAME="${_ARGV[1]:-"grav"}"
-   local _GRAV_TAG="${_ARGV[2]:-"latest"}"
-   local _GRAV_VOL="${_ARGV[3]:-"grav_data"}"
+   local _GRAV_USER="${_ARGV[1]}"
+   local _GRAV_NAME="${_ARGV[2]:-"grav"}"
+   local _GRAV_TAG="${_ARGV[3]:-"latest"}"
+   local _GRAV_VOL="${_ARGV[4]:-"grav_data"}"
    
    local _GRAV_TEXT="FAIL: Arguments are not provided!"
    local _GRAV_ARGS="ARGS: ${_CMD} grav_user [grav_imgname=grav] [grav_imgtag=latest] [grav_volname=grav_data]"
@@ -59,7 +59,7 @@ main() {
 # #### #
 # MAIN #
 # #### #
-main ${ARGC} "${ARGV}"
+main ${ARGC} "${ARGV[@]}"
 
 RC=$?
 

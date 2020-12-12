@@ -16,15 +16,15 @@ source ${PWD}/libgrav
 # ##### #
 main() {
    local _ARGC=${1}
-   local _ARGV="${2}"
+   local _ARGV=("${@}")
    
    local _RC=0
    local _CMD=$(basename ${0})
 
-   local _GRAV_EMAIL="${_ARGV[0]}"
-   local _GRAV_TYPE="${_ARGV[1]:-"rsa"}"
-   local _GRAV_LEN="${_ARGV[2]:-4096}"
-   local _GRAV_SSH="${_ARGV[3]:-${PWD}/grav_${_GRAV_TYPE}}"
+   local _GRAV_EMAIL="${_ARGV[1]}"
+   local _GRAV_TYPE="${_ARGV[2]:-"rsa"}"
+   local _GRAV_LEN="${_ARGV[3]:-4096}"
+   local _GRAV_SSH="${_ARGV[4]:-${PWD}/grav_${_GRAV_TYPE}}"
 
    local _GRAV_TEXT="FAIL: Arguments are not provided!"
    local _GRAV_ARGS="ARGS: ${_CMD} grav_email [grav_keytype] [grav_keylen] [grav_user] [grav_keyfile]"
@@ -54,7 +54,7 @@ main() {
 # #### #
 # MAIN #
 # #### #
-main ${ARGC} "${ARGCV}"
+main ${ARGC} "${ARGV[@]}"
 
 RC=$?
 

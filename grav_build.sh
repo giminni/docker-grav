@@ -18,19 +18,19 @@ source ${PWD}/libgrav
 # ##### #
 main() {
    local _ARGC=${1}
-   local _ARGV="${2}"
+   local _ARGV=("${@}")
 
    local _RC=0
    local _CMD=$(basename ${0})
 
    # Enter latest or testing
-   local _GRAV_KIND="${_ARGV[0]}"
-   local _GRAV_USER="${_ARGV[1]:-$(id -un)}"
-   local _GRAV_NAME="${_ARGV[2]:-"grav"}"
-   local _GRAV_TAG="${_ARGV[3]:-"latest"}"
-   local _GRAV_SECS="${_ARGV[4]:-"${PWD}/grav_pwd.key"}"
-   local _GRAV_PRIV="${_ARGV[5]:-"${PWD}/grav_rsa"}"
-   local _GRAV_PUB="${_ARGV[6]:-"${PWD}/grav_rsa.pub"}"
+   local _GRAV_KIND="${_ARGV[1]}"
+   local _GRAV_USER="${_ARGV[2]:-$(id -un)}"
+   local _GRAV_NAME="${_ARGV[3]:-"grav"}"
+   local _GRAV_TAG="${_ARGV[4]:-"latest"}"
+   local _GRAV_SECS="${_ARGV[5]:-"${PWD}/grav_pwd.key"}"
+   local _GRAV_PRIV="${_ARGV[6]:-"${PWD}/grav_rsa"}"
+   local _GRAV_PUB="${_ARGV[7]:-"${PWD}/grav_rsa.pub"}"
    local _GRAV_DIST=".buster"
    local _GRAV_ARCH=".amd64"
    local _GRAV_FILE="Dockerfile${_GRAV_DIST}${_GRAV_ARCH}"
@@ -67,7 +67,7 @@ main() {
 # #### #
 # MAIN #
 # #### #
-main ${ARGC} "${ARGV}"
+main ${ARGC} "${ARGV[@]}"
 
 RC=$?
 

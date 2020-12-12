@@ -101,90 +101,90 @@ RUN --mount=type=cache,id=php,target=/root/.ccache \
     pear config-set php_ini /usr/local/etc/php/conf.d/php-recommended.ini; \
     pecl install xdebug;
 
-#RUN set -ex; \
-#    echo "[STAGE] PHP configuration..."; \
-#    echo "Setting recommended PHP.ini values..."; \
-#    { \
-#    echo 'opcache.memory_consumption=128'; \
-#    echo 'opcache.interned_strings_buffer=8'; \
-#    echo 'opcache.max_accelerated_files=4000'; \
-#    echo 'opcache.revalidate_freq=2'; \
-#    echo 'opcache.fast_shutdown=1'; \
-#    echo 'opcache.enable_cli=1'; \
-#    echo 'upload_max_filesize=128M'; \
-#    echo 'post_max_size=128M'; \
-#    echo 'expose_php=off'; \
-#    echo ''; \
-#    echo '[XDebug]'; \
-#    echo 'xdebug.remote_enable=1'; \
-#    echo 'xdebug.remote_autostart=1'; \
-#    } > /usr/local/etc/php/conf.d/php-recommended.ini
-#
-#RUN set -ex; \    
-#    echo "[STAGE] Grav installation..."; \
-#    echo "Installing grav ${GRAV_VER}..."; \
-#    test -f /tmp/${GRAV_FILE} || wget --progress=bar:force \
-#        -O /tmp/${GRAV_FILE} \
-#        ${GRAV_URL}; \
-#    cd /var/www; \
-#    rm -rf /var/www/html;\
-#    unzip /tmp/${GRAV_FILE}; \
-#    ln -s /var/www/grav-admin /var/www/html;
-#
-#RUN set -ex; \    
-#    echo "[STAGE] OS configuration..."; \
-#    echo "Setting ownership to www-data..."; \
-#    chown -R www-data:www-data /var/www/; \
-#    echo "Setting composer link..."; \
-#    ln -s /var/www/html/bin/composer-phar /var/www/html/bin/composer; \
-#    echo "Creating run directory for SSH daemon..."; \ 
-#    mkdir -vp /run/sshd; \
-#    echo "Downloading su-exec..."; \
-#    test -f /tmp/${GRAV_SUEXEC_FILE} || wget --progress=bar:force \
-#        -O /tmp/${GRAV_SUEXEC_FILE} \
-#    ${GRAV_SUEXEC_URL}/${GRAV_SUEXEC_FILE}; \
-#    echo "Compiling su-exec..."; \
-#    gcc -Wall /tmp/${GRAV_SUEXEC_FILE} -o /usr/local/bin/su-exec;
-#
-#RUN set -ex; \    
-#    echo "[STAGE] User ${GRAV_USER} installation..."; \
-#    echo "Adding user and group ${GRAV_USER}..."; \
-#    groupadd --gid ${GRAV_GID} ${GRAV_USER}; \
-#    useradd --create-home --shell ${GRAV_SHELL} --uid ${GRAV_UID} --gid ${GRAV_GID} ${GRAV_USER}; \
-#    echo "Adding ${GRAV_USER} to user group www-data..."; \
-#    usermod -a -G www-data ${GRAV_USER}; \
-#    echo "Creating ${GRAV_USER} SSH directory..."; \
-#    mkdir -vp /home/${GRAV_USER}/.ssh; \
-#    touch /home/${GRAV_USER}/.ssh/known_hosts; \
-#    touch /home/${GRAV_USER}/.ssh/authorized_keys; \
-#    ssh-keyscan -t rsa github.com >> /home/${GRAV_USER}/.ssh/known_hosts; \
-#    echo "Changing ownership to ${GRAV_USER}"; \
-#    chown -R ${GRAV_USER}:${GRAV_USER} /home/${GRAV_USER};
-#
-#RUN --mount=type=secret,id=grav_pwd.key,mode=400,required=true \
-#    cat /run/secrets/grav_pwd.key | chpasswd -e;
-#
-#RUN --mount=type=secret,id=grav_rsa,mode=400 \
-#    cat /run/secrets/grav_rsa > /home/${GRAV_USER}/.ssh/id_rsa;
-#
-#RUN --mount=type=secret,id=grav_rsa.pub,mode=600 \
-#    cat /run/secrets/grav_rsa.pub > /home/${GRAV_USER}/.ssh/id_rsa.pub;
-#
-#RUN set -ex; \
-#    echo "[STAGE] User ${GRAV_USER} configuration..."; \
-#    echo "Setting SSH file ownership..."; \
-#    cat /home/${GRAV_USER}/.ssh/id_rsa.pub >> /home/${GRAV_USER}/.ssh/authorized_keys; \
-#    chmod 400 /home/${GRAV_USER}/.ssh/id_rsa; \
-#    chmod 600 /home/${GRAV_USER}/.ssh/id_rsa.pub; \
-#    chmod 600 /home/${GRAV_USER}/.ssh/authorized_keys; \
-#    chown -R ${GRAV_USER}:${GRAV_USER} /home/${GRAV_USER}/.ssh;
-#
-#RUN set -ex; \
-#    echo "[STAGE] Cleanup installation..."; \
-#    echo "Removing installation artefacts..."; \
-#    apt autoremove -y; \
-#    rm -rf /var/lib/apt/lists/*; \
-#    rm -rf /tmp/*;
+RUN set -ex; \
+    echo "[STAGE] PHP configuration..."; \
+    echo "Setting recommended PHP.ini values..."; \
+    { \
+    echo 'opcache.memory_consumption=128'; \
+    echo 'opcache.interned_strings_buffer=8'; \
+    echo 'opcache.max_accelerated_files=4000'; \
+    echo 'opcache.revalidate_freq=2'; \
+    echo 'opcache.fast_shutdown=1'; \
+    echo 'opcache.enable_cli=1'; \
+    echo 'upload_max_filesize=128M'; \
+    echo 'post_max_size=128M'; \
+    echo 'expose_php=off'; \
+    echo ''; \
+    echo '[XDebug]'; \
+    echo 'xdebug.remote_enable=1'; \
+    echo 'xdebug.remote_autostart=1'; \
+    } > /usr/local/etc/php/conf.d/php-recommended.ini
+
+RUN set -ex; \    
+    echo "[STAGE] Grav installation..."; \
+    echo "Installing grav ${GRAV_VER}..."; \
+    test -f /tmp/${GRAV_FILE} || wget --progress=bar:force \
+        -O /tmp/${GRAV_FILE} \
+        ${GRAV_URL}; \
+    cd /var/www; \
+    rm -rf /var/www/html;\
+    unzip /tmp/${GRAV_FILE}; \
+    ln -s /var/www/grav-admin /var/www/html;
+
+RUN set -ex; \    
+    echo "[STAGE] OS configuration..."; \
+    echo "Setting ownership to www-data..."; \
+    chown -R www-data:www-data /var/www/; \
+    echo "Setting composer link..."; \
+    ln -s /var/www/html/bin/composer-phar /var/www/html/bin/composer; \
+    echo "Creating run directory for SSH daemon..."; \ 
+    mkdir -vp /run/sshd; \
+    echo "Downloading su-exec..."; \
+    test -f /tmp/${GRAV_SUEXEC_FILE} || wget --progress=bar:force \
+        -O /tmp/${GRAV_SUEXEC_FILE} \
+    ${GRAV_SUEXEC_URL}/${GRAV_SUEXEC_FILE}; \
+    echo "Compiling su-exec..."; \
+    gcc -Wall /tmp/${GRAV_SUEXEC_FILE} -o /usr/local/bin/su-exec;
+
+RUN set -ex; \    
+    echo "[STAGE] User ${GRAV_USER} installation..."; \
+    echo "Adding user and group ${GRAV_USER}..."; \
+    groupadd --gid ${GRAV_GID} ${GRAV_USER}; \
+    useradd --create-home --shell ${GRAV_SHELL} --uid ${GRAV_UID} --gid ${GRAV_GID} ${GRAV_USER}; \
+    echo "Adding ${GRAV_USER} to user group www-data..."; \
+    usermod -a -G www-data ${GRAV_USER}; \
+    echo "Creating ${GRAV_USER} SSH directory..."; \
+    mkdir -vp /home/${GRAV_USER}/.ssh; \
+    touch /home/${GRAV_USER}/.ssh/known_hosts; \
+    touch /home/${GRAV_USER}/.ssh/authorized_keys; \
+    ssh-keyscan -t rsa github.com >> /home/${GRAV_USER}/.ssh/known_hosts; \
+    echo "Changing ownership to ${GRAV_USER}"; \
+    chown -R ${GRAV_USER}:${GRAV_USER} /home/${GRAV_USER};
+
+RUN --mount=type=secret,id=grav_pwd.key,mode=400,required=true \
+    cat /run/secrets/grav_pwd.key | chpasswd -e;
+
+RUN --mount=type=secret,id=grav_rsa,mode=400 \
+    cat /run/secrets/grav_rsa > /home/${GRAV_USER}/.ssh/id_rsa;
+
+RUN --mount=type=secret,id=grav_rsa.pub,mode=600 \
+    cat /run/secrets/grav_rsa.pub > /home/${GRAV_USER}/.ssh/id_rsa.pub;
+
+RUN set -ex; \
+    echo "[STAGE] User ${GRAV_USER} configuration..."; \
+    echo "Setting SSH file ownership..."; \
+    cat /home/${GRAV_USER}/.ssh/id_rsa.pub >> /home/${GRAV_USER}/.ssh/authorized_keys; \
+    chmod 400 /home/${GRAV_USER}/.ssh/id_rsa; \
+    chmod 600 /home/${GRAV_USER}/.ssh/id_rsa.pub; \
+    chmod 600 /home/${GRAV_USER}/.ssh/authorized_keys; \
+    chown -R ${GRAV_USER}:${GRAV_USER} /home/${GRAV_USER}/.ssh;
+
+RUN set -ex; \
+    echo "[STAGE] Cleanup installation..."; \
+    echo "Removing installation artefacts..."; \
+    apt autoremove -y; \
+    rm -rf /var/lib/apt/lists/*; \
+    rm -rf /tmp/*;
 
 WORKDIR /var/www/html
 

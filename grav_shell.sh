@@ -20,13 +20,13 @@ source ${PWD}/libgrav
 # #### #
 main() {
    local _ARGC=${1}
-   local _ARGV="${2}"
+   local _ARGV=("${@}")
    
    local _RC=0
    local _CMD=$(basename ${0})
 
-   local _GRAV_SHELL="${_ARGV[0]:-"bash"}"
-   local _GRAV_NAME="${_ARGV[1]:-"grav"}"
+   local _GRAV_SHELL="${_ARGV[1]:-"bash"}"
+   local _GRAV_NAME="${_ARGV[2]:-"grav"}"
    
    local _GRAV_TEXT="FAIL: Arguments are not provided!"
    local _GRAV_ARGS="ARGS: ${0} grav_shell [grav_imgname]"
@@ -47,7 +47,7 @@ main() {
 # #### #
 # MAIN #
 # #### #
-main ${ARGC} "${ARGV}"
+main ${ARGC} "${ARGV[@]}"
 
 RC=$?
 
