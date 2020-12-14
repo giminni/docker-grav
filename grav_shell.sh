@@ -29,7 +29,7 @@ main() {
    local _GRAV_NAME="${_ARGV[2]:-"grav"}"
    
    local _GRAV_TEXT="FAIL: Arguments are not provided!"
-   local _GRAV_ARGS="ARGS: ${0} grav_shell [grav_imgname]"
+   local _GRAV_ARGS="ARGS: ${_CMD} grav_shell [grav_imgname]"
    local _GRAV_NOTE="NOTE: (*) are default values, (#) are recommended values"
    local _GRAV_ARG1="ARG1:     grav_shell: sh|ash|bash - (#=bash)"
    local _GRAV_ARG2="ARG2: [grav_imgname]: any|(*)     - (*=grav)"
