@@ -1,8 +1,10 @@
 **/.cache
 **/.context**
 **/.volumes
+**/.vscode
 **/.DS_store
 **/node_modules
+**/*.zip
 **/*.org
 
 # Only in .gitignore
