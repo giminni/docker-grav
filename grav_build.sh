@@ -21,6 +21,9 @@ main() {
    local _RC=0
    local _CMD=$(basename ${0})
 
+   local _GRAV_DEV="$(cat ${PWD}/.context.dev | cut -d'=' -f2)"
+   local _GRAV_PROD="$(cat ${PWD}/.context.prod | cut -d'=' -f2)"
+
    # Enter latest or testing
    local _GRAV_USER="${_ARGV[1]}"
    local _GRAV_NAME="${_ARGV[2]:-"grav-admin"}"
@@ -31,7 +34,6 @@ main() {
    local _GRAV_DIST=".buster"
    local _GRAV_ARCH=".amd64"
    local _GRAV_FILE="Dockerfile${_GRAV_DIST}${_GRAV_ARCH}"
-   local _GRAV_VER=="latest"
    local _GRAV_KIND="core"
    local _GRAV_URLFILE="${_GRAV_NAME}-${_GRAV_TAG}.zip"
    local _GRAV_URL="https://getgrav.org/download/${_GRAV_KIND}/${_GRAV_NAME}"
@@ -52,22 +54,22 @@ main() {
    if [ ! -f ${PWD}/.context.pass ] || [ ! -f $(cat ${PWD}/.context.pass | cut -d'=' -f2) ]; then usage 2 "FAIL: User and password not provided! Please run grav_mkpass.sh first...";
       elif [ ! -f ${PWD}/.context.ssh ] || [ ! -f $(cat ${PWD}/.context.ssh | cut -d'=' -f2) ]; then usage 2 "FAIL: SSH files not provided! Please run grav_mkssh.sh first...";
       elif [ ! -f ${PWD}/.context.cache ] || [ ! -d $(cat ${PWD}/.context.cache | cut -d'=' -f2) ]; then usage 2 "FAIL: Cache directory not provided! Please run grav_mkcache.sh first...";
+      elif [ ! -f ${PWD}/.context.dev ] || [ ! -n $(cat ${PWD}/.context.dev | cut -d'=' -f2) ]; then usage 2 "FAIL: Grav dev version not provided! Please run grav_getver.sh first...";
+      elif [ ! -f ${PWD}/.context.prod ] || [ ! -n $(cat ${PWD}/.context.prod | cut -d'=' -f2) ]; then usage 2 "FAIL: Grav prod version not provided! Please run grav_getver.sh first...";
    fi
 
    # Define core or skeleton package for download
    if [ "${_GRAV_NAME:0:13}" == "grav-skeleton" ]; then _GRAV_KIND="skeleton"; fi
 
-   # If a ? char exists remove it and resave variables
-   if [[ "${_GRAV_TAG}" =~ "?" ]]; then
-      _GRAV_VER="$(echo ${_GRAV_TAG} | cut -d'?' -f2)"
-      _GRAV_TAG="$(echo ${_GRAV_TAG} | cut -d'?' -f1)"
-      _GRAV_URLFILE="${_GRAV_NAME}-${_GRAV_TAG}?${_GRAV_VER}.zip"
-      _GRAV_URL="${_GRAV_URL}"/"${_GRAV_TAG}"?"${_GRAV_VER}"
-   else
-      _GRAV_URLFILE="${_GRAV_NAME}-${_GRAV_TAG}.zip"
-      _GRAV_URL="${_GRAV_URL}"/"${_GRAV_TAG}"
+   # Define URLs using the predefined version string from above
+   if [ "${_GRAV_TAG}" == "testing" ]; then
+      _GRAV_URLFILE="${_GRAV_NAME}-${_GRAV_DEV}?${_GRAV_TAG}.zip"
+      _GRAV_URL="${_GRAV_URL}"/"${_GRAV_DEV}"?"${_GRAV_TAG}"
+   elif [ "${_GRAV_TAG}" == "latest" ]; then
+      _GRAV_URLFILE="${_GRAV_NAME}-${_GRAV_PROD}.zip"
+      _GRAV_URL="${_GRAV_URL}"/"${_GRAV_PROD}"
    fi
-
+exit
    build \
       "${_GRAV_USER}" \
       "${_GRAV_NAME}" \
@@ -78,7 +80,6 @@ main() {
       "${_GRAV_DIST}" \
       "${_GRAV_ARCH}" \
       "${_GRAV_FILE}" \
-      "${_GRAV_VER}" \
       "${_GRAV_KIND}" \
       "${_GRAV_URLFILE}" \
       "${_GRAV_URL}"
