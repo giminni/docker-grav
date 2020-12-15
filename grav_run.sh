@@ -29,7 +29,7 @@ main() {
    local _GRAV_TEXT="FAIL: Arguments are not provided!"
    local _GRAV_ARGS="ARGS: ${_CMD} grav_user [grav_imgname=grav] [grav_imgtag=latest] [grav_voldata=grav_data]"
    local _GRAV_NOTE="NOTE: (*) are default values, (#) are recommended values"
-   local _GRAV_ARG1="ARG1:      grav_user: any|(*) - (*=<current-user>,#=grav)"
+   local _GRAV_ARG1="ARG1:      grav_user: any|(#) - (#=grav)"
    local _GRAV_ARG2="ARG2: [grav_imgname|: any|(*) - (*=grav)"
    local _GRAV_ARG3="ARG3:  [grav_imgtag|: any|(*) - (*=latest)"
    local _GRAV_ARG4="ARG4: [grav_voldata]: any|(*) - (*=grav_data)"
