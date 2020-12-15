@@ -59,10 +59,9 @@ build() {
    local _GRAV_DIST="${7}"
    local _GRAV_ARCH="${8}"
    local _GRAV_FILE="${9}"
-   local _GRAV_VER="${10}"
-   local _GRAV_KIND="${11}"
-   local _GRAV_URLFILE="${12}"
-   local _GRAV_URL="${13}"
+   local _GRAV_KIND="${10}"
+   local _GRAV_URLFILE="${11}"
+   local _GRAV_URL="${12}"
 
    local _GRAV_CMD="${FUNCNAME[0]}"
 
@@ -78,10 +77,11 @@ build() {
             --use
 
          sudo docker buildx "${_GRAV_CMD}" \
+            --platform linux/amd64 \
             --progress=text \
             --load \
-            --cache-from type=local,id=${_GRAV_NAME},src="${PWD}"/.cache/docker/"${_GRAV_NAME}" \
-            --cache-to type=local,id=${_GRAV_NAME},dest="${PWD}"/.cache/docker/"${_GRAV_NAME}" \
+            --cache-from type=local,id=${_GRAV_NAME},src="${PWD}"/.volumes/grav_cache/.dcache \
+            --cache-to type=local,id=${_GRAV_NAME},dest="${PWD}"/.volumes/grav_cache/.dcache \
             --secret id=grav_pwd.key,src="${_GRAV_PASS}" \
             --secret id=grav_rsa,src="${_GRAV_PRIV}" \
             --secret id=grav_rsa.pub,src="${_GRAV_PUB}" \
@@ -91,13 +91,13 @@ build() {
             --build-arg GRAV_KIND="${_GRAV_KIND}" \
             --build-arg GRAV_URLFILE="${_GRAV_URLFILE}" \
             --build-arg GRAV_URL="${_GRAV_URL}" \
-            --tag "${_GRAV_USER}"/"${_GRAV_NAME}"-"${_GRAV_TAG}":"${_GRAV_VER}" \
+            --tag "${_GRAV_USER}"/"${_GRAV_NAME}":"${_GRAV_TAG}" \
             --file "${PWD}"/"${_GRAV_FILE}" \
             ${PWD}
 
          sudo docker tag \
-            "${_GRAV_USER}"/"${_GRAV_NAME}"-"${_GRAV_TAG}":"${_GRAV_VER}" \
-            "${_GRAV_USER}"/"${_GRAV_NAME}"-"${_GRAV_TAG}":latest
+            "${_GRAV_USER}"/"${_GRAV_NAME}":"${_GRAV_TAG}" \
+            "${_GRAV_USER}"/"${_GRAV_NAME}":latest
       ;;
 
       *)
@@ -107,6 +107,28 @@ build() {
            
     _RC=$?
 
+
+   return ${_RC}
+}
+
+#
+# Getver function for grav_getver.sh script
+#
+getver() {
+   local _RC=0
+   local _GRAV_VER="${1}"
+
+   case "${_GRAV_VER}" in
+      prod) echo "GRAV_PROD=$(wget -O - -o /dev/null https://getgrav.org | grep 'Stable Version' | sed -e 's/<[^>]*>//g' | awk '{print $3}')"  > "${PWD}"/.context.prod 
+      ;;
+      
+      dev) echo "GRAV_DEV=$(wget -O - -o /dev/null https://getgrav.org |grep 'Release Candidate Version' | sed -e 's/<[^>]*>//g' | awk '{print $4}')" > "${PWD}"/.context.dev 
+      ;;
+          
+      *) usage 2 "FAIL: Parameter not defined: ${_GRAV_VER}!"
+      ;;
+
+   esac
 
    return ${_RC}
 }
@@ -213,9 +235,9 @@ purge() {
    RC=$?
    sudo docker buildx prune -f
    RC=$?
-   sudo rm -rf ${PWD}/.cache
-   RC=$?
    sudo rm -rf ${PWD}/.volumes/grav_cache/.ccache/*
+   RC=$?
+   sudo rm -rf ${PWD}/.volumes/grav_cache/.dcache/*
    RC=$?
 
    return ${_RC}
@@ -234,8 +256,8 @@ run() {
    sudo docker volume prune -f
 
    sudo docker run -d \
-      --name ${_GRAV_TAG} \
-      --hostname ${_GRAV_TAG}p01 \
+      --name ${_GRAV_NAME} \
+      --hostname ${_GRAV_NAME}p01 \
       --restart always \
       --publish 0.0.0.0:80:80/tcp \
       --publish 0.0.0.0:2222:22/tcp \
