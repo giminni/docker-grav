@@ -112,28 +112,6 @@ build() {
 }
 
 #
-# Getver function for grav_getver.sh script
-#
-getver() {
-   local _RC=0
-   local _GRAV_VER="${1}"
-
-   case "${_GRAV_VER}" in
-      prod) echo "GRAV_PROD=$(wget -O - -o /dev/null https://getgrav.org | grep 'Stable Version' | sed -e 's/<[^>]*>//g' | awk '{print $3}')"  > "${PWD}"/.context.prod 
-      ;;
-      
-      dev) echo "GRAV_DEV=$(wget -O - -o /dev/null https://getgrav.org |grep 'Release Candidate Version' | sed -e 's/<[^>]*>//g' | awk '{print $4}')" > "${PWD}"/.context.dev 
-      ;;
-          
-      *) usage 2 "FAIL: Parameter not defined: ${_GRAV_VER}!"
-      ;;
-
-   esac
-
-   return ${_RC}
-}
-
-#
 # mkcache function for grav_mkcache.sh script
 #
 mkcache() {
@@ -219,6 +197,28 @@ mkssh() {
 }
 
 #
+# Mkver function for grav_mkver.sh script
+#
+mkver() {
+   local _RC=0
+   local _GRAV_VER="${1}"
+
+   case "${_GRAV_VER}" in
+      prod) echo "GRAV_PROD=$(wget -O - -o /dev/null https://getgrav.org | grep 'Stable Version' | sed -e 's/<[^>]*>//g' | awk '{print $3}')"  > "${PWD}"/.context.prod 
+      ;;
+      
+      dev) echo "GRAV_DEV=$(wget -O - -o /dev/null https://getgrav.org |grep 'Release Candidate Version' | sed -e 's/<[^>]*>//g' | awk '{print $4}')" > "${PWD}"/.context.dev 
+      ;;
+          
+      *) usage 2 "FAIL: Argument is not defined: ${_GRAV_VER}!"
+      ;;
+
+   esac
+
+   return ${_RC}
+}
+
+#
 # Purge function for grav_prune.sh script
 #
 purge() {
@@ -259,9 +259,9 @@ run() {
       --name ${_GRAV_NAME} \
       --hostname ${_GRAV_NAME}p01 \
       --restart always \
-      --publish 0.0.0.0:80:80/tcp \
+      --publish 0.0.0.0:8080:80/tcp \
+      --publish 0.0.0.0:8443:443/tcp \
       --publish 0.0.0.0:2222:22/tcp \
-      --publish 0.0.0.0:9222:9003/tcp \
       --mount type=volume,src=${_GRAV_DATA},dst=/var/www/html \
       ${_GRAV_USER}/${_GRAV_NAME}:${_GRAV_TAG}
 
