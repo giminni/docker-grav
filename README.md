@@ -35,7 +35,7 @@ In addition other packages are included:
 * tree
 * wget 
 
-# Prerequisites
+## Prerequisites
 
 This Dockerfile needs the following prerequisites:
 
@@ -44,7 +44,7 @@ This Dockerfile needs the following prerequisites:
 * Install latest docker buildx plugin
   (See https://docs.docker.com/buildx/working-with-buildx/)
 
-# Project features
+## Project features
 
 This project includes the following features:
 
