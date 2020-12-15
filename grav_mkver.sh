@@ -31,7 +31,7 @@ main() {
 
    if [ ${_ARGC} -lt 1 ]; then usage 1 "${_GRAV_TEXT}" "${_GRAV_ARGS}" "${_GRAV_NOTE}" "${_GRAV_INFO}" "${_GRAV_ARG1}"; fi
    
-   getver "${_GRAV_VER}"
+   mkver "${_GRAV_VER}"
 
    _RC=$?
    
