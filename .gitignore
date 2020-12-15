@@ -4,10 +4,10 @@
 **/.vscode
 **/.DS_store
 **/node_modules
-**/*.zip
 **/*.org
 
 # Only in .gitignore
+**/*.c
 **/*_rsa**
 **/*key
 **/*zip
