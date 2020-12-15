@@ -40,7 +40,7 @@ main() {
    local _GRAV_URL="https://getgrav.org/download/${_GRAV_KIND}/${_GRAV_NAME}"
 
    local _GRAV_TEXT="FAIL: Arguments are not provided!"
-   local _GRAV_ARGS="ARGS: ${_CMD} grav_kind [grav_user] [grav_imgname] [grav_tagname] [grav_passfile] [grav_privfile] [grav_pubfile]"
+   local _GRAV_ARGS="ARGS: ${_CMD} grav_user [grav_imgname] [grav_tagname] [grav_passfile] [grav_privfile] [grav_pubfile]"
    local _GRAV_NOTE="NOTE: (*) are default values, (#) are recommended values"
    local _GRAV_ARG1="ARG1:     [grav_user]: any|(#)         - (#=grav)"
    local _GRAV_ARG2="ARG2:  [grav_imgname]: grav-admin|grav - (*=grav-admin)"
