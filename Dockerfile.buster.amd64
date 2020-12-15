@@ -20,6 +20,8 @@
 #   xdebug
 # - Mount docker named volume to a specific host 
 #   directory (.volumes/grav_data)
+# - Rootfs repository for caching grav packages 
+#  (packages, themes, skeletons, plugins)
 FROM php:7.4-apache AS build
 
 LABEL MAINTAINER="Giovanni Minniti <minniti@t-online.de> (@giminni)"
@@ -33,12 +35,14 @@ ARG PATH \
     CACHE_DIR \
     CACHE_USER \
     CACHE_HOST \
-    GRAV_VER \
-    GRAV_FILE \
+    GRAV_NAME \
+    GRAV_TAG \
+    GRAV_USER \
+    GRAV_KIND \
+    GRAV_URLFILE \
     GRAV_URL \
     GRAV_SUEXEC_URL \
     GRAV_SUEXEC_FILE \
-    GRAV_USER \
     GRAV_UID \
     GRAV_GID \
     GRAV_SHELL \
@@ -49,22 +53,24 @@ ENV PATH="${PATH:-"/var/www/html/bin:$PATH"}" \
     LC_ALL="${LC_ALL:-"C.UTF-8"}" \
     TZ="${TZ:-"Europe/Berlin"}" \
     TERM="${TERM:-"xterm-256color"}" \
-    CCACHE_DIR="/tmp/cache/.ccache" \
+    CCACHE_DIR="${CCACHE_DIR:-"/tmp/cache/.ccache"}" \
     CACHE_DIR="${CACHE_DIR:-"/home/rpiadmin/Workspace/docker-grav/.volumes"}" \
-    CACHE_USER="rpiadmin" \
-    CACHE_HOST="172.17.0.1" \
-    GRAV_VER="${GRAV_VER:-"latest"}" \
-    GRAV_FILE="${GRAV_FILE:-"grav-admin-${GRAV_VER}.zip"}" \
-    GRAV_URL="${GRAV_URL:-"https://getgrav.org/download/core/grav-admin/${GRAV_VER}"}" \
+    CACHE_USER="${CACHE_USER:-"rpiadmin"}" \
+    CACHE_HOST="${CACHE_HOST:-"172.17.0.1"}" \
+    GRAV_NAME="${GRAV_NAME:-"grav-admin"}" \
+    GRAV_TAG=="${GRAV_TAG:-"latest"}" \
+    GRAV_USER="${GRAV_USER:-"grav"}" \
+    GRAV_KIND="${GRAV_KIND:-"core"}" \
+    GRAV_URLFILE="${GRAV_URLFILE:-"${GRAV_NAME}-${GRAV_TAG}.zip"}" \
+    GRAV_URL="${GRAV_URL:-"https://getgrav.org/download/${GRAV_KIND}/${GRAV_NAME}/${GRAV_TAG}"}" \
     GRAV_SUEXEC_URL="${GRAV_SUEXEC_URL:-"https://raw.githubusercontent.com/ncopa/su-exec/master"}" \
     GRAV_SUEXEC_FILE="${GRAV_SUEXEC_FILE:-"su-exec.c"}" \
-    GRAV_USER="${GRAV_USER:-"grav"}" \
     GRAV_UID=${GRAV_UID:-1000} \
     GRAV_GID=${GRAV_GID:-1000} \
     GRAV_SHELL="${GRAV_SHELL:-"/bin/bash"}" \
     GRAV_CACHE="${GRAV_CACHE:-"grav_cache"}"
 
-COPY rootfs /
+COPY ./rootfs/* /tmp
 # COPY docker-entrypoint.sh /entrypoint.sh
 
 RUN set -eux; \    
@@ -195,16 +201,16 @@ RUN set -eux; \
     echo 'xdebug.remote_autostart=1'; \
     } > /usr/local/etc/php/conf.d/php-recommended.ini
 
-RUN set -eux; \    
+RUN set -eux; \
     echo "[STAGE] Grav installation..."; \
-    echo "Installing grav ${GRAV_VER}..."; \
-    test -f /tmp/${GRAV_FILE} || wget --progress=bar:force \
-        -O /tmp/${GRAV_FILE} \
+    echo "Installing ${GRAV_URLFILE}..."; \
+    test -f /tmp/${GRAV_URLFILE} || wget --progress=bar:force \
+        -O /tmp/${GRAV_URLFILE} \
         ${GRAV_URL}; \
     cd /var/www; \
     rm -rf /var/www/html;\
-    unzip /tmp/${GRAV_FILE}; \
-    ln -s /var/www/grav-admin /var/www/html;
+    unzip /tmp/${GRAV_URLFILE}; \
+    ln -s /var/www/${GRAV_NAME} /var/www/html;
 
 RUN set -eux; \    
     echo "[STAGE] OS configuration..."; \
@@ -239,6 +245,6 @@ EXPOSE 80 22 9003
 
 # ENTRYPOINT ["/entrypoint.sh"]
 # CMD ["apache2-foreground"]
-CMD ["bash"]
-# CMD ["sh", "-c", "/usr/sbin/sshd && cron && apache2-foreground"]
+# CMD ["bash"]
+CMD ["sh", "-c", "/usr/sbin/sshd && cron && apache2-foreground"]
 # CMD ["sh", "-c", "su-exec grav", "/usr/sbin/sshd && cron && apache2-foreground"]

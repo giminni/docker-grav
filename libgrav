@@ -50,20 +50,22 @@ usage() {
 #
 build() {
    local _RC=0
-   local _GRAV_KIND="${1}"
-   local _GRAV_USER="${2}"
-   local _GRAV_NAME="${3}"
-   local _GRAV_TAG="${4}"
-   local _GRAV_PASS="${5}"
-   local _GRAV_PRIV="${6}"
-   local _GRAV_PUB="${7}"
-   local _GRAV_DIST="${8}"
-   local _GRAV_ARCH="${9}"
-   local _GRAV_SSH="${10}"
-   local _GRAV_VER="${11}"
+   local _GRAV_USER="${1}"
+   local _GRAV_NAME="${2}"
+   local _GRAV_TAG="${3}"
+   local _GRAV_PASS="${4}"
+   local _GRAV_PRIV="${5}"
+   local _GRAV_PUB="${6}"
+   local _GRAV_DIST="${7}"
+   local _GRAV_ARCH="${8}"
+   local _GRAV_FILE="${9}"
+   local _GRAV_VER="${10}"
+   local _GRAV_KIND="${11}"
+   local _GRAV_URLFILE="${12}"
+   local _GRAV_URL="${13}"
 
    local _GRAV_CMD="${FUNCNAME[0]}"
- 
+
    # sudo docker ps | grep "${_GRAV_NAME}" | awk '{print $1}' | xargs -r sudo docker rm -f
    # _RC=$?
 
@@ -75,19 +77,27 @@ build() {
             --platform linux/amd64 \
             --use
 
-         sudo docker buildx ${_GRAV_CMD} \
+         sudo docker buildx "${_GRAV_CMD}" \
             --progress=text \
             --load \
-            --cache-from type=local,id=${_GRAV_NAME},src=${PWD}/.cache/docker/${_GRAV_NAME} \
-            --cache-to type=local,id=${_GRAV_NAME},dest=${PWD}/.cache/docker/${_GRAV_NAME} \
-            --secret id=grav_pwd.key,src=${_GRAV_PASS} \
-            --secret id=grav_rsa,src=${_GRAV_PRIV} \
-            --secret id=grav_rsa.pub,src=${_GRAV_PUB} \
-            --build-arg GRAV_VER=${_GRAV_VER} \
-            --build-arg GRAV_USER=${_GRAV_USER} \
-            --tag ${_GRAV_USER}/${_GRAV_NAME}:${_GRAV_TAG} \
-            --file ${PWD}/${_GRAV_SSH} \
+            --cache-from type=local,id=${_GRAV_NAME},src="${PWD}"/.cache/docker/"${_GRAV_NAME}" \
+            --cache-to type=local,id=${_GRAV_NAME},dest="${PWD}"/.cache/docker/"${_GRAV_NAME}" \
+            --secret id=grav_pwd.key,src="${_GRAV_PASS}" \
+            --secret id=grav_rsa,src="${_GRAV_PRIV}" \
+            --secret id=grav_rsa.pub,src="${_GRAV_PUB}" \
+            --build-arg GRAV_NAME="${_GRAV_NAME}" \
+            --build-arg GRAV_TAG="${_GRAV_TAG}" \
+            --build-arg GRAV_USER="${_GRAV_USER}" \
+            --build-arg GRAV_KIND="${_GRAV_KIND}" \
+            --build-arg GRAV_URLFILE="${_GRAV_URLFILE}" \
+            --build-arg GRAV_URL="${_GRAV_URL}" \
+            --tag "${_GRAV_USER}"/"${_GRAV_NAME}"-"${_GRAV_TAG}":"${_GRAV_VER}" \
+            --file "${PWD}"/"${_GRAV_FILE}" \
             ${PWD}
+
+         sudo docker tag \
+            "${_GRAV_USER}"/"${_GRAV_NAME}"-"${_GRAV_TAG}":"${_GRAV_VER}" \
+            "${_GRAV_USER}"/"${_GRAV_NAME}"-"${_GRAV_TAG}":latest
       ;;
 
       *)
@@ -187,19 +197,25 @@ mkssh() {
 }
 
 #
-# Purge function for grav_clean.sh script
+# Purge function for grav_prune.sh script
 #
 purge() {
    local _RC=0
    local _GRAV_NAME="${1}"
 
-   sudo docker ps -a | grep ${_GRAV_NAME} | awk '{print $1}' | xargs -r sudo docker rm -f
+   sudo docker ps -a | grep ${_GRAV_NAME} | awk '{print $1":"$2}' | xargs -r sudo docker rm -f
    RC=$?
-   sudo docker images | grep ${_GRAV_NAME} | awk '{print $1}' | xargs -r sudo docker rmi -f
+   sudo docker images | grep ${_GRAV_NAME} | awk '{print $1":"$2}' | xargs -r sudo docker rmi -f
    RC=$?
    sudo docker volume prune -f
    RC=$?
    sudo docker system prune -f
+   RC=$?
+   sudo docker buildx prune -f
+   RC=$?
+   sudo rm -rf ${PWD}/.cache
+   RC=$?
+   sudo rm -rf ${PWD}/.volumes/grav_cache/.ccache/*
    RC=$?
 
    return ${_RC}
@@ -218,8 +234,8 @@ run() {
    sudo docker volume prune -f
 
    sudo docker run -d \
-      --name ${_GRAV_NAME} \
-      --hostname ${_GRAV_NAME}p01 \
+      --name ${_GRAV_TAG} \
+      --hostname ${_GRAV_TAG}p01 \
       --restart always \
       --publish 0.0.0.0:80:80/tcp \
       --publish 0.0.0.0:2222:22/tcp \
