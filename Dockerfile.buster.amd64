@@ -1,8 +1,10 @@
 # syntax=docker/dockerfile:1.2
 
 # This Dockerfile needs the following prerequisites:
-# - Install at least docker 20.10
+# - Install at least docker-ce 20.10
+#   (See https://docs.docker.com/engine/install/)
 # - Install latest docker buildx plugin
+#   (See https://docs.docker.com/buildx/working-with-buildx/)
 #
 # This Dockerfile includes the following features:
 # - Use docker buildx builder for external docker 
@@ -210,6 +212,9 @@ RUN set -eux; \
     unzip /tmp/${GRAV_URLFILE}; \
     echo "Creating symlink for URL access..."; \
     ln -s /var/www/${GRAV_NAME} /var/www/html; \
+    echo "Exporting ${GRAV_NAME} path to users..."; \
+    echo "export PATH=/var/www/html/bin:${PATH}" >> /home/${GRAV_USER}/.bashrc; \
+    echo "export PATH=/var/www/html/bin:${PATH}" >> /root/.bashrc; \
     echo "Create cron job for Grav maintenance scripts for www-data..."; \
     echo "* * * * * cd /var/www/${GRAV_NAME}; /usr/local/bin/php bin/grav scheduler 1>>/dev/null 2>&1" | crontab -u www-data -;
 
