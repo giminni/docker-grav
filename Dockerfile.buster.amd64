@@ -159,8 +159,6 @@ RUN set -eux; \
     echo "[STAGE] OS configuration..."; \
     echo "Setting timezone to ${TZ}..."; \
     ln -sf /usr/share/zoneinfo/${TZ} /etc/localtime; \
-    echo "Create cron job for Grav maintenance scripts for www-data..."; \
-    echo "* * * * * cd /var/www/html; /usr/local/bin/php bin/grav scheduler 1>>/dev/null 2>&1" | crontab -u www-data -; \
     echo "Configuring Ccache tool..."; \
     /usr/sbin/update-ccache-symlinks; \
     for PROG in $(ls /usr/lib/ccache); do ln -s $(which ccache) /usr/local/bin/${PROG}; done; \
@@ -210,7 +208,10 @@ RUN set -eux; \
     cd /var/www; \
     rm -rf /var/www/html;\
     unzip /tmp/${GRAV_URLFILE}; \
-    ln -s /var/www/${GRAV_NAME} /var/www/html;
+    echo "Creating symlink for URL access..."; \
+    ln -s /var/www/${GRAV_NAME} /var/www/html; \
+    echo "Create cron job for Grav maintenance scripts for www-data..."; \
+    echo "* * * * * cd /var/www/${GRAV_NAME}; /usr/local/bin/php bin/grav scheduler 1>>/dev/null 2>&1" | crontab -u www-data -;
 
 RUN set -eux; \    
     echo "[STAGE] OS configuration..."; \
