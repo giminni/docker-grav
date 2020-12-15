@@ -21,6 +21,7 @@ main() {
    local _RC=0
    local _CMD=$(basename ${0})
 
+   # Get Grav version strings from context files
    local _GRAV_DEV="$(cat ${PWD}/.context.dev | cut -d'=' -f2)"
    local _GRAV_PROD="$(cat ${PWD}/.context.prod | cut -d'=' -f2)"
 
@@ -69,7 +70,7 @@ main() {
       _GRAV_URLFILE="${_GRAV_NAME}-${_GRAV_PROD}.zip"
       _GRAV_URL="${_GRAV_URL}"/"${_GRAV_PROD}"
    fi
-exit
+
    build \
       "${_GRAV_USER}" \
       "${_GRAV_NAME}" \
