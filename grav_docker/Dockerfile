@@ -1,29 +1,6 @@
 # syntax=docker/dockerfile:1.2
 
-# This Dockerfile needs the following prerequisites:
-# - Install at least docker-ce 20.10
-#   (See https://docs.docker.com/engine/install/)
-# - Install latest docker buildx plugin
-#   (See https://docs.docker.com/buildx/working-with-buildx/)
-#
-# This Dockerfile includes the following features:
-# - Use docker buildx builder for external docker 
-#   image storage (--cache-from, --cache-to)
-# - Use docker buildx builder for specific platform 
-#   builds, here amd64
-# - Create a user with SSH keys for vscode development 
-#   over remote SSH (grav)
-# - Inject as a secret a user password for SSH login 
-# - Inject as a secret the SSH keys for automatic 
-#   logins and cache retrieval
-# - Use external cache volume created with ccache, rsync
-#   for faster php compilation (grav_cache)
-# - Install PHP xdebug for vscode debugging over remote 
-#   xdebug
-# - Mount docker named volume to a specific host 
-#   directory (grav_data)
-# - Rootfs repository for caching grav packages 
-#  (packages, themes, skeletons, plugins)
+# Read the README.md file for instructions
 FROM php:7.4-apache AS build
 
 LABEL MAINTAINER="Giovanni Minniti <minniti@t-online.de> (@giminni)"
@@ -47,8 +24,7 @@ ARG PATH \
     GRAV_SUEXEC_FILE \
     GRAV_UID \
     GRAV_GID \
-    GRAV_SHELL \
-    GRAV_CACHE
+    GRAV_SHELL
 
 ENV PATH="${PATH:-"/var/www/html/bin:$PATH"}" \
     LANG="${LANG:-"C.UTF-8"}" \
@@ -69,10 +45,9 @@ ENV PATH="${PATH:-"/var/www/html/bin:$PATH"}" \
     GRAV_SUEXEC_FILE="${GRAV_SUEXEC_FILE:-"su-exec.c"}" \
     GRAV_UID=${GRAV_UID:-1000} \
     GRAV_GID=${GRAV_GID:-1000} \
-    GRAV_SHELL="${GRAV_SHELL:-"/bin/bash"}" \
-    GRAV_CACHE="${GRAV_CACHE:-"grav_cache"}"
+    GRAV_SHELL="${GRAV_SHELL:-"/bin/bash"}"
 
-COPY ./rootfs/* /tmp
+COPY ./grav_rootfs/* /
 # COPY docker-entrypoint.sh /entrypoint.sh
 
 RUN set -eux; \    
@@ -168,7 +143,7 @@ RUN set -eux; \
     for PROG in $(ls /usr/lib/ccache); do ln -s $(which ccache) /usr/local/bin/${PROG}; done; \
     echo "Downloading cached packages from global cache repository..."; \
     rsync -avz -e "ssh -i /home/${GRAV_USER}/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" \
-    ${CACHE_USER}@${CACHE_HOST}:${CACHE_DIR}/${GRAV_CACHE}/.ccache ${CCACHE_DIR%/*};
+    ${CACHE_USER}@${CACHE_HOST}:${CACHE_DIR}/.ccache ${CCACHE_DIR%/*};
 
 RUN set -eux; \
     echo "[STAGE] PHP installation..."; \
@@ -238,7 +213,7 @@ RUN set -eux; \
 RUN set -eux; \
     echo "Uploading compiled files to global cache repository"; \
     rsync -avz -e "ssh -i /home/${GRAV_USER}/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" \
-       ${CCACHE_DIR} ${CACHE_USER}@${CACHE_HOST}:${CACHE_DIR}/${GRAV_CACHE}; \
+       ${CCACHE_DIR} ${CACHE_USER}@${CACHE_HOST}:${CACHE_DIR}; \
     echo "[STAGE] Cleanup installation..."; \
     echo "Removing installation artefacts..."; \
     apt autoremove -y; \
