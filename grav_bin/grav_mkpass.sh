@@ -41,7 +41,7 @@ main() {
 
    local _GRAV_SECS="${_ARGV[1]}"
    local _GRAV_USER="${_ARGV[2]:-$(id -un)}"
-   local _GRAV_PASS="${_ARGV[3]:-"${PWD}/grav_keys/grav_pass.key"}"
+   local _GRAV_PASS="${_ARGV[3]:-"${KEY_DIR}/grav_pass.key"}"
 
    local _GRAV_TEXT="FAIL: Arguments are not provided!"
    local _GRAV_ARGS="ARGS: ${CMD} grav_pass [grav_user] [grav_passfile]"
@@ -69,8 +69,8 @@ main() {
       "${_GRAV_USER}" \
       "${_GRAV_PASS}"
 
-   echo "GRAV_USER=${_GRAV_USER}" > ${CFG_DIR}/.config.user
-   echo "GRAV_PASS=${_GRAV_PASS}" > ${CFG_DIR}/.config.pass
+   echo "GRAV_USER=${_GRAV_USER}" > "${CFG_DIR}"/.config.user
+   echo "GRAV_PASS=${_GRAV_PASS}" > "${CFG_DIR}"/.config.pass
    
    RC=$?
 

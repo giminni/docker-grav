@@ -42,7 +42,7 @@ main() {
    local _GRAV_EMAIL="${_ARGV[1]}"
    local _GRAV_TYPE="${_ARGV[2]:-"rsa"}"
    local _GRAV_LEN="${_ARGV[3]:-4096}"
-   local _GRAV_SSH="${_ARGV[4]:-${PWD}/grav_keys/grav_${_GRAV_TYPE}}"
+   local _GRAV_SSH="${_ARGV[4]:-${KEY_DIR}/grav_${_GRAV_TYPE}}"
 
    local _GRAV_TEXT="FAIL: Arguments are not provided!"
    local _GRAV_ARGS="ARGS: ${CMD} grav_email [grav_keytype] [grav_keylen] [grav_keyfile]"
@@ -50,8 +50,8 @@ main() {
    local _GRAV_ARG1="ARG1:     grav_email: any|(#)       - (#=own-email-address)"
    local _GRAV_ARG2="ARG2: [grav_keytype]: rsa|dsa|ecdsa - (*=rsa)"
    local _GRAV_ARG3="ARG3:  [grav_keylen]: 2048-8192     - (*=4096)"
-   local _GRAV_ARG4="ARG4: [grav_keyfile]: any|(*)       - (*=<PROJECT_NAME>/grav_key/grav_<grav-keytype>)"
-   local _GRAV_INFO="INFO: ${CMD} grav@example.com rsa 4096 <PROJECT_NAME>/grav_key/grav_rsa"
+   local _GRAV_ARG4="ARG4: [grav_keyfile]: any|(*)       - (*=${KEY_DIR}/grav_<grav-keytype>)"
+   local _GRAV_INFO="INFO: ${CMD} grav@example.com rsa 4096 ${KEY_DIR}/grav_rsa"
    local _GRAV_HELP="HELP: ${CMD}: Create the required user SSH keys depending from some entered arguments. (See NOTE, INFO and ARGS)"
 
    if [ ${_ARGC} -lt 1 ]; then 
