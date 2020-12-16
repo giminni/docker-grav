@@ -3,6 +3,7 @@
 #
 #
 init() {
+   # Remove enclosing double quotes
    ROOT_DIR="$(cat ${CTX_DIR}/.config.root | tr -d '"' | cut -d'=' -f2)"
    CACHE_DIR="$(cat ${CTX_DIR}/.config.cache | tr -d '"' | cut -d'=' -f2)"
    DATA_DIR="$(cat ${CTX_DIR}/.config.data | tr -d '"' | cut -d'=' -f2)"
