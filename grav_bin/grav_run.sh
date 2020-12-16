@@ -15,14 +15,17 @@ RC=0
 
 CMD="$(basename ${0})"
 NAME=$(echo ${CMD} | cut -d'.' -f1)
-ABS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-BASE_DIR="${ABS_DIR%/*}"
-DATA_DIR="${BASE_DIR}/grav_data"
-ROOT_DIR="${BASE_DIR}/grav_rootfs"
-BIN_DIR="${BASE_DIR}/grav_bin"
-CFG_DIR="${BASE_DIR}/grav_config"
-KEY_DIR="${BASE_DIR}/grav_keys"
-LIB_DIR="${BASE_DIR}/grav_libs"
+CUR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+HOME_DIR="${CUR_DIR%/*}"
+# Remove enclosing double quotes
+CTX_DIR="$(cat ${HOME_DIR}/.context | tr -d '"' | cut -d'=' -f2)"
+ROOT_DIR="$(cat ${CTX_DIR}/.config.root | tr -d '"' | cut -d'=' -f2)"
+CACHE_DIR="$(cat ${CTX_DIR}/.config.cache | tr -d '"' | cut -d'=' -f2)"
+DATA_DIR="$(cat ${CTX_DIR}/.config.data | tr -d '"' | cut -d'=' -f2)"
+DOCK_DIR="$(cat ${CTX_DIR}/.config.docker | tr -d '"' | cut -d'=' -f2)"
+BIN_DIR="$(cat ${CTX_DIR}/.config.bin | tr -d '"' | cut -d'=' -f2)"
+KEY_DIR="$(cat ${CTX_DIR}/.config.key | tr -d '"' | cut -d'=' -f2)"
+LIB_DIR="$(cat ${CTX_DIR}/.config.lib | tr -d '"' | cut -d'=' -f2)"
 
 # #### #
 # LIBS #
@@ -51,17 +54,33 @@ main() {
    local _GRAV_ARG2="ARG2: [grav_imgname|: any|(*) - (*=grav-admin)"
    local _GRAV_ARG3="ARG3:  [grav_imgtag|: any|(*) - (*=latest)"
    local _GRAV_ARG4="ARG4: [grav_voldata]: any|(*) - (*=grav_data)"
-   local _GRAV_INFO="INFO: ${CMD} grav grav latest grav_data"
+   local _GRAV_INFO="INFO: ${CMD} grav grav-admin latest grav_data"
+   local _GRAV_HELP="HELP: ${CMD}: Instantiate a docker container depending from some entered arguments. (See NOTE, INFO and ARGS)"
 
-   if [ ${_ARGC} -lt 1 ]; then usage 1 "${_GRAV_TEXT}" "${_GRAV_ARGS}" "${_GRAV_NOTE}" "${_GRAV_INFO}" "${_GRAV_ARG1}" "${_GRAV_ARG2}" "${_GRAV_ARG3}" "${_GRAV_ARG4}"; fi
-
-   # Check if keys and volumes are available
-   if [ ! -f ${CFG_DIR}/.config.pass ] || [ ! -f $(cat ${CFG_DIR}/.config.pass | cut -d'=' -f2) ]; then usage 2 "FAIL: User and password not provided! Please run grav_mkpass.sh first...";
-      elif [ ! -f ${CFG_DIR}/.config.ssh ] || [ ! -f $(cat ${CFG_DIR}/.config.ssh | cut -d'=' -f2) ]; then usage 2 "FAIL: SSH files not provided! Please run grav_mkssh.sh first...";
-      elif [ ! -f ${CFG_DIR}/.config.data ] || [ ! -d $(cat ${CFG_DIR}/.config.data | cut -d'=' -f2) ]; then usage 2 "FAIL: Data volume not provided! Please run grav_mkdata.sh first...";
+   if [ ${_ARGC} -lt 1 ]; then 
+      usage 1 \
+         "${_GRAV_TEXT}" \
+         "${_GRAV_ARGS}" \
+         "${_GRAV_NOTE}" \
+         "${_GRAV_INFO}" \
+         "${_GRAV_HELP}" \
+         "${_GRAV_ARG1}" \
+         "${_GRAV_ARG2}" \
+         "${_GRAV_ARG3}" \
+         "${_GRAV_ARG4}"
    fi
 
-   run "${_GRAV_USER}" "${_GRAV_NAME}" "${_GRAV_TAG}" "${_GRAV_DATA}"
+   # Check if essential configuration files exists
+   if [ ! -f ${CFG_DIR}/.config.pass ] || [ ! -f $(cat ${CFG_DIR}/.config.pass | cut -d'=' -f2) ]; then error 2 "FAIL: User and password not provided! Please run grav_mkpass.sh first...";
+      elif [ ! -f ${CFG_DIR}/.config.ssh ] || [ ! -f $(cat ${CFG_DIR}/.config.ssh | cut -d'=' -f2) ]; then error 2 "FAIL: SSH files not provided! Please run grav_mkssh.sh first...";
+      elif [ ! -f ${CFG_DIR}/.config.data ] || [ ! -d $(cat ${CFG_DIR}/.config.data | cut -d'=' -f2) ]; then error 2 "FAIL: Data volume not provided! Please run grav_mkdata.sh first...";
+   fi
+
+   run \
+      "${_GRAV_USER}" \
+      "${_GRAV_NAME}" \
+      "${_GRAV_TAG}" \
+      "${_GRAV_DATA}"
 
    _RC=$?
 

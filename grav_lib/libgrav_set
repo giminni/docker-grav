@@ -22,7 +22,7 @@ setcore() {
          echo "GRAV_DEV=${_GRAV_CORE}"  > "${PWD}"/.context.dev 
       ;;
 
-      *) usage 2 "FAIL: Argument is not defined: ${_GRAV_CORE}!"
+      *) error 2 "FAIL: Argument is not defined: ${_GRAV_CORE}!"
       ;;
 
    esac

@@ -1,6 +1,17 @@
 #!/usr/bin/env bash
 
 #
+# help function for all shell scripts
+#
+help() {
+   local _HELP="${1}"
+   
+   echo ""
+   echo -e "${_HELP}"
+   echo ""
+}
+
+#
 # usage function for all shell scripts
 #
 usage() {
@@ -9,17 +20,18 @@ usage() {
    local _ARGS="${3:-""}"
    local _NOTE="${4:-""}"
    local _INFO="${5:-""}"
-   local _ARG1="${6:-""}"
-   local _ARG2="${7:-""}"
-   local _ARG3="${8:-""}"
-   local _ARG4="${9:-""}"
-   local _ARG5="${10:-""}"
-   local _ARG6="${11:-""}"
-   local _ARG7="${12:-""}"
+   local _HELP="${6:-""}"
+   local _ARG1="${7:-""}"
+   local _ARG2="${8:-""}"
+   local _ARG3="${9:-""}"
+   local _ARG4="${10:-""}"
+   local _ARG5="${11:-""}"
+   local _ARG6="${12:-""}"
+   local _ARG7="${13:-""}"
 
    case ${_RC}  in
       1)
-         echo ${_TEXT}
+         echo "${_TEXT}"
          echo ""
          echo "${_ARGS}"
          echo "${_NOTE}"
@@ -33,8 +45,27 @@ usage() {
          test ! -z "${_ARG7}" && echo "${_ARG7}"
          echo ""
          echo "${_INFO}"
+         help "${_HELP}"
       ;;
 
+      *)
+         echo ""
+         echo ${_TEXT}
+      ;;
+   
+   esac
+   
+   exit ${_RC}
+}
+
+#
+# error function for all shell scripts
+#
+error() {
+   local _RC=${1}
+   local _TEXT="${2}"
+
+   case ${_RC}  in
       *)
          echo ""
          echo ${_TEXT}

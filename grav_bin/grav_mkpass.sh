@@ -15,14 +15,17 @@ RC=0
 
 CMD="$(basename ${0})"
 NAME=$(echo ${CMD} | cut -d'.' -f1)
-ABS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-BASE_DIR="${ABS_DIR%/*}"
-DATA_DIR="${BASE_DIR}/grav_data"
-ROOT_DIR="${BASE_DIR}/grav_rootfs"
-BIN_DIR="${BASE_DIR}/grav_bin"
-CFG_DIR="${BASE_DIR}/grav_config"
-KEY_DIR="${BASE_DIR}/grav_keys"
-LIB_DIR="${BASE_DIR}/grav_libs"
+CUR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+HOME_DIR="${CUR_DIR%/*}"
+# Remove enclosing double quotes
+CTX_DIR="$(cat ${HOME_DIR}/.context | tr -d '"' | cut -d'=' -f2)"
+ROOT_DIR="$(cat ${CTX_DIR}/.config.root | tr -d '"' | cut -d'=' -f2)"
+CACHE_DIR="$(cat ${CTX_DIR}/.config.cache | tr -d '"' | cut -d'=' -f2)"
+DATA_DIR="$(cat ${CTX_DIR}/.config.data | tr -d '"' | cut -d'=' -f2)"
+DOCK_DIR="$(cat ${CTX_DIR}/.config.docker | tr -d '"' | cut -d'=' -f2)"
+BIN_DIR="$(cat ${CTX_DIR}/.config.bin | tr -d '"' | cut -d'=' -f2)"
+KEY_DIR="$(cat ${CTX_DIR}/.config.key | tr -d '"' | cut -d'=' -f2)"
+LIB_DIR="$(cat ${CTX_DIR}/.config.lib | tr -d '"' | cut -d'=' -f2)"
 
 # #### #
 # LIBS #
@@ -46,14 +49,28 @@ main() {
    local _GRAV_TEXT="FAIL: Arguments are not provided!"
    local _GRAV_ARGS="ARGS: ${CMD} grav_pass [grav_user] [grav_passfile]"
    local _GRAV_NOTE="NOTE: (*) are default values, (#) are recommended values"
-   local _GRAV_ARG1="ARG1:     grav_pass: any|(#) - (#=minimum 12 chars length)"
-   local _GRAV_ARG2="ARG2:     grav_user: any|(*) - (*=<current-user>,#=grav)"
-   local _GRAV_ARG3="ARG3: grav_passfile: any|(*) - (*=<current-dir>/grav_keys/grav_pass.key]"
-   local _GRAV_INFO="INFO: ${CMD} my-secret-pass grav ${PWD}/grav_keys/grav_pass.key"
+   local _GRAV_ARG1="ARG1:       grav_pass: any|(#) - (#=minimum 11 chars length)"
+   local _GRAV_ARG2="ARG2:     [grav_user]: any|(*) - (*=<current-user>,#=grav)"
+   local _GRAV_ARG3="ARG3: [grav_passfile]: any|(*) - (*=<PROJECT_HOME>/grav_key/grav_pass.key]"
+   local _GRAV_INFO="INFO: ${CMD} my-secret-pass grav <PROJECT_HOME>/grav_key/grav_pass.key"
+   local _GRAV_HELP="HELP: ${CMD}: Create the required user password depending from some entered arguments. (See NOTE, INFO and ARGS)"
 
-   if [ ${_ARGC} -lt 1 ]; then usage 1 "${_GRAV_TEXT}" "${_GRAV_ARGS}" "${_GRAV_NOTE}" "${_GRAV_INFO}" "${_GRAV_ARG1}" "${_GRAV_ARG2}" "${_GRAV_ARG3}"; fi
+   if [ ${_ARGC} -lt 1 ]; then 
+      usage 1 \
+         "${_GRAV_TEXT}" \
+         "${_GRAV_ARGS}" \
+         "${_GRAV_NOTE}" \
+         "${_GRAV_INFO}" \
+         "${_GRAV_HELP}" \
+         "${_GRAV_ARG1}" \
+         "${_GRAV_ARG2}" \
+         "${_GRAV_ARG3}"
+   fi
 
-   mkpass "${_GRAV_SECS}" "${_GRAV_USER}" "${_GRAV_PASS}"
+   mkpass \
+      "${_GRAV_SECS}" \
+      "${_GRAV_USER}" \
+      "${_GRAV_PASS}"
 
    echo "GRAV_USER=${_GRAV_USER}" > ${CFG_DIR}/.config.user
    echo "GRAV_PASS=${_GRAV_PASS}" > ${CFG_DIR}/.config.pass

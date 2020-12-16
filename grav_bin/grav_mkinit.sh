@@ -18,6 +18,9 @@ NAME=$(echo ${CMD} | cut -d'.' -f1)
 CUR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOME_DIR="${CUR_DIR%/*}"
 ROOT_DIR="${HOME_DIR}/grav_rootfs"
+CACHE_DIR="${HOME_DIR}/grav_cache"
+DATA_DIR="${HOME_DIR}/grav_data"
+DOCK_DIR="${HOME_DIR}/grav_docker"
 BIN_DIR="${HOME_DIR}/grav_bin"
 CFG_DIR="${HOME_DIR}/grav_cfg"
 KEY_DIR="${HOME_DIR}/grav_key"
@@ -43,8 +46,9 @@ main() {
    local _GRAV_TEXT="FAIL: Arguments are not provided!"
    local _GRAV_ARGS="ARGS: ${CMD} grav_command"
    local _GRAV_NOTE="NOTE: (*) are default values, (#) are recommended values"
-   local _GRAV_ARG1="ARG1: grav_command: (#) - (#=init)"
+   local _GRAV_ARG1="ARG1: grav_command: init - (#=init)"
    local _GRAV_INFO="INFO: ${CMD} init"
+   local _GRAV_HELP="HELP: ${CMD}: Use the 'init' command to initialize the project environment with context files under the ${CFG_DIR} directory. (See NOTE, INFO and ARGS)"
 
    if [ ${_ARGC} -lt 1 ]; then 
       usage 1 \
@@ -52,6 +56,7 @@ main() {
          "${_GRAV_ARGS}" \
          "${_GRAV_NOTE}" \
          "${_GRAV_INFO}" \
+         "${_GRAV_HELP}" \
          "${_GRAV_ARG1}"
    fi
    
@@ -59,6 +64,9 @@ main() {
       "${_GRAV_CMD}" \
       "${HOME_DIR}" \
       "${ROOT_DIR}" \
+      "${CACHE_DIR}" \
+      "${DATA_DIR}" \
+      "${DOCK_DIR}" \
       "${BIN_DIR}" \
       "${CFG_DIR}" \
       "${KEY_DIR}" \

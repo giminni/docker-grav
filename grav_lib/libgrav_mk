@@ -93,23 +93,30 @@ mkinit() {
    local _GRAV_CMD="${1}"
    local _GRAV_HOME="${2}" 
    local _GRAV_ROOT="${3}" 
-   local _GRAV_BIN="${4}" 
-   local _GRAV_CFG="${5}" 
-   local _GRAV_KEY="${6}" 
-   local _GRAV_LIB="${7}"
+   local _GRAV_CACHE="${4}" 
+   local _GRAV_DATA="${5}" 
+   local _GRAV_DOCK="${6}" 
+   local _GRAV_BIN="${7}" 
+   local _GRAV_CFG="${8}" 
+   local _GRAV_KEY="${9}" 
+   local _GRAV_LIB="${10}"
 
    case "${_GRAV_CMD}" in
       init)
-         echo "GRAV_HOME=${_GRAV_HOME}" > "${_GRAV_CFG}"/.config.home 
-         echo "GRAV_ROOT=${_GRAV_ROOT}" > "${_GRAV_CFG}"/.config.root 
-         echo "GRAV_BIN=${_GRAV_BIN}" > "${_GRAV_CFG}"/.config.bin 
-         echo "GRAV_CFG=${_GRAV_CFG}" > "${_GRAV_CFG}"/.config.cfg
-         echo "GRAV_KEY=${_GRAV_KEY}" > "${_GRAV_CFG}"/.config.key
-         echo "GRAV_LIB=${_GRAV_LIB}" > "${_GRAV_CFG}"/.config.lib 
+         echo "GRAV_HOME=\"${_GRAV_HOME}\"" > "${_GRAV_CFG}"/.config.home 
+         echo "GRAV_ROOT=\"${_GRAV_ROOT}\"" > "${_GRAV_CFG}"/.config.root 
+         echo "GRAV_CACHE=\"${_GRAV_CACHE}\"" > "${_GRAV_CFG}"/.config.cache
+         echo "GRAV_DATA=\"${_GRAV_DATA}\"" > "${_GRAV_CFG}"/.config.data
+         echo "GRAV_DOCK=\"${_GRAV_DOCK}\"" > "${_GRAV_CFG}"/.config.docker
+         echo "GRAV_BIN=\"${_GRAV_BIN}\"" > "${_GRAV_CFG}"/.config.bin 
+         echo "GRAV_CFG=\"${_GRAV_CFG}\"" > "${_GRAV_CFG}"/.config.cfg
+         echo "GRAV_KEY=\"${_GRAV_KEY}\"" > "${_GRAV_CFG}"/.config.key
+         echo "GRAV_LIB=\"${_GRAV_LIB}\"" > "${_GRAV_CFG}"/.config.lib 
+         echo "GRAV_CTX=\"${_GRAV_CFG}\"" > "${_GRAV_HOME}"/.context
       ;;
       
       
-      *) usage 2 "FAIL: Argument is not defined: ${_GRAV_CMD}!"
+      *) error 2 "FAIL: Argument is not defined: ${_GRAV_CMD}!"
       ;;
 
    esac

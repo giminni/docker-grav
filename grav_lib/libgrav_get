@@ -35,7 +35,7 @@ getcore() {
             https://getgrav.org/download/${_GRAV_KIND}/${_GRAV_NAME}/${_GRAV_CORE}
       ;;
 
-      *) usage 2 "FAIL: Argument is not defined: ${_GRAV_CORE}!"
+      *) error 2 "FAIL: Argument is not defined: ${_GRAV_CORE}!"
       ;;
 
    esac

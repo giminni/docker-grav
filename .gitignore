@@ -6,6 +6,7 @@
 **/.gocache
 **/.pycache
 **/.config**
+**/.context
 **/grav_data/**
 **/.vscode
 **/.idea
@@ -16,7 +17,7 @@
 # Exclude pattern only in .gitignore
 **/*.c
 **/*_rsa**
-**/*key
+**/*.key
 **/*zip
 
 # Include pattern only in .gitignore
