@@ -14,24 +14,24 @@ getcore() {
 
    case "${_GRAV_CORE}" in
       dev)
-         _GRAV_DEV=$(cat "${PWD}"/.context.dev | cut -d'=' -f2)
-         wget -O "${PWD}"/grav_rootfs/tmp/${_GRAV_NAME}-${_GRAV_DEV}?testing.zip \
+         _GRAV_DEV=$(cat "${CFG_DIR}"/.config.dev | cut -d'=' -f2)
+         wget -O "${ROOT_DIR}"/tmp/${_GRAV_NAME}-${_GRAV_DEV}?testing.zip \
             https://getgrav.org/download/${_GRAV_KIND}/${_GRAV_NAME}/${_GRAV_DEV}?testing
       ;;
 
       [0-9]*.[0-9]*.[0-9]*-[a-z][a-z].[0-9]*)
-         wget -O "${PWD}"/grav_rootfs/tmp/${_GRAV_NAME}-${_GRAV_CORE}?testing.zip \
+         wget -O "${ROOT_DIR}"/tmp/${_GRAV_NAME}-${_GRAV_CORE}?testing.zip \
             https://getgrav.org/download/${_GRAV_KIND}/${_GRAV_NAME}/${_GRAV_CORE}?testing
       ;;
 
       prod) 
-         _GRAV_PROD=$(cat "${PWD}"/.context.prod | cut -d'=' -f2)
-         wget -O "${PWD}"/grav_rootfs/tmp/${_GRAV_NAME}-${_GRAV_PROD}.zip \
+         _GRAV_PROD=$(cat "${CFG_DIR}"/.config.prod | cut -d'=' -f2)
+         wget -O "${ROOT_DIR}"/tmp/${_GRAV_NAME}-${_GRAV_PROD}.zip \
             https://getgrav.org/download/${_GRAV_KIND}/${_GRAV_NAME}/${_GRAV_PROD}
       ;;
       
       [0-9]*.[0-9]*.[0-9]*)
-         wget -O "${PWD}"/grav_rootfs/tmp/${_GRAV_NAME}-${_GRAV_CORE}.zip \
+         wget -O "${ROOT_DIR}"/tmp/${_GRAV_NAME}-${_GRAV_CORE}.zip \
             https://getgrav.org/download/${_GRAV_KIND}/${_GRAV_NAME}/${_GRAV_CORE}
       ;;
 

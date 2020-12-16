@@ -35,8 +35,8 @@ build() {
             --platform linux/amd64 \
             --progress=text \
             --load \
-            --cache-from type=local,id=${_GRAV_NAME},src="${PWD}"/grav_cache/.dcache \
-            --cache-to type=local,id=${_GRAV_NAME},dest="${PWD}"/grav_cache/.dcache \
+            --cache-from type=local,id=${_GRAV_NAME},src="${CACHE_DIR}/.dcache \
+            --cache-to type=local,id=${_GRAV_NAME},dest="${CACHE_DIR}/.dcache \
             --secret id=grav_pwd.key,src="${_GRAV_PASS}" \
             --secret id=grav_rsa,src="${_GRAV_PRIV}" \
             --secret id=grav_rsa.pub,src="${_GRAV_PUB}" \
@@ -47,8 +47,8 @@ build() {
             --build-arg GRAV_URLFILE="${_GRAV_URLFILE}" \
             --build-arg GRAV_URL="${_GRAV_URL}" \
             --tag "${_GRAV_USER}"/"${_GRAV_NAME}":"${_GRAV_TAG}" \
-            --file "${PWD}"/"${_GRAV_FILE}" \
-            ${PWD}
+            --file "${HOME_DIR}"/"${_GRAV_FILE}" \
+            ${HOME_DIR}
 
          sudo docker tag \
             "${_GRAV_USER}"/"${_GRAV_NAME}":"${_GRAV_TAG}" \
@@ -83,9 +83,9 @@ purge() {
    RC=$?
    sudo docker buildx prune -f
    RC=$?
-   sudo rm -rf ${PWD}/grav_cache/.ccache/*
+   sudo rm -rf ${CACHE_DIR}/.ccache/*
    RC=$?
-   sudo rm -rf ${PWD}/grav_cache/.dcache/*
+   sudo rm -rf ${CACHE_DIR}/.dcache/*
    RC=$?
 
    return ${_RC}

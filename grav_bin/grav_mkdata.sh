@@ -40,7 +40,7 @@ main() {
    local _RC=0
 
    local _GRAV_NAME="${_ARGV[1]}"
-   local _GRAV_DATA="${_ARGV[2]:-"${PWD}/${_GRAV_NAME}"}"
+   local _GRAV_DATA="${_ARGV[2]:-"${DATA_DIR}/${_GRAV_NAME}"}"
 
    local _GRAV_TEXT="FAIL: Arguments are not provided!"
    local _GRAV_ARGS="ARGS: ${CMD} grav_volname [grav_voldata]"

@@ -83,7 +83,7 @@ main() {
 
    if [ ${_RC} -eq 125 ]; then
 #   	usage 3 "FAIL: Docker image does not exists! Execute grav-build.sh first..."
-      ${PWD}/grav_build.sh testing grav
+      ${BIN_DIR}/grav_build.sh testing grav
       $0 grav
    fi
 
