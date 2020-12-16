@@ -9,7 +9,8 @@ RC=0
 # #### #
 # LIBS #
 # #### #
-source ${PWD}/libgrav
+source ${PWD}/libs/libgrav
+source ${PWD}/libs/libgrav_mk
 
 # ##### #
 # FUNCS #

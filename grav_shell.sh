@@ -9,7 +9,8 @@ RC=0
 # #### #
 # LIBS #
 # #### #
-source ${PWD}/libgrav
+source ${PWD}/libs/libgrav
+source ${PWD}/libs/libgrav_docker
 
 # ##### #
 # FUNCS #
@@ -32,7 +33,7 @@ main() {
    local _GRAV_ARGS="ARGS: ${_CMD} grav_shell [grav_imgname]"
    local _GRAV_NOTE="NOTE: (*) are default values, (#) are recommended values"
    local _GRAV_ARG1="ARG1:     grav_shell: sh|ash|bash - (#=bash)"
-   local _GRAV_ARG2="ARG2: [grav_imgname]: any|(*)     - (*=grav)"
+   local _GRAV_ARG2="ARG2: [grav_imgname]: any|(*)     - (*=grav-admin)"
    local _GRAV_INFO="INFO: ${_CMD} bash grav"
  
    if [ ${_ARGC} -lt 1 ]; then usage 1 "${_GRAV_TEXT}" "${_GRAV_ARGS}" "${_GRAV_NOTE}" "${_GRAV_INFO}" "${_GRAV_ARG1}" "${_GRAV_ARG2}"; fi

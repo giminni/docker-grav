@@ -1,0 +1,116 @@
+#!/usr/bin/env bash
+
+#
+# mkcache function for grav_mkcache.sh script
+#
+mkcache() {
+   local _RC=0
+   local _GRAV_NAME="${1}"
+   local _GRAV_CACHE="${2}"
+ 
+   sudo docker volume create \
+      --driver local \
+      --opt type=none \
+      --opt device="${_GRAV_CACHE}" \
+      --opt o=bind "${_GRAV_NAME}" 1>/dev/stderr
+   
+   mkdir -vp ${_GRAV_CACHE}/.ccache
+   echo "GRAV_CACHE=${_GRAV_CACHE}" > ${PWD}/.context.cache
+   
+   echo _RC=$?
+
+   return ${_RC}
+}
+
+#
+# mkdata function for grav_mkdata.sh script
+#
+mkdata() {
+   local _RC=0
+   local _GRAV_NAME="${1}"
+   local _GRAV_DATA="${2}"
+ 
+   sudo docker volume create \
+      --driver local \
+      --opt type=none \
+      --opt device="${_GRAV_DATA}" \
+      --opt o=bind "${_GRAV_NAME}" 1>/dev/stderr
+   
+   mkdir -vp ${_GRAV_DATA}
+   echo "GRAV_DATA=${_GRAV_DATA}" > ${PWD}/.context.data
+   
+   echo _RC=$?
+
+   return ${_RC}
+}
+
+#
+# mkpass function for grav_mkpass.sh script
+#
+mkpass() {
+   local _RC=0
+   local _GRAV_SECS="${1}"
+   local _GRAV_USER="${2}"
+   local _GRAV_PASS="${3}"
+   local _GRAV_PW
+
+   _GRAV_PW="$(openssl passwd -6 -salt $(openssl rand -base64 32) ${_GRAV_SECS})"
+   
+   _RC=$?
+
+   chmod 600 ${_GRAV_PASS}
+
+   echo ${_GRAV_USER}:${_GRAV_PW} > ${_GRAV_PASS}
+   _RC=$?
+   
+   chmod 400 ${_GRAV_PASS}
+
+   return ${_RC}
+}
+
+#
+# mkssh function for grav_mkssh.sh script
+#
+mkssh() {
+   local _RC=0
+   local _GRAV_EMAIL="${1}"
+   local _GRAV_TYPE="${2}"
+   local _GRAV_LENGTH="${3}"
+   local _GRAV_SSH="${4}"
+
+   ssh-keygen -C "${_GRAV_EMAIL}" -t ${_GRAV_TYPE} -b ${_GRAV_LENGTH} -f "${_GRAV_SSH}" -N ''
+
+   _RC=$?
+
+   return ${_RC}
+}
+
+#
+# Mkver function for grav_mkver.sh script
+#
+mkver() {
+   local _RC=0
+   local _GRAV_VER="${1}"
+
+   case "${_GRAV_VER}" in
+      prod) echo "GRAV_PROD=$(wget -O - -o /dev/null https://getgrav.org | grep 'Stable Version' | sed -e 's/<[^>]*>//g' | awk '{print $3}')"  > "${PWD}"/.context.prod 
+      ;;
+      
+      [0-9]*.[0-9]*.[0-9]*)
+         echo "GRAV_PROD=${_GRAV_VER}"  > "${PWD}"/.context.prod 
+      ;;
+
+      dev) echo "GRAV_DEV=$(wget -O - -o /dev/null https://getgrav.org |grep 'Release Candidate Version' | sed -e 's/<[^>]*>//g' | awk '{print $4}')" > "${PWD}"/.context.dev 
+      ;;
+          
+      [0-9]*.[0-9]*.[0-9]*-[a-z][a-z].[0-9]*\?testing)
+         echo "GRAV_DEV=${_GRAV_VER}"  > "${PWD}"/.context.dev 
+      ;;
+
+      *) usage 2 "FAIL: Argument is not defined: ${_GRAV_VER}!"
+      ;;
+
+   esac
+
+   return ${_RC}
+}

@@ -9,7 +9,8 @@ RC=0
 # #### #
 # LIBS #
 # #### #
-source ${PWD}/libgrav
+source ${PWD}/libs/libgrav
+source ${PWD}/libs/libgrav_docker
 
 # ##### #
 # FUNCS #
@@ -22,7 +23,7 @@ main() {
    local _CMD=$(basename ${0})
 
    local _GRAV_USER="${_ARGV[1]}"
-   local _GRAV_NAME="${_ARGV[2]:-"grav"}"
+   local _GRAV_NAME="${_ARGV[2]:-"grav-admin"}"
    local _GRAV_TAG="${_ARGV[3]:-"latest"}"
    local _GRAV_DATA="${_ARGV[4]:-"grav_data"}"
    
@@ -30,7 +31,7 @@ main() {
    local _GRAV_ARGS="ARGS: ${_CMD} grav_user [grav_imgname=grav] [grav_imgtag=latest] [grav_voldata=grav_data]"
    local _GRAV_NOTE="NOTE: (*) are default values, (#) are recommended values"
    local _GRAV_ARG1="ARG1:      grav_user: any|(#) - (#=grav)"
-   local _GRAV_ARG2="ARG2: [grav_imgname|: any|(*) - (*=grav)"
+   local _GRAV_ARG2="ARG2: [grav_imgname|: any|(*) - (*=grav-admin)"
    local _GRAV_ARG3="ARG3:  [grav_imgtag|: any|(*) - (*=latest)"
    local _GRAV_ARG4="ARG4: [grav_voldata]: any|(*) - (*=grav_data)"
    local _GRAV_INFO="INFO: ${_CMD} grav grav latest grav_data"
