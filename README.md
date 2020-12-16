@@ -98,6 +98,29 @@ This project includes the following features:
 * (TBD) Use buildx with docker composer file
 * (TBD) Ability to install grav skeletons and plugins
 
+## Installation procedure
+
+* Install the prerequisite software (See [Prerequisites](#-prerequisites)
+* Download project with git `git clone https://github.com/giminni/docker-grav`
+* Change into the current project directory with `cd docker-grav`
+* Add grav_bin directory to your .bashrc file with `echo "export PATH=${PWD}/grav_bin:${PATH} #-# docker-grav #-# docker-grav" >> ${HOME}/.bashrc`
+* Reload bash shell with `source ${HOME}/.bashrc`
+* Check if scripts are available by entering `grav_` and pressing the TAB-key
+* Initialize the project with `grav_mkinit.sh init`
+* Check if the `.context` file is created in the project directory with `cat ${PWD}/.context`
+* Check if the configuration directory `grav_cfg` is populated with `.config.*` files with `ls -las ${PWD}/grav_cfg`
+* Create the user `grav` encrypted password with `grav_mkpass.sh secret-pass grav grav`. The password must contain at least 11 characters
+* Check `grav_pass.key` file under the key directory `grav_key` with `cat ${PWD}/grav_key/grav_pass.key`
+* If you have own SSH keys for an external user copy this to the key directory `grav_key` using this scheme `grav_rsa` for the private SSH key and `grav_rsa.pub` for the public SSH key
+* Otherwise create new SSH private and public key with `grav_mkssh.sh your-email-address`
+* Check if the SSH keys exists with `ls -las ${PWD}/grav_key/grav_rsa*` if you are using the `rsa` algorithm
+* The latest core production and development version are automatically set, other version are installed for example with `grav_setcore.sh 1.6.0` for production version or `grav_setcore.sh grav_setcore.sh 1.7.0-rc.19`
+* Reduce internet bandwith or working in airgap environments by downloading the file with `grav_getcore.sh 1.6.0` for production environment or `grav_getcore.sh 1.7.0-rc.19` for development environemnt.
+* Check if the file was downloaded correctly with `ls -las ${PWD}/grav_rootfs/tmp`
+* Create the cache directory with `grav_mkcache.sh grav_cache`
+* Check if the cache directory exists with `ls -las ${PWD}/grav_cache`
+* Build the docker image with `grav_build grav grav-admin testing` for the development version or `grav_build.sh grav grav latest` for the production environment
+
 ## Using local key/value files for configuration
 
 To persist some project configuration data a couple of key/value files are created in the `(<PROJECT_HOME>/grav_cfg)` directory. A `(<PROJECT_HOME>/.context)` file will be generated with `(<PROJECT_HOME/grav_bin/grav_mkinit.sh)` at init time holding the configuration directory where all configuration files are stored. 
@@ -108,7 +131,7 @@ E.g. .context file:
 GRAV_CTX=<PROJECT_HOME>/grav_cfg
 ```
 
-> NOTE: Every configuration files can be changed manually by expert user or use the handy local bash scripts that starts with `(<PROJECT__ROOT>./grav_mk*.sh)` for novice user.
+> NOTE: Every configuration files can be changed manually by expert user or use the handy local bash scripts that starts with `(<PROJECT_HOME>/grav_bin/grav_mk*.sh)` for novice user.
 
 ## Using docker multiarch environment
 
@@ -208,19 +231,19 @@ This script as a lot of presetted arguments. The first argument is mandatory if 
 Here an example, how to create a user `(grav)` and build the latest grav+admin development package.
 
 ```bash
-<PROJECT__ROOT>./grav_build.sh grav grav-admin testing
+<PROJECT_HOME>/grav_bin/grav_build.sh grav grav-admin testing
 ```
 
 Here an example how to create a user `(grav)` and build the latest grav+admin production package. Observe that the last two arguments are omitted while presetted.
 
 ```bash
-<PROJECT__ROOT>./grav_build.sh grav
+<PROJECT_HOME>/grav_bin/grav_build.sh grav
 ```
 
 Here the complete usage string of `(<PROJECT__ROOT>/grav_build.sh)` script:
 
 ```bash
-$ <PROJECT__ROOT>./grav_build.sh 
+$ <PROJECT_HOME>/grav_bin/grav_build.sh 
 FAIL: Arguments are not provided!
 
 ARGS: grav_build.sh grav_user [grav_imgname] [grav_tagname] [grav_passfile] [grav_privfile] [grav_pubfile]
@@ -250,19 +273,19 @@ This script as a lot of presetted arguments. The first argument is mandatory if 
 Here an example how to run as user `(grav)` and use the latest `(grav-admin)` development package.
 
 ```bash
-<PROJECT__ROOT>./grav_run.sh grav grav-admin testing
+<PROJECT_HOME>/grav_bin/grav_run.sh grav grav-admin testing
 ```
 
 Here an example how to run as user `(grav)` and use the latest `(grav-admin)` production package. Observe that the last two arguments are omitted while presetted.
 
 ```bash
-<PROJECT__ROOT>./grav_run.sh grav grav-admin
+<PROJECT_HOME>/grav_bin/grav_run.sh grav grav-admin
 ```
 
 Here the complete usage string of `(<PROJECT__ROOT>/grav_run.sh)` script:
 
 ```bash
-$ <PROJECT__ROOT>./grav_run.sh
+$ <PROJECT_HOME>/grav_bin/grav_run.sh
 FAIL: Arguments are not provided!
 
 ARGS: grav_run.sh grav_user [grav_imgname=grav] [grav_imgtag=latest] [grav_voldata=grav_data]
