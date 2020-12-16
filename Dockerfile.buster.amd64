@@ -255,4 +255,4 @@ EXPOSE 22 80 443
 # CMD ["apache2-foreground"]
 # CMD ["bash"]
 CMD ["sh", "-c", "/usr/sbin/sshd && cron && apache2-foreground"]
-# CMD ["sh", "-c", "su-exec grav", "/usr/sbin/sshd && cron && apache2-foreground"]
+# CMD ["/usr/local/bin/su-exec", "grav", "sh", "-c", "/usr/sbin/sshd && cron && apache2-foreground"]
