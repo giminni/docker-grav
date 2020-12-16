@@ -1,11 +1,12 @@
-**/.cache
-**/.context**
-**/.gitkeep
-**/grav_cache
-**/grav_data
+# Exclude pattern for Docker context
+**/.ccache
+**/.dcache
+**/.config**
+**/grav_data/**
 **/.vscode
 **/.DS_store
 **/node_modules
 **/*.org
 
-# Only in .dockerignore
+# Exclude pattern only in .dockerignore
+**/.gitkeep

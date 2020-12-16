@@ -39,10 +39,33 @@ In addition other packages are included:
 
 This Dockerfile needs the following prerequisites:
 
+* Insert `export PATH=${PWD}/grav_bin:${PATH}` into your .bashrc script
 * Install at least docker-ce 20.10
   (See https://docs.docker.com/engine/install/)
 * Install latest docker buildx plugin
   (See https://docs.docker.com/buildx/working-with-buildx/)
+
+## Project structure
+
+```bash
+<PROJECT_ROOT>
+|-- [ ]  grav_bin        |-- (Directory for bash scripts)
+|-- [*]  grav_cache      |-- (Directory for cache files) 
+|-- [*]  grav_context    |-- (Directory for context files) 
+|-- [*]  grav_data       |-- (Directory for data files)  
+|-- [ ]  grav_docker     |-- (Directory for docker files)
+|-- [*]  grav_keys       |-- (Directory for SSH & user keys)
+|-- [ ]  grav_libs       |-- (Library for shell scripts)
+|-- [ ]  grav_rootfs     |-- (Repository for packages and files)
+|-- [ ]  Dockerfile -> ./grav_docker/Dockerfile
+|-- [ ]  .dockerignore
+|-- [ ]  .gitignore
+`-- [ ]  README.md
+```
+
+> NOTE: All items marked with `[*]` are not uploaded to Git. They must be build with the appropriate `(<PROJECT_ROOT>/grav_mk*)` script.
+
+> NOTE: Dockerfile is a symlink to `(<PROJECT_ROOT>/grav_docker/Dockerfile)`.
 
 ## Project features
 
@@ -96,7 +119,7 @@ The extended docker build features of `(buildx)` allows to inject sensitive data
 
 The same thing occures for the SSH private and public key. The key are stored under `(<PROJECT_DIR/grav_keys/grav_rsa)` and `(<PROJECT_DIR/grav_keys/grav_rsa.pub)`respectively.
 
-> NOTE: Ensure that the SSH keys and user match the SSH keys of an external user on the local or remote host. Otherwise the user autologin over SSH and cache synchronization over github, r rsync does not work.
+> NOTE: Ensure that the SSH keys and user match the SSH keys of an external user on the local or remote host. Otherwise the user autologin over SSH and cache synchronization over github, rsync does not work.
 
 ## Caching docker buildtime
 
@@ -130,8 +153,8 @@ There are a couple of local bash scripts to create, run and delete a container:
 
 To be able to build or run a container some information is needed in advance:
 
-* `Grav production version, e.g. GRAV_PROD=1.6.1`
-* `Grav development version, e.g. GRAV_DEV=1.7.0-rc.19`
+* `Grav production core version, e.g. GRAV_PROD=1.6.1`
+* `Grav development core version, e.g. GRAV_DEV=1.7.0-rc.19`
 * `Grav cache directory path, e.g. GRAV_CACHE=<PROJECT_ROOT>/grav_cache`
 * `Grav volume directory path, e.g. GRAV_VOL=<PROJECT_ROOT>/grav_data`
 * `Grav password path, e.g. GRAV_PASS=<PROJECT_ROOT>/grav_pass.key`
@@ -142,8 +165,8 @@ This information is stored into local project context files that begins with `<P
 
 * `<PROJECT_ROOT>/mkpass.sh)` = Configures the named container user and password
 * `<PROJECT_ROOT>/mkssh.sh)` = Configures the SSH private and public files for rsync, git, ...
-* `<PROJECT_ROOT>/mkver.sh)` = Configures the grav production and version string information
-* `<PROJECT_ROOT>/getver.sh)`= Download the corresponding file into `(<PROJECT_ROOT>/rootfs)` directory
+* `<PROJECT_ROOT>/mkcore.sh)` = Configures the grav production/development core version string
+* `<PROJECT_ROOT>/getcore.sh)`= Download the corresponding production/development core file into `(<PROJECT_ROOT>/rootfs)` directory
 * `<PROJECT_ROOT>/mkdata.sh)` = Configures the local data volume path `(<PROJECT_ROOT>/grav_data)`
 * `<PROJECT_ROOT>/mkcache.sh)` = Configures the local cache volume path `(<PROJECT_ROOT>/grav_cache/*)`
 
@@ -153,12 +176,12 @@ This information is stored into local project context files that begins with `<P
 
 To be able to create the project in offline situation or minimize the download time from the internet, two tasks must be executed:
 
-* Define wich grav version is needed to be installed from the grav download site using a local script `(<PROJECT_ROOT>/grav_mkver.sh)`.  Insert as first argument `(prod)` or `(dev)`. To download a specific version use `(<PROJECT_ROOT/grav_getver.sh)`. Use the same arguments like `(<PROJECT_ROOT>/grav_mkver.sh)`
+* Define wich grav version is needed to be installed from the grav download site using a local script `(<PROJECT_ROOT>/grav_mkcore.sh)`.  Insert as first argument `(prod)` or `(dev)`. To download a specific version use `(<PROJECT_ROOT/grav_getcore.sh)`. Use the same arguments like `(<PROJECT_ROOT>/grav_mkcore.sh)`
 
-E.g. to download a specific version of grav-admin `(1.6.0)` enter:
+E.g. to download a specific version of grav-admin core `(1.6.0)` enter:
 
 ```bash
-./grav_getver.sh 1.6.0 grav-admin
+./grav_getcore.sh 1.6.0 grav-admin
 ```
 
 > NOTE: The files are stored into the `(<PROJECT_ROOT>/rootfs/tmp)`

@@ -13,11 +13,22 @@ ARGC=$#
 ARGV=("$@")
 RC=0
 
+CMD="$(basename ${0})"
+NAME=$(echo ${CMD} | cut -d'.' -f1)
+ABS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BASE_DIR="${ABS_DIR%/*}"
+DATA_DIR="${BASE_DIR}/grav_data"
+ROOT_DIR="${BASE_DIR}/grav_rootfs"
+BIN_DIR="${BASE_DIR}/grav_bin"
+CFG_DIR="${BASE_DIR}/grav_config"
+KEY_DIR="${BASE_DIR}/grav_keys"
+LIB_DIR="${BASE_DIR}/grav_libs"
+
 # #### #
 # LIBS #
 # #### #
-source "${PWD}"/grav_libs/libgrav
-source "${PWD}"/grav_libs/libgrav_docker
+source "${LIB_DIR}"/libgrav
+source "${LIB_DIR}"/libgrav_docker
 
 # ##### #
 # FUNCS #
@@ -27,7 +38,6 @@ main() {
    local _ARGV=("${@}")
    
    local _RC=0
-   local _CMD=$(basename ${0})
 
    local _GRAV_USER="${_ARGV[1]}"
    local _GRAV_NAME="${_ARGV[2]:-"grav-admin"}"
@@ -35,13 +45,13 @@ main() {
    local _GRAV_DATA="${_ARGV[4]:-"grav_data"}"
    
    local _GRAV_TEXT="FAIL: Arguments are not provided!"
-   local _GRAV_ARGS="ARGS: ${_CMD} grav_user [grav_imgname=grav] [grav_imgtag=latest] [grav_voldata=grav_data]"
+   local _GRAV_ARGS="ARGS: ${CMD} grav_user [grav_imgname=grav] [grav_imgtag=latest] [grav_voldata=grav_data]"
    local _GRAV_NOTE="NOTE: (*) are default values, (#) are recommended values"
    local _GRAV_ARG1="ARG1:      grav_user: any|(#) - (#=grav)"
    local _GRAV_ARG2="ARG2: [grav_imgname|: any|(*) - (*=grav-admin)"
    local _GRAV_ARG3="ARG3:  [grav_imgtag|: any|(*) - (*=latest)"
    local _GRAV_ARG4="ARG4: [grav_voldata]: any|(*) - (*=grav_data)"
-   local _GRAV_INFO="INFO: ${_CMD} grav grav latest grav_data"
+   local _GRAV_INFO="INFO: ${CMD} grav grav latest grav_data"
 
    if [ ${_ARGC} -lt 1 ]; then usage 1 "${_GRAV_TEXT}" "${_GRAV_ARGS}" "${_GRAV_NOTE}" "${_GRAV_INFO}" "${_GRAV_ARG1}" "${_GRAV_ARG2}" "${_GRAV_ARG3}" "${_GRAV_ARG4}"; fi
 

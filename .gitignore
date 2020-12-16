@@ -1,13 +1,14 @@
-**/.cache
-**/.context**
-**/grav_cache
-**/grav_data
+# Exclude pattern for GitHub context
+**/.ccache
+**/.dcache
+**/.config**
+**/grav_data/**
 **/.vscode
 **/.DS_store
 **/node_modules
 **/*.org
 
-# Only in .gitignore
+# Exclude pattern only in .gitignore
 **/*.c
 **/*_rsa**
 **/*key

@@ -15,7 +15,7 @@ mkcache() {
       --opt o=bind "${_GRAV_NAME}" 1>/dev/stderr
    
    mkdir -vp ${_GRAV_CACHE}/.ccache
-   echo "GRAV_CACHE=${_GRAV_CACHE}" > ${PWD}/.context.cache
+   echo "GRAV_CACHE=${_GRAV_CACHE}" > ${CFG_DIR}/.config.cache
    
    echo _RC=$?
 
@@ -37,7 +37,7 @@ mkdata() {
       --opt o=bind "${_GRAV_NAME}" 1>/dev/stderr
    
    mkdir -vp ${_GRAV_DATA}
-   echo "GRAV_DATA=${_GRAV_DATA}" > ${PWD}/.context.data
+   echo "GRAV_DATA=${_GRAV_DATA}" > ${CFG_DIR}/.config.data
    
    echo _RC=$?
 
@@ -108,6 +108,40 @@ mkcore() {
       ;;
 
       *) usage 2 "FAIL: Argument is not defined: ${_GRAV_CORE}!"
+      ;;
+
+   esac
+
+   return ${_RC}
+}
+
+#
+# Mkinit function for grav_mkinit.sh script
+#
+mkinit() {
+   local _RC=0
+   local _GRAV_CMD="${1}"
+   local _GRAV_HOME="${2}" 
+   local _GRAV_DATA="${3}" 
+   local _GRAV_ROOT="${4}" 
+   local _GRAV_BIN="${5}" 
+   local _GRAV_CFG="${6}" 
+   local _GRAV_KEY="${7}" 
+   local _GRAV_LIB="${8}"
+
+   case "${_GRAV_CMD}" in
+      init)
+         echo "GRAV_HOME=${_GRAV_HOME}" > "${_GRAV_CFG}"/.config.home 
+         echo "GRAV_DATA=${_GRAV_DATA}" > "${_GRAV_CFG}"/.config.data 
+         echo "GRAV_ROOT=${_GRAV_ROOT}" > "${_GRAV_CFG}"/.config.root 
+         echo "GRAV_BIN=${_GRAV_BIN}" > "${_GRAV_CFG}"/.config.bin 
+         echo "GRAV_CFG=${_GRAV_CFG}" > "${_GRAV_CFG}"/.config.cfg
+         echo "GRAV_KEY=${_GRAV_KEY}" > "${_GRAV_CFG}"/.config.key
+         echo "GRAV_LIB=${_GRAV_LIB}" > "${_GRAV_CFG}"/.config.lib 
+      ;;
+      
+      
+      *) usage 2 "FAIL: Argument is not defined: ${_GRAV_CMD}!"
       ;;
 
    esac

@@ -12,12 +12,22 @@ if [ "$(set | grep xtrace)" -o ${DEBUG:-0} -ne 0 ]; then DEBUG=1; set -x; else D
 ARGC=$#
 ARGV=("$@")
 RC=0
+CMD="$(basename ${0})"
+NAME=$(echo ${CMD} | cut -d'.' -f1)
+ABS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BASE_DIR="${ABS_DIR%/*}"
+DATA_DIR="${BASE_DIR}/grav_data"
+ROOT_DIR="${BASE_DIR}/grav_rootfs"
+BIN_DIR="${BASE_DIR}/grav_bin"
+CFG_DIR="${BASE_DIR}/grav_config"
+KEY_DIR="${BASE_DIR}/grav_keys"
+LIB_DIR="${BASE_DIR}/grav_libs"
 
 # #### #
 # LIBS #
 # #### #
-source "${PWD}"/grav_libs/libgrav
-source "${PWD}"/grav_libs/libgrav_docker
+source "${LIB_DIR}"/libgrav
+source "${LIB_DIR}"/libgrav_docker
 
 # ##### #
 # FUNCS #
@@ -27,7 +37,6 @@ main() {
    local _ARGV=("${@}")
 
    local _RC=0
-   local _GRAV_CMD=$(basename ${0})
 
    # Get Grav version strings from context files
    local _GRAV_DEV="$(cat ${CFG_DIR}/.config.dev | cut -d'=' -f2)"
@@ -48,7 +57,7 @@ main() {
    local _GRAV_URL="https://getgrav.org/download/${_GRAV_KIND}/${_GRAV_NAME}"
 
    local _GRAV_TEXT="FAIL: Arguments are not provided!"
-   local _GRAV_ARGS="ARGS: ${_GRAV_CMD} grav_user [grav_imgname] [grav_tagname] [grav_passfile] [grav_privfile] [grav_pubfile]"
+   local _GRAV_ARGS="ARGS: ${CMD} grav_user [grav_imgname] [grav_tagname] [grav_passfile] [grav_privfile] [grav_pubfile]"
    local _GRAV_NOTE="NOTE: (*) are default values, (#) are recommended values"
    local _GRAV_ARG1="ARG1:     [grav_user]: any|(#)         - (#=grav)"
    local _GRAV_ARG2="ARG2:  [grav_imgname]: grav-admin|grav - (*=grav-admin)"
@@ -56,7 +65,7 @@ main() {
    local _GRAV_ARG4="ARG4: [grav_passfile]: any|(*)         - (*=<current-dir>/grav_keys/grav_pass.key)"
    local _GRAV_ARG5="ARG5: [grav_privfile]: any|(*)         - (*=<current-dir>/grav_keys/grav_rsa)"
    local _GRAV_ARG6="ARG6:  [grav_pubfile]: any|(*)         - (*=<current-dir>/grav_keys/grav_rsa.pub)"
-   local _GRAV_INFO="INFO: ${_GRAV_CMD} grav grav-admin latest ${PWD}/grav_keys/grav_pass.key ${PWD}/grav_keys/grav_rsa ${PWD}/grav_keys/grav_rsa.pub"
+   local _GRAV_INFO="INFO: ${CMD} grav grav-admin latest ${PWD}/grav_keys/grav_pass.key ${PWD}/grav_keys/grav_rsa ${PWD}/grav_keys/grav_rsa.pub"
 
    if [ ${_ARGC} -lt 1 ]; then usage 1 "${_GRAV_TEXT}" "${_GRAV_ARGS}" "${_GRAV_NOTE}" "${_GRAV_INFO}" "${_GRAV_ARG1}" "${_GRAV_ARG2}" "${_GRAV_ARG3}" "${_GRAV_ARG4}" "${_GRAV_ARG5}" "${_GRAV_ARG6}"; fi
 
