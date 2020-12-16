@@ -63,7 +63,7 @@ This Dockerfile needs the following prerequisites:
 `-- [ ]  README.md
 ```
 
-> NOTE: The files or directory content marked with `[*]` are not uploaded to Git. They must be build with the appropriate `(<PROJECT_HOME>/grav_mk*)` script.
+> NOTE: The files or directory content marked with `[*]` are not uploaded to Git. They must be build with the appropriate `(<PROJECT_HOME>/grav_bin/grav_mk*)` script.
 
 > NOTE: To initialize the project, execute `./grav_bin/grav_mkinit.sh init` first.
 
@@ -72,8 +72,8 @@ This Dockerfile needs the following prerequisites:
 This project includes the following features:
 
 * Use local context key/value files for project configuration settings `(<PROJECT_HOME>/.context.*)`
-* Use local cache directory for injecting files at buildtime `(<PROJECT_HOME>/rootfs/*)`
-* Use some bash shell scripts for build, runtime and configuration `(<PROJECT_HOME>/grav_*.sh)`
+* Use local cache directory for injecting files at buildtime `(<PROJECT_HOME>/grav_rootfs/*)`
+* Use some bash shell scripts for build, runtime and configuration `(<PROJECT_HOME>/grav_bin/grav_*.sh)`
 * Use docker buildx builder for external docker image storage `(--cache-from, --cache-to)` in a local directory `(<PROJECT_HOME>/grav_cache/.ccache)`
 * Use docker buildx builder for specific platform builds, here `(linux/amd64)`
 * Create a named user `(grav)` with SSH keys for vscode development over remote SSH
@@ -95,7 +95,9 @@ This project includes the following features:
 
 ## Using local key/value files for configuration
 
-To persist some project configuration data a couple of key/value files are created in this local directory. This `(<PROJECT_HOME>/.context.*)` files are identified by a key and a corresponding value. E.g.
+To persist some project configuration data a couple of key/value files are created in the `(grav_cfg)` directory. This `(<PROJECT_HOME>/.context)` file point to the configuration directory where all configuration files are stored. 
+
+E.g.
 
 ```bash
 GRAV_USER=grav
@@ -109,15 +111,15 @@ Using the extended docker build features of `(buildx)` this project is prepared 
 
 ## Using local docker cache repository
 
-In addition to the build and compile cache environment, there is another local directory `(./<PROJECT_HOME>/rootfs/*)` that holds cached artefacts. This directory can be used to store for example the grav zip files to avoid a lengthy download time from the internet.
+In addition to the build and compile cache environment, there is another local directory `(./<PROJECT_HOME>/grav_rootfs/*)` that holds cached artefacts. This directory can be used to store for example the grav zip files to avoid a lengthy download time from the internet.
 
 In this case store the `(grav-admin.zip)` file under `(./<PROJECT_HOME>/grav_rootfs/tmp)`. If the name is correct the file will be inserted into the docker buildtime context and used instead of downloading the file from the internet.
 
 ## Handling user password and SSH secrets
 
-The extended docker build features of `(buildx)` allows to inject sensitive data without history trace. The user password is generated externally with `(SHA512)` using a provided bash script `<PROJECT_HOME>/mkssh.sh)` stored under `(<PROJECT_DIR>/grav_keys/grav_pass.key)` and injected into the container at buildtime.
+The extended docker build features of `(buildx)` allows to inject sensitive data without history trace. The user password is generated externally with `(SHA512)` using a provided bash script `<PROJECT_HOME>/grav_bin/mkssh.sh)` stored under `(<PROJECT_DIR>/grav_key/grav_pass.key)` and injected into the container at buildtime.
 
-The same thing occures for the SSH private and public key. The key are stored under `(<PROJECT_DIR/grav_keys/grav_rsa)` and `(<PROJECT_DIR/grav_keys/grav_rsa.pub)`respectively.
+The same thing occures for the SSH private and public key. The key are stored under `(<PROJECT_DIR/grav_key/grav_rsa)` and `(<PROJECT_DIR/grav_key/grav_rsa.pub)`respectively.
 
 > NOTE: Ensure that the SSH keys and user match the SSH keys of an external user on the local or remote host. Otherwise the user autologin over SSH and cache synchronization over github, rsync does not work.
 
@@ -157,18 +159,18 @@ To be able to build or run a container some information is needed in advance:
 * `Grav development core version, e.g. GRAV_DEV=1.7.0-rc.19`
 * `Grav cache directory path, e.g. GRAV_CACHE=<PROJECT_HOME>/grav_cache`
 * `Grav volume directory path, e.g. GRAV_VOL=<PROJECT_HOME>/grav_data`
-* `Grav password path, e.g. GRAV_PASS=<PROJECT_HOME>/grav_pass.key`
-* `SSH key directory path, e.g. GRAV_SSH=>PROJECT_HOME>/grav_rsa`
+* `Grav password path, e.g. GRAV_PASS=<PROJECT_HOME>/grav_key/grav_pass.key`
+* `SSH key directory path, e.g. GRAV_SSH=<PROJECT_HOME>/grav_key/grav_rsa`
 * `Username, e.g. GRAV_USER=grav`
 
-This information is stored into local project context files that begins with `<PROJECT_HOME>/.*`. To insert this data locally some local bash scripts are used `grav_mk*`. Feel free to include your own values if needed.
+This information is stored into local project connfig files that begins with `<PROJECT_HOME>/grav_cfg/.*`. To insert this data locally some local bash scripts are used `grav_mk*`. Feel free to include your own values if needed.
 
-* `<PROJECT_HOME>/mkpass.sh)` = Configures the named container user and password
-* `<PROJECT_HOME>/mkssh.sh)` = Configures the SSH private and public files for rsync, git, ...
-* `<PROJECT_HOME>/mkcore.sh)` = Configures the grav production/development core version string
-* `<PROJECT_HOME>/getcore.sh)`= Download the corresponding production/development core file into `(<PROJECT_HOME>/rootfs)` directory
-* `<PROJECT_HOME>/mkdata.sh)` = Configures the local data volume path `(<PROJECT_HOME>/grav_data)`
-* `<PROJECT_HOME>/mkcache.sh)` = Configures the local cache volume path `(<PROJECT_HOME>/grav_cache/*)`
+* `<PROJECT_HOME>/grav_bin/mkpass.sh)` = Configures the named container user and password
+* `<PROJECT_HOME>/grav_bin/mkssh.sh)` = Configures the SSH private and public files for rsync, git, ...
+* `<PROJECT_HOME>/grav_bin/setcore.sh)` = Configures the grav production/development core version string
+* `<PROJECT_HOME>/grav_bin/getcore.sh)`= Download the corresponding production/development core file into `(<PROJECT_HOME>/rootfs)` directory
+* `<PROJECT_HOME>/grav_bin/mkdata.sh)` = Configures the local data volume path `(<PROJECT_HOME>/grav_data)`
+* `<PROJECT_HOME>/grav_bin/mkcache.sh)` = Configures the local cache volume path `(<PROJECT_HOME>/grav_cache/*)`
 
 > NOTE: Please consult the usage information of each local bash script by executing the command without arguments.
 
@@ -176,7 +178,7 @@ This information is stored into local project context files that begins with `<P
 
 To be able to create the project in offline situation or minimize the download time from the internet, two tasks must be executed:
 
-* Define wich grav version is needed to be installed from the grav download site using a local script `(<PROJECT_HOME>/grav_mkcore.sh)`.  Insert as first argument `(prod)` or `(dev)`. To download a specific version use `(<PROJECT_HOME/grav_getcore.sh)`. Use the same arguments like `(<PROJECT_HOME>/grav_mkcore.sh)`
+* Define wich grav version is needed to be installed from the grav download site using a local script `(<PROJECT_HOME>/grav_bin/grav_mkcore.sh)`.  Insert as first argument `(prod)` or `(dev)`. To download a specific version use `(<PROJECT_HOME/grav_bin/grav_getcore.sh)`. Use the same arguments like `(<PROJECT_HOME>/grav_bin/grav_mkcore.sh)`
 
 E.g. to download a specific version of grav-admin core `(1.6.0)` enter:
 
@@ -184,7 +186,7 @@ E.g. to download a specific version of grav-admin core `(1.6.0)` enter:
 ./grav_getcore.sh 1.6.0 grav-admin
 ```
 
-> NOTE: The files are stored into the `(<PROJECT_HOME>/rootfs/tmp)`
+> NOTE: The files are stored into the `(<PROJECT_HOME>/grav_rootfs/tmp)`
 
 ## Persisting data into an external storage
 
