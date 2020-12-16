@@ -51,15 +51,15 @@ This Dockerfile needs the following prerequisites:
 <PROJECT_ROOT>
 |-- [ ]  grav_bin        |-- (Directory for bash scripts)
 |-- [*]  grav_cache      |-- (Directory for cache files) 
-|-- [*]  grav_context    |-- (Directory for context files) 
+|-- [*]  grav_cfg        |-- (Directory for config files) 
 |-- [*]  grav_data       |-- (Directory for data files)  
 |-- [ ]  grav_docker     |-- (Directory for docker files)
-|-- [*]  grav_keys       |-- (Directory for SSH & user keys)
-|-- [ ]  grav_libs       |-- (Library for shell scripts)
+|-- [*]  grav_key        |-- (Directory for SSH & user keys)
+|-- [ ]  grav_lib        |-- (Library for shell scripts)
 |-- [ ]  grav_rootfs     |-- (Repository for packages and files)
-|-- [ ]  Dockerfile -> ./grav_docker/Dockerfile
 |-- [ ]  .dockerignore
 |-- [ ]  .gitignore
+|-- [ ]  Dockerfile -> ./grav_docker/Dockerfile
 `-- [ ]  README.md
 ```
 
