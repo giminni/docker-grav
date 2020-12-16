@@ -39,13 +39,17 @@ In addition other packages are included:
 
 This Dockerfile needs the following prerequisites:
 
-* Insert `export PATH=${PWD}/grav_bin:${PATH}` into your .bashrc script
+* Insert `export PATH=${PWD}/grav_bin:${PATH}` into your `.bashrc` script or execute it from the command line
 * Install at least docker-ce 20.10
   (See https://docs.docker.com/engine/install/)
 * Install latest docker buildx plugin
   (See https://docs.docker.com/buildx/working-with-buildx/)
+* Install a newer version of openssl not older than 1.1.1
+* Install uuid, jq, git, tree, vim or vscode for development
 
 ## Project structure
+
+The project consists of different directories, each one has a specific role:
 
 ```bash
 <PROJECT_HOME>
@@ -73,15 +77,15 @@ This project includes the following features:
 
 * Use local context key/value files for project configuration settings `(<PROJECT_HOME>/.context.*)`
 * Use local cache directory for injecting files at buildtime `(<PROJECT_HOME>/grav_rootfs/*)`
-* Use some bash shell scripts for build, runtime and configuration `(<PROJECT_HOME>/grav_bin/grav_*.sh)`
-* Use docker buildx builder for external docker image storage `(--cache-from, --cache-to)` in a local directory `(<PROJECT_HOME>/grav_cache/.ccache)`
-* Use docker buildx builder for specific platform builds, here `(linux/amd64)`
-* Create a named user `(grav)` with SSH keys for vscode development over remote SSH
-* Inject a user password for SSH login securely
-* Inject the SSH keys for automatic logins and cache retrieval from local or remote host securely
+* Use some sophisticated bash shell scripts for build, runtime and configuration `(<PROJECT_HOME>/grav_bin/grav_*.sh)`
+* Use the latest docker buildx builder for external docker image storage `(--cache-from, --cache-to)` in a local directory `(<PROJECT_HOME>/grav_cache/.ccache)`
+* Use the latest docker buildx builder for specific platform builds, here `(linux/amd64)`
+* Ability to create a named user `(grav)` with SSH keys for vscode development over remote SSH over port 2222
+* Ability to create a user password for SSH login securely
+* Ability to create and add the SSH keys for automatic logins and cache retrieval from local or remote host securely
 * Use external cache volume with ccache, rsync for faster php compilation `(<PROJECT_HOME>/grav_cache/.ccache)`
-* Mount docker named volume to a specific host directory `(<PROJECT_HOME>/grav_data)`
-* <PROJECT_HOME>/rootfs repository for caching grav packages (packages, themes, skeletons, plugins)
+* Mount a docker named volume `(grav_data)` to a specific host directory `(<PROJECT_HOME>/grav_data)`
+* Create a repository `(<PROJECT_HOME>/rootfs)` for caching grav packages (packages, themes, skeletons, plugins)
 * Use a local bash shared library `(libgrav)` for all local bash scripts
 
 ## Work in progress
@@ -92,18 +96,19 @@ This project includes the following features:
 * (TBD) Implement multiarch images wit QEMU static support
 * (TBD) Create an alpine container for smaller footprint
 * (TBD) Use buildx with docker composer file
+* (TBD) Ability to install grav skeletons and plugins
 
 ## Using local key/value files for configuration
 
-To persist some project configuration data a couple of key/value files are created in the `(grav_cfg)` directory. This `(<PROJECT_HOME>/.context)` file point to the configuration directory where all configuration files are stored. 
+To persist some project configuration data a couple of key/value files are created in the `(<PROJECT_HOME>/grav_cfg)` directory. A `(<PROJECT_HOME>/.context)` file will be generated with `(<PROJECT_HOME/grav_bin/grav_mkinit.sh)` at init time holding the configuration directory where all configuration files are stored. 
 
-E.g.
+E.g. .context file:
 
 ```bash
-GRAV_USER=grav
+GRAV_CTX=<PROJECT_HOME>/grav_cfg
 ```
 
-> NOTE: This files can be changed manually or by a local bash scripts that starts with `(<PROJECT__ROOT>./grav_mk*.sh)`
+> NOTE: Every configuration files can be changed manually by expert user or use the handy local bash scripts that starts with `(<PROJECT__ROOT>./grav_mk*.sh)` for novice user.
 
 ## Using docker multiarch environment
 
@@ -111,21 +116,21 @@ Using the extended docker build features of `(buildx)` this project is prepared 
 
 ## Using local docker cache repository
 
-In addition to the build and compile cache environment, there is another local directory `(./<PROJECT_HOME>/grav_rootfs/*)` that holds cached artefacts. This directory can be used to store for example the grav zip files to avoid a lengthy download time from the internet.
+In addition to the build and compile cache environment, there is another local directory `(./<PROJECT_HOME>/grav_rootfs/*)` that holds cached artefacts. This directory can be used to store for example the grav core zip files to reduce bandwith and avoid a lengthy download time from the internet.
 
-In this case store the `(grav-admin.zip)` file under `(./<PROJECT_HOME>/grav_rootfs/tmp)`. If the name is correct the file will be inserted into the docker buildtime context and used instead of downloading the file from the internet.
+In this case store the `(grav-admin.zip)` file under `(<PROJECT_HOME>/grav_rootfs/tmp)`. If the name is correct the file will be inserted into the docker buildtime context and used instead of downloading the file from the internet.
 
 ## Handling user password and SSH secrets
 
-The extended docker build features of `(buildx)` allows to inject sensitive data without history trace. The user password is generated externally with `(SHA512)` using a provided bash script `<PROJECT_HOME>/grav_bin/mkssh.sh)` stored under `(<PROJECT_DIR>/grav_key/grav_pass.key)` and injected into the container at buildtime.
+The extended docker build features of `(buildx)` allows injecting sensitive data without leaving any history trace. The user password is generated externally with openssl `(SHA512)` encryption by a provided bash script `<PROJECT_HOME>/grav_bin/mkssh.sh)`. The encrypted password is then stored under `(<PROJECT_DIR>/grav_key/grav_pass.key)` and injected into the container at buildtime.
 
-The same thing occures for the SSH private and public key. The key are stored under `(<PROJECT_DIR/grav_key/grav_rsa)` and `(<PROJECT_DIR/grav_key/grav_rsa.pub)`respectively.
+The same thing occures for the SSH private and public key. The key are stored under `(<PROJECT_DIR/grav_key/grav_rsa)` and `(<PROJECT_DIR/grav_key/grav_rsa.pub)` respectively.
 
 > NOTE: Ensure that the SSH keys and user match the SSH keys of an external user on the local or remote host. Otherwise the user autologin over SSH and cache synchronization over github, rsync does not work.
 
 ## Caching docker buildtime
 
-The extended docker build features of `(buildx)` allows to store the docker buildtime cache into a local project directory `(<PROJECT_HOME>/grav_cache/.dcache)`. This can be of course changed to push/pull from a private registry if needed.
+The extended docker build features of `(buildx)` allows to store the docker buildtime cache into a local project directory `(<PROJECT_HOME>/grav_cache/.dcache)`. This can be of course changed to push/pull from a pubic/private registry if needed.
 
 ## Running services as non-root user
 
