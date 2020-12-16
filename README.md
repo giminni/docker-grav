@@ -48,18 +48,18 @@ This Dockerfile needs the following prerequisites:
 
 This project includes the following features:
 
-* Use local context key/value files for project configuration settings `(<PROJECT_ROOT>/.*)`
+* Use local context key/value files for project configuration settings `(<PROJECT_ROOT>/.context.*)`
 * Use local cache directory for injecting files at buildtime `(<PROJECT_ROOT>/rootfs/*)`
-* Use some bash shell scripts for build-, runtime and configuration `(<PROJECT_ROOT>/grav_*.sh)`
+* Use some bash shell scripts for build, runtime and configuration `(<PROJECT_ROOT>/grav_*.sh)`
 * Use docker buildx builder for external docker image storage `(--cache-from, --cache-to)` in a local directory `(<PROJECT_ROOT>/.volumes/grav_cache/.ccache)`
 * Use docker buildx builder for specific platform builds, here `(linux/amd64)`
 * Create a named user `(grav)` with SSH keys for vscode development over remote SSH
 * Inject a user password for SSH login securely
-* Inject the SSH keys for automatic logins and cache retrieval securely
-* Use external cache volume created with ccache, rsync for faster php compilation `(<PROJECT_ROOT>/.volumes/grav_cache/.ccache)`
+* Inject the SSH keys for automatic logins and cache retrieval from local or remote host securely
+* Use external cache volume with ccache, rsync for faster php compilation `(<PROJECT_ROOT>/.volumes/grav_cache/.ccache)`
 * Mount docker named volume to a specific host directory `(<PROJECT_ROOT>/.volumes/grav_data)`
-* <PROJECT_ROOT>/Rootfs repository for caching grav packages (packages, themes, skeletons, plugins)
-* Use a local bash shared library `(libgrav)`
+* <PROJECT_ROOT>/rootfs repository for caching grav packages (packages, themes, skeletons, plugins)
+* Use a local bash shared library `(libgrav)` for all local bash scripts
 
 ## Work in progress
 
@@ -72,7 +72,7 @@ This project includes the following features:
 
 ## Using local key/value files for configuration
 
-To persist some configuration data a couple of key/value files are created in this local directory. This `(<PROJECT_ROOT>/.context.*)` files are identified by a key and a corresponding value.
+To persist some project configuration data a couple of key/value files are created in this local directory. This `(<PROJECT_ROOT>/.context.*)` files are identified by a key and a corresponding value. E.g.
 
 ```bash
 GRAV_USER=grav
@@ -82,13 +82,13 @@ GRAV_USER=grav
 
 ## Using docker multiarch environment
 
-Using the extended docker build features of `(buildx)` this project is prepared for multiarch images. That means it uses one name for different target architectures `(linux/amd64, linux/arm64, ...)`. Currently only the linux/amd64 architecture is supported.
+Using the extended docker build features of `(buildx)` this project is prepared for multiarch images. That means it uses one name for different target architectures `(linux/amd64, linux/arm64, linux/armv7, ...)`. Currently only the `(linux/amd64)` architecture is supported.
 
 ## Using local docker cache repository
 
-In addition to the buildtime and compile cache environment there is another local directory `(./<PROJECT_ROOT>/rootfs/*)` that can be used to store for example the grav zip files to avoid a lengthy download and compilation time.
+In addition to the build and compile cache environment, there is another local directory `(./<PROJECT_ROOT>/rootfs/*)` that holds cached artefacts. This directory can be used to store for example the grav zip files to avoid a lengthy download time from the internet.
 
-In this case store the grav-admin.zip file under `(./<PROJECT_ROOT>/rootfs/tmp)`. If the name is correct the file will be inserted into the docker buildtime context and used instead of downloading the file from the internet.
+In this case store the `(grav-admin.zip)` file under `(./<PROJECT_ROOT>/rootfs/tmp)`. If the name is correct the file will be inserted into the docker buildtime context and used instead of downloading the file from the internet.
 
 ## Handling user password and SSH secrets
 
@@ -124,6 +124,7 @@ There are a couple of local bash scripts to create, run and delete a container:
 * `grav_build.sh` is used for building a container
 * `grav_run.sh` is used for running a container
 * `grav_shell.sh` is used for accessing the command line inside a container
+* `grav_purge.sh` is used for deleting all cached data, container and image artefacts.
 
 ## Configuring a container from the command line
 
@@ -142,10 +143,25 @@ This information is stored into local project context files that begins with `<P
 * `<PROJECT_ROOT>/mkpass.sh)` = Configures the named container user and password
 * `<PROJECT_ROOT>/mkssh.sh)` = Configures the SSH private and public files for rsync, git, ...
 * `<PROJECT_ROOT>/mkver.sh)` = Configures the grav production and version string information
+* `<PROJECT_ROOT>/getver.sh)`= Download the corresponding file into `(<PROJECT_ROOT>/rootfs)` directory
 * `<PROJECT_ROOT>/mkdata.sh)` = Configures the local data volume path `(<PROJECT_ROOT>/.volumes/grav_data)`
 * `<PROJECT_ROOT>/mkcache.sh)` = Configures the local cache volume path `(<PROJECT_ROOT>/.volumes/grav_cache/*)`
 
-> NOTE: Please consult the usage information of each local bash script, executing the command without arguments.
+> NOTE: Please consult the usage information of each local bash script by executing the command without arguments.
+
+## Downloading files to be cached into the rootfs directory
+
+To be able to create the project in offline situation or minimize the download time from the internet, two tasks must be executed:
+
+* Define wich grav version is needed to be installed from the grav download site using a local script `(<PROJECT_ROOT>/grav_mkver.sh)`.  Insert as first argument `(prod)` or `(dev)`. To download a specific version use `(<PROJECT_ROOT/grav_getver.sh)`. Use the same arguments like `(<PROJECT_ROOT>/grav_mkver.sh)`
+
+E.g. to download a specific version of grav-admin `(1.6.0)` enter:
+
+```bash
+./grav_getver.sh 1.6.0 grav-admin
+```
+
+> NOTE: The files are stored into the `(<PROJECT_ROOT>/rootfs/tmp)`
 
 ## Persisting data into an external storage
 
@@ -156,9 +172,10 @@ To save the Grav site data to the host file system (so that it persists even aft
 ## Building the image from Dockerfile
 
 To build the image from the command line a local bash script `(<PROJECT__ROOT>/grav_build.sh)` is needed.
-This script as a lot of presetted arguments. The first argument is mandatory if not set the script emits a usage string.
 
-Here an example how to create a user `(grav)` and build the latest grav+admin development package.
+This script as a lot of presetted arguments. The first argument is mandatory if not set, the script emits a usage string.
+
+Here an example, how to create a user `(grav)` and build the latest grav+admin development package.
 
 ```bash
 <PROJECT__ROOT>./grav_build.sh grav grav-admin testing
@@ -193,7 +210,7 @@ The docker image has the following scheme:
 
 * <grav-user=grav>/<grav-name=<grav|grav-admin>:<grav-tag=latest|testing>
 
-e.g. `grav/grav:latest` or `(grav/grav-admin:testing)`
+E.g. `grav/grav:latest` for production images or `(grav/grav-admin:testing)` for development images.
 
 ## Running the image from Dockerfile
 
