@@ -4,6 +4,7 @@
 **/.config**
 **/grav_data/**
 **/.vscode
+**/.idea
 **/.DS_store
 **/node_modules
 **/*.org
