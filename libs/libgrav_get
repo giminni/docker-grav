@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+#
+# Getver function for grav_getver.sh script
+#
+getver() {
+   local _RC=0
+   local _GRAV_VER="${1}"
+   local _GRAV_NAME="${2}"
+   local _GRAV_KIND="${3}"
+
+   local _GRAV_DEV=""
+   local _GRAV_PROD=""
+
+   case "${_GRAV_VER}" in
+      dev)
+         _GRAV_DEV=$(cat "${PWD}"/.context.dev | cut -d'=' -f2)
+         wget -O "${PWD}"/rootfs/tmp/${_GRAV_NAME}-${_GRAV_DEV}?testing.zip \
+            https://getgrav.org/download/${_GRAV_KIND}/${_GRAV_NAME}/${_GRAV_DEV}?testing
+      ;;
+
+      [0-9]*.[0-9]*.[0-9]*-[a-z][a-z].[0-9]*)
+         wget -O "${PWD}"/rootfs/tmp/${_GRAV_NAME}-${_GRAV_VER}?testing.zip \
+            https://getgrav.org/download/${_GRAV_KIND}/${_GRAV_NAME}/${_GRAV_VER}?testing
+      ;;
+
+      prod) 
+         _GRAV_PROD=$(cat "${PWD}"/.context.prod | cut -d'=' -f2)
+         wget -O "${PWD}"/rootfs/tmp/${_GRAV_NAME}-${_GRAV_PROD}.zip \
+            https://getgrav.org/download/${_GRAV_KIND}/${_GRAV_NAME}/${_GRAV_PROD}
+      ;;
+      
+      [0-9]*.[0-9]*.[0-9]*)
+         wget -O "${PWD}"/rootfs/tmp/${_GRAV_NAME}-${_GRAV_VER}.zip \
+            https://getgrav.org/download/${_GRAV_KIND}/${_GRAV_NAME}/${_GRAV_VER}
+      ;;
+
+      *) usage 2 "FAIL: Argument is not defined: ${_GRAV_VER}!"
+      ;;
+
+   esac
+
+   return ${_RC}
+}
