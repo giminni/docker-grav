@@ -9,8 +9,8 @@ RC=0
 # #### #
 # LIBS #
 # #### #
-source ${PWD}/libs/libgrav
-source ${PWD}/libs/libgrav_docker
+source "${PWD}"/grav_libs/libgrav
+source "${PWD}"/grav_libs/libgrav_docker
 
 # ##### #
 # FUNCS #

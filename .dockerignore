@@ -1,7 +1,8 @@
 **/.cache
 **/.context**
 **/.gitkeep
-**/.volumes
+**/grav_cache
+**/grav_data
 **/.vscode
 **/.DS_store
 **/node_modules

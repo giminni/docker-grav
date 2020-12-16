@@ -9,8 +9,8 @@ RC=0
 # #### #
 # LIBS #
 # #### #
-source ${PWD}/libs/libgrav
-source ${PWD}/libs/libgrav_mk
+source "${PWD}"/grav_libs/libgrav
+source "${PWD}"/grav_libs/libgrav_mk
 
 # ##### #
 # FUNCS #
@@ -25,17 +25,17 @@ main() {
    local _GRAV_EMAIL="${_ARGV[1]}"
    local _GRAV_TYPE="${_ARGV[2]:-"rsa"}"
    local _GRAV_LEN="${_ARGV[3]:-4096}"
-   local _GRAV_SSH="${_ARGV[4]:-${PWD}/grav_${_GRAV_TYPE}}"
+   local _GRAV_SSH="${_ARGV[4]:-${PWD}/grav_keys/grav_${_GRAV_TYPE}}"
 
    local _GRAV_TEXT="FAIL: Arguments are not provided!"
    local _GRAV_ARGS="ARGS: ${_CMD} grav_email [grav_keytype] [grav_keylen] [grav_user] [grav_keyfile]"
    local _GRAV_NOTE="NOTE: (*) are default values, (#) are recommended values"
-   local _GRAV_ARG1="ARG1:     grav_email: any"
+   local _GRAV_ARG1="ARG1:     grav_email: any|(#)"      - (#=own-email-address)
    local _GRAV_ARG2="ARG2: [grav_keytype]: rsa|dsa|ecdsa - (*=rsa)"
    local _GRAV_ARG3="ARG3:  [grav_keylen]: 2048-8192     - (*=4096)"
    local _GRAV_ARG4="ARG4:    [grav_user]: any|(*)       - (*=<current-user>)"
-   local _GRAV_ARG5="ARG5: [grav_keyfile]: any|(*)       - (*=<current-dir>/grav_<grav-keytype>.key)"
-   local _GRAV_INFO="INFO: ${_CMD} grav@grav.org rsa 4096 grav ${PWD}/grav_rsa.key"
+   local _GRAV_ARG5="ARG5: [grav_keyfile]: any|(*)       - (*=<current-dir>/grav_keys/grav_<grav-keytype>.key)"
+   local _GRAV_INFO="INFO: ${_CMD} grav@example.com rsa 4096 grav ${PWD}/grav_keys/grav_rsa.key"
 
    if [ ${_ARGC} -lt 1 ]; then usage 1 "${_GRAV_TEXT}" "${_GRAV_ARGS}" "${_GRAV_NOTE}" "${_GRAV_INFO}" "${_GRAV_ARG1}" "${_GRAV_ARG2}" "${_GRAV_ARG3}" "${_GRAV_ARG4}" "${_GRAV_ARG5}"; fi
 

@@ -9,8 +9,8 @@ RC=0
 # #### #
 # LIBS #
 # #### #
-source ${PWD}/libs/libgrav
-source ${PWD}/libs/libgrav_docker
+source "${PWD}"/grav_libs/libgrav
+source "${PWD}"/grav_libs/libgrav_docker
 
 # ##### #
 # FUNCS #
@@ -30,12 +30,12 @@ main() {
    local _GRAV_USER="${_ARGV[1]}"
    local _GRAV_NAME="${_ARGV[2]:-"grav-admin"}"
    local _GRAV_TAG="${_ARGV[3]:-"latest"}"
-   local _GRAV_PASS="${_ARGV[4]:-"${PWD}/grav_pass.key"}"
-   local _GRAV_PRIV="${_ARGV[5]:-"${PWD}/grav_rsa"}"
-   local _GRAV_PUB="${_ARGV[6]:-"${PWD}/grav_rsa.pub"}"
+   local _GRAV_PASS="${_ARGV[4]:-"${PWD}/grav_keys/grav_pass.key"}"
+   local _GRAV_PRIV="${_ARGV[5]:-"${PWD}/grav_keys/grav_rsa"}"
+   local _GRAV_PUB="${_ARGV[6]:-"${PWD}/grav_keys/grav_rsa.pub"}"
    local _GRAV_DIST=".buster"
    local _GRAV_ARCH=".amd64"
-   local _GRAV_FILE="Dockerfile${_GRAV_DIST}${_GRAV_ARCH}"
+   local _GRAV_FILE="Dockerfile"
    local _GRAV_KIND="core"
    local _GRAV_URLFILE="${_GRAV_NAME}-${_GRAV_TAG}.zip"
    local _GRAV_URL="https://getgrav.org/download/${_GRAV_KIND}/${_GRAV_NAME}"
@@ -46,10 +46,10 @@ main() {
    local _GRAV_ARG1="ARG1:     [grav_user]: any|(#)         - (#=grav)"
    local _GRAV_ARG2="ARG2:  [grav_imgname]: grav-admin|grav - (*=grav-admin)"
    local _GRAV_ARG3="ARG3:  [grav_tagname]: latest|testing  - (*=latest)"
-   local _GRAV_ARG4="ARG4: [grav_passfile]: any|(*)         - (*=<current-dir>/grav_pass.key)"
-   local _GRAV_ARG5="ARG5: [grav_privfile]: any|(*)         - (*=<current-dir>/grav_rsa)"
-   local _GRAV_ARG6="ARG6:  [grav_pubfile]: any|(*)         - (*=<current-dir>/grav_rsa.pub)"
-   local _GRAV_INFO="INFO: ${_CMD} grav grav-admin latest ${PWD}/grav_pass.key ${PWD}/grav_rsa ${PWD}/grav_rsa.pub"
+   local _GRAV_ARG4="ARG4: [grav_passfile]: any|(*)         - (*=<current-dir>/grav_keys/grav_pass.key)"
+   local _GRAV_ARG5="ARG5: [grav_privfile]: any|(*)         - (*=<current-dir>/grav_keys/grav_rsa)"
+   local _GRAV_ARG6="ARG6:  [grav_pubfile]: any|(*)         - (*=<current-dir>/grav_keys/grav_rsa.pub)"
+   local _GRAV_INFO="INFO: ${_CMD} grav grav-admin latest ${PWD}/grav_keys/grav_pass.key ${PWD}/grav_keys/grav_rsa ${PWD}/grav_keys/grav_rsa.pub"
 
    if [ ${_ARGC} -lt 1 ]; then usage 1 "${_GRAV_TEXT}" "${_GRAV_ARGS}" "${_GRAV_NOTE}" "${_GRAV_INFO}" "${_GRAV_ARG1}" "${_GRAV_ARG2}" "${_GRAV_ARG3}" "${_GRAV_ARG4}" "${_GRAV_ARG5}" "${_GRAV_ARG6}"; fi
 

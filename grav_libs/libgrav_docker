@@ -35,8 +35,8 @@ build() {
             --platform linux/amd64 \
             --progress=text \
             --load \
-            --cache-from type=local,id=${_GRAV_NAME},src="${PWD}"/.volumes/grav_cache/.dcache \
-            --cache-to type=local,id=${_GRAV_NAME},dest="${PWD}"/.volumes/grav_cache/.dcache \
+            --cache-from type=local,id=${_GRAV_NAME},src="${PWD}"/grav_cache/.dcache \
+            --cache-to type=local,id=${_GRAV_NAME},dest="${PWD}"/grav_cache/.dcache \
             --secret id=grav_pwd.key,src="${_GRAV_PASS}" \
             --secret id=grav_rsa,src="${_GRAV_PRIV}" \
             --secret id=grav_rsa.pub,src="${_GRAV_PUB}" \
@@ -81,23 +81,23 @@ getver() {
    case "${_GRAV_VER}" in
       dev)
          _GRAV_DEV=$(cat "${PWD}"/.context.dev | cut -d'=' -f2)
-         wget -O "${PWD}"/rootfs/tmp/${_GRAV_NAME}-${_GRAV_DEV}?testing.zip \
+         wget -O "${PWD}"/grav_rootfs/tmp/${_GRAV_NAME}-${_GRAV_DEV}?testing.zip \
             https://getgrav.org/download/${_GRAV_KIND}/${_GRAV_NAME}/${_GRAV_DEV}?testing
       ;;
 
       [0-9]*.[0-9]*.[0-9]*-[a-z][a-z].[0-9]*)
-         wget -O "${PWD}"/rootfs/tmp/${_GRAV_NAME}-${_GRAV_VER}?testing.zip \
+         wget -O "${PWD}"/grav_rootfs/tmp/${_GRAV_NAME}-${_GRAV_VER}?testing.zip \
             https://getgrav.org/download/${_GRAV_KIND}/${_GRAV_NAME}/${_GRAV_VER}?testing
       ;;
 
       prod) 
          _GRAV_PROD=$(cat "${PWD}"/.context.prod | cut -d'=' -f2)
-         wget -O "${PWD}"/rootfs/tmp/${_GRAV_NAME}-${_GRAV_PROD}.zip \
+         wget -O "${PWD}"/grav_rootfs/tmp/${_GRAV_NAME}-${_GRAV_PROD}.zip \
             https://getgrav.org/download/${_GRAV_KIND}/${_GRAV_NAME}/${_GRAV_PROD}
       ;;
       
       [0-9]*.[0-9]*.[0-9]*)
-         wget -O "${PWD}"/rootfs/tmp/${_GRAV_NAME}-${_GRAV_VER}.zip \
+         wget -O "${PWD}"/grav_rootfs/tmp/${_GRAV_NAME}-${_GRAV_VER}.zip \
             https://getgrav.org/download/${_GRAV_KIND}/${_GRAV_NAME}/${_GRAV_VER}
       ;;
 
@@ -126,9 +126,9 @@ purge() {
    RC=$?
    sudo docker buildx prune -f
    RC=$?
-   sudo rm -rf ${PWD}/.volumes/grav_cache/.ccache/*
+   sudo rm -rf ${PWD}/grav_cache/.ccache/*
    RC=$?
-   sudo rm -rf ${PWD}/.volumes/grav_cache/.dcache/*
+   sudo rm -rf ${PWD}/grav_cache/.dcache/*
    RC=$?
 
    return ${_RC}

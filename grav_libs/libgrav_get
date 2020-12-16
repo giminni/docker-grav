@@ -15,23 +15,23 @@ getver() {
    case "${_GRAV_VER}" in
       dev)
          _GRAV_DEV=$(cat "${PWD}"/.context.dev | cut -d'=' -f2)
-         wget -O "${PWD}"/rootfs/tmp/${_GRAV_NAME}-${_GRAV_DEV}?testing.zip \
+         wget -O "${PWD}"/grav_rootfs/tmp/${_GRAV_NAME}-${_GRAV_DEV}?testing.zip \
             https://getgrav.org/download/${_GRAV_KIND}/${_GRAV_NAME}/${_GRAV_DEV}?testing
       ;;
 
       [0-9]*.[0-9]*.[0-9]*-[a-z][a-z].[0-9]*)
-         wget -O "${PWD}"/rootfs/tmp/${_GRAV_NAME}-${_GRAV_VER}?testing.zip \
+         wget -O "${PWD}"/grav_rootfs/tmp/${_GRAV_NAME}-${_GRAV_VER}?testing.zip \
             https://getgrav.org/download/${_GRAV_KIND}/${_GRAV_NAME}/${_GRAV_VER}?testing
       ;;
 
       prod) 
          _GRAV_PROD=$(cat "${PWD}"/.context.prod | cut -d'=' -f2)
-         wget -O "${PWD}"/rootfs/tmp/${_GRAV_NAME}-${_GRAV_PROD}.zip \
+         wget -O "${PWD}"/grav_rootfs/tmp/${_GRAV_NAME}-${_GRAV_PROD}.zip \
             https://getgrav.org/download/${_GRAV_KIND}/${_GRAV_NAME}/${_GRAV_PROD}
       ;;
       
       [0-9]*.[0-9]*.[0-9]*)
-         wget -O "${PWD}"/rootfs/tmp/${_GRAV_NAME}-${_GRAV_VER}.zip \
+         wget -O "${PWD}"/grav_rootfs/tmp/${_GRAV_NAME}-${_GRAV_VER}.zip \
             https://getgrav.org/download/${_GRAV_KIND}/${_GRAV_NAME}/${_GRAV_VER}
       ;;
 
