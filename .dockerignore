@@ -10,3 +10,5 @@
 
 # Exclude pattern only in .dockerignore
 **/.gitkeep
+
+# Include pattern only in .dockerignore

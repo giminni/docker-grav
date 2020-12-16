@@ -63,9 +63,9 @@ This Dockerfile needs the following prerequisites:
 `-- [ ]  README.md
 ```
 
-> NOTE: All items marked with `[*]` are not uploaded to Git. They must be build with the appropriate `(<PROJECT_ROOT>/grav_mk*)` script.
+> NOTE: The files or directory content marked with `[*]` are not uploaded to Git. They must be build with the appropriate `(<PROJECT_ROOT>/grav_mk*)` script.
 
-> NOTE: Dockerfile is a symlink to `(<PROJECT_ROOT>/grav_docker/Dockerfile)`.
+> NOTE: To initialize the project, execute `./grav_bin/grav_mkinit.sh init` first.
 
 ## Project features
 

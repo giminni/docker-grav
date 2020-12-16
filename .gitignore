@@ -13,3 +13,10 @@
 **/*_rsa**
 **/*key
 **/*zip
+
+# Include pattern only in .gitignore
+!grav_cache/.gitkeep
+!grav_cfg/.gitkeep
+!grav_data/.gitkeep 
+!grav_key/.gitkeep
+!grav_rootfs/.gitkeep
