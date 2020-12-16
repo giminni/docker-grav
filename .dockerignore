@@ -1,6 +1,9 @@
 # Exclude pattern for Docker context
+**/.aptcache
+**/.apkcache
 **/.ccache
 **/.dcache
+**/.pycache
 **/.config**
 **/grav_data/**
 **/.vscode
