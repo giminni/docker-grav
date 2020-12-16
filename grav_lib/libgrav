@@ -8,6 +8,7 @@ init() {
    DATA_DIR="$(cat ${CTX_DIR}/.config.data | tr -d '"' | cut -d'=' -f2)"
    DOCK_DIR="$(cat ${CTX_DIR}/.config.docker | tr -d '"' | cut -d'=' -f2)"
    BIN_DIR="$(cat ${CTX_DIR}/.config.bin | tr -d '"' | cut -d'=' -f2)"
+   CFG_DIR="$(cat ${CTX_DIR}/.config.cfg | tr -d '"' | cut -d'=' -f2)"
    KEY_DIR="$(cat ${CTX_DIR}/.config.key | tr -d '"' | cut -d'=' -f2)"
 }
 
