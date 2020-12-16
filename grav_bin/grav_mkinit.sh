@@ -17,7 +17,6 @@ CMD="$(basename ${0})"
 NAME=$(echo ${CMD} | cut -d'.' -f1)
 CUR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOME_DIR="${CUR_DIR%/*}"
-DATA_DIR="${HOME_DIR}/grav_data"
 ROOT_DIR="${HOME_DIR}/grav_rootfs"
 BIN_DIR="${HOME_DIR}/grav_bin"
 CFG_DIR="${HOME_DIR}/grav_cfg"
@@ -47,9 +46,23 @@ main() {
    local _GRAV_ARG1="ARG1: grav_command: (#) - (#=init)"
    local _GRAV_INFO="INFO: ${CMD} init"
 
-   if [ ${_ARGC} -lt 1 ]; then usage 1 "${_GRAV_TEXT}" "${_GRAV_ARGS}" "${_GRAV_NOTE}" "${_GRAV_INFO}" "${_GRAV_ARG1}"; fi
+   if [ ${_ARGC} -lt 1 ]; then 
+      usage 1 \
+         "${_GRAV_TEXT}" \
+         "${_GRAV_ARGS}" \
+         "${_GRAV_NOTE}" \
+         "${_GRAV_INFO}" \
+         "${_GRAV_ARG1}"
+   fi
    
-   mkinit "${_GRAV_CMD}" "${HOME_DIR}" "${DATA_DIR}" "${ROOT_DIR}" "${BIN_DIR}" "${CFG_DIR}" "${KEY_DIR}" "${LIB_DIR}"
+   mkinit \
+      "${_GRAV_CMD}" \
+      "${HOME_DIR}" \
+      "${ROOT_DIR}" \
+      "${BIN_DIR}" \
+      "${CFG_DIR}" \
+      "${KEY_DIR}" \
+      "${LIB_DIR}"
 
    _RC=$?
    
