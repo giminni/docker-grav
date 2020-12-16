@@ -3,6 +3,7 @@
 **/.apkcache
 **/.ccache
 **/.dcache
+**/.gocache
 **/.pycache
 **/.config**
 **/grav_data/**
