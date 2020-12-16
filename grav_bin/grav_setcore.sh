@@ -49,7 +49,7 @@ main() {
 
    if [ ${_ARGC} -lt 1 ]; then usage 1 "${_GRAV_TEXT}" "${_GRAV_ARGS}" "${_GRAV_NOTE}" "${_GRAV_INFO}" "${_GRAV_ARG1}"; fi
    
-   mkcore "${_GRAV_CORE}"
+   setcore "${_GRAV_CORE}"
 
    _RC=$?
    
