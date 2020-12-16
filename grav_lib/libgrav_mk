@@ -86,53 +86,21 @@ mkssh() {
 }
 
 #
-# Mkcore function for grav_mkcore.sh script
-#
-mkcore() {
-   local _RC=0
-   local _GRAV_CORE="${1}"
-
-   case "${_GRAV_CORE}" in
-      prod) echo "GRAV_PROD=$(wget -O - -o /dev/null https://getgrav.org | grep 'Stable Version' | sed -e 's/<[^>]*>//g' | awk '{print $3}')"  > "${PWD}"/.context.prod 
-      ;;
-      
-      [0-9]*.[0-9]*.[0-9]*)
-         echo "GRAV_PROD=${_GRAV_CORE}"  > "${PWD}"/.context.prod 
-      ;;
-
-      dev) echo "GRAV_DEV=$(wget -O - -o /dev/null https://getgrav.org |grep 'Release Candidate Version' | sed -e 's/<[^>]*>//g' | awk '{print $4}')" > "${PWD}"/.context.dev 
-      ;;
-          
-      [0-9]*.[0-9]*.[0-9]*-[a-z][a-z].[0-9]*\?testing)
-         echo "GRAV_DEV=${_GRAV_CORE}"  > "${PWD}"/.context.dev 
-      ;;
-
-      *) usage 2 "FAIL: Argument is not defined: ${_GRAV_CORE}!"
-      ;;
-
-   esac
-
-   return ${_RC}
-}
-
-#
 # Mkinit function for grav_mkinit.sh script
 #
 mkinit() {
    local _RC=0
    local _GRAV_CMD="${1}"
    local _GRAV_HOME="${2}" 
-   local _GRAV_DATA="${3}" 
-   local _GRAV_ROOT="${4}" 
-   local _GRAV_BIN="${5}" 
-   local _GRAV_CFG="${6}" 
-   local _GRAV_KEY="${7}" 
-   local _GRAV_LIB="${8}"
+   local _GRAV_ROOT="${3}" 
+   local _GRAV_BIN="${4}" 
+   local _GRAV_CFG="${5}" 
+   local _GRAV_KEY="${6}" 
+   local _GRAV_LIB="${7}"
 
    case "${_GRAV_CMD}" in
       init)
          echo "GRAV_HOME=${_GRAV_HOME}" > "${_GRAV_CFG}"/.config.home 
-         echo "GRAV_DATA=${_GRAV_DATA}" > "${_GRAV_CFG}"/.config.data 
          echo "GRAV_ROOT=${_GRAV_ROOT}" > "${_GRAV_CFG}"/.config.root 
          echo "GRAV_BIN=${_GRAV_BIN}" > "${_GRAV_CFG}"/.config.bin 
          echo "GRAV_CFG=${_GRAV_CFG}" > "${_GRAV_CFG}"/.config.cfg
