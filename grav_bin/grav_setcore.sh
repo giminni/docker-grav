@@ -25,7 +25,7 @@ RC=0
 # LIBS #
 # #### #
 source "${LIB_DIR}"/libgrav
-source "${LIB_DIR}"/libgrav_mk
+source "${LIB_DIR}"/libgrav_set
 
 # ##### #
 # FUNCS #
