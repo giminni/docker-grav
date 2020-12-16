@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 # #### #
+# INIT #
+# #### #
+set -e
+
+if [ "$(set | grep xtrace)" -o ${DEBUG:-0} -ne 0 ]; then DEBUG=1; set -x; else DEBUG=0; set +x; fi
+
+# #### #
 # VARS #
 # #### #
 ARGC=$#
@@ -20,7 +27,7 @@ main() {
    local _ARGV=("${@}")
 
    local _RC=0
-   local _CMD=$(basename ${0})
+   local _GRAV_CMD=$(basename ${0})
 
    # Get Grav version strings from context files
    local _GRAV_DEV="$(cat ${PWD}/.context.dev | cut -d'=' -f2)"
@@ -41,7 +48,7 @@ main() {
    local _GRAV_URL="https://getgrav.org/download/${_GRAV_KIND}/${_GRAV_NAME}"
 
    local _GRAV_TEXT="FAIL: Arguments are not provided!"
-   local _GRAV_ARGS="ARGS: ${_CMD} grav_user [grav_imgname] [grav_tagname] [grav_passfile] [grav_privfile] [grav_pubfile]"
+   local _GRAV_ARGS="ARGS: ${_GRAV_CMD} grav_user [grav_imgname] [grav_tagname] [grav_passfile] [grav_privfile] [grav_pubfile]"
    local _GRAV_NOTE="NOTE: (*) are default values, (#) are recommended values"
    local _GRAV_ARG1="ARG1:     [grav_user]: any|(#)         - (#=grav)"
    local _GRAV_ARG2="ARG2:  [grav_imgname]: grav-admin|grav - (*=grav-admin)"
@@ -49,7 +56,7 @@ main() {
    local _GRAV_ARG4="ARG4: [grav_passfile]: any|(*)         - (*=<current-dir>/grav_keys/grav_pass.key)"
    local _GRAV_ARG5="ARG5: [grav_privfile]: any|(*)         - (*=<current-dir>/grav_keys/grav_rsa)"
    local _GRAV_ARG6="ARG6:  [grav_pubfile]: any|(*)         - (*=<current-dir>/grav_keys/grav_rsa.pub)"
-   local _GRAV_INFO="INFO: ${_CMD} grav grav-admin latest ${PWD}/grav_keys/grav_pass.key ${PWD}/grav_keys/grav_rsa ${PWD}/grav_keys/grav_rsa.pub"
+   local _GRAV_INFO="INFO: ${_GRAV_CMD} grav grav-admin latest ${PWD}/grav_keys/grav_pass.key ${PWD}/grav_keys/grav_rsa ${PWD}/grav_keys/grav_rsa.pub"
 
    if [ ${_ARGC} -lt 1 ]; then usage 1 "${_GRAV_TEXT}" "${_GRAV_ARGS}" "${_GRAV_NOTE}" "${_GRAV_INFO}" "${_GRAV_ARG1}" "${_GRAV_ARG2}" "${_GRAV_ARG3}" "${_GRAV_ARG4}" "${_GRAV_ARG5}" "${_GRAV_ARG6}"; fi
 
@@ -61,7 +68,7 @@ main() {
    fi
 
    # Define core or skeleton package for download
-   if [ "${_GRAV_NAME:0:13}" == "grav-skeleton" ]; then _GRAV_KIND="skeleton"; fi
+   if [ "${_GRAV_NAME:0:13}" == "grav-skeleton" ]; then _GRAV_KIND="skeletons"; fi
 
    # Define URLs using the predefined version string from above
    if [ "${_GRAV_TAG}" == "testing" ]; then

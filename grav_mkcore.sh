@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 # #### #
+# INIT #
+# #### #
+set -e
+
+if [ "$(set | grep xtrace)" -o ${DEBUG:-0} -ne 0 ]; then DEBUG=1; set -x; else DEBUG=0; set +x; fi
+
+# #### #
 # VARS #
 # #### #
 ARGC=$#
@@ -20,19 +27,19 @@ main() {
    local _ARGV=("${@}")
    
    local _RC=0
-   local _CMD=$(basename ${0})
+   local _GRAV_CMD=$(basename ${0})
 
-   local _GRAV_VER="${_ARGV[1]}"
+   local _GRAV_CORE="${_ARGV[1]}"
 
    local _GRAV_TEXT="FAIL: Arguments are not provided!"
-   local _GRAV_ARGS="ARGS: ${_CMD} grav_version"
+   local _GRAV_ARGS="ARGS: ${_GRAV_CMD} grav_core"
    local _GRAV_NOTE="NOTE: (*) are default values, (#) are recommended values"
-   local _GRAV_ARG1="ARG1: grav_version: prod|dev - (#=prod)"
-   local _GRAV_INFO="INFO: ${_CMD} prod"
+   local _GRAV_ARG1="ARG1: grav_core: prod|dev - (#=prod)"
+   local _GRAV_INFO="INFO: ${_GRAV_CMD} prod"
 
    if [ ${_ARGC} -lt 1 ]; then usage 1 "${_GRAV_TEXT}" "${_GRAV_ARGS}" "${_GRAV_NOTE}" "${_GRAV_INFO}" "${_GRAV_ARG1}"; fi
    
-   mkver "${_GRAV_VER}"
+   mkcore "${_GRAV_CORE}"
 
    _RC=$?
    

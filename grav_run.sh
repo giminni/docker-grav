@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 # #### #
+# INIT #
+# #### #
+set -e
+
+if [ "$(set | grep xtrace)" -o ${DEBUG:-0} -ne 0 ]; then DEBUG=1; set -x; else DEBUG=0; set +x; fi
+
+# #### #
 # VARS #
 # #### #
 ARGC=$#
