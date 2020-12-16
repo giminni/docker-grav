@@ -17,6 +17,8 @@ CMD="$(basename ${0})"
 NAME=$(echo ${CMD} | cut -d'.' -f1)
 CUR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOME_DIR="${CUR_DIR%/*}"
+
+# Preset directories
 ROOT_DIR="${HOME_DIR}/grav_rootfs"
 CACHE_DIR="${HOME_DIR}/grav_cache"
 DATA_DIR="${HOME_DIR}/grav_data"

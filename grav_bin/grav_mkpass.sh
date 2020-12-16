@@ -6,26 +6,20 @@ set -e
 
 if [ "$(set | grep xtrace)" -o ${DEBUG:-0} -ne 0 ]; then DEBUG=1; set -x; else DEBUG=0; set +x; fi
 
-# #### #
-# VARS #
-# #### #
-ARGC=$#
-ARGV=("$@")
-RC=0
-
 CMD="$(basename ${0})"
 NAME=$(echo ${CMD} | cut -d'.' -f1)
 CUR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOME_DIR="${CUR_DIR%/*}"
 # Remove enclosing double quotes
 CTX_DIR="$(cat ${HOME_DIR}/.context | tr -d '"' | cut -d'=' -f2)"
-ROOT_DIR="$(cat ${CTX_DIR}/.config.root | tr -d '"' | cut -d'=' -f2)"
-CACHE_DIR="$(cat ${CTX_DIR}/.config.cache | tr -d '"' | cut -d'=' -f2)"
-DATA_DIR="$(cat ${CTX_DIR}/.config.data | tr -d '"' | cut -d'=' -f2)"
-DOCK_DIR="$(cat ${CTX_DIR}/.config.docker | tr -d '"' | cut -d'=' -f2)"
-BIN_DIR="$(cat ${CTX_DIR}/.config.bin | tr -d '"' | cut -d'=' -f2)"
-KEY_DIR="$(cat ${CTX_DIR}/.config.key | tr -d '"' | cut -d'=' -f2)"
 LIB_DIR="$(cat ${CTX_DIR}/.config.lib | tr -d '"' | cut -d'=' -f2)"
+
+# #### #
+# VARS #
+# #### #
+ARGC=$#
+ARGV=("$@")
+RC=0
 
 # #### #
 # LIBS #
@@ -37,6 +31,9 @@ source "${LIB_DIR}"/libgrav_mk
 # FUNCS #
 # ##### #
 main() {
+   # Initialize context
+   init
+
    local _ARGC=${1}
    local _ARGV=("${@}")
    
