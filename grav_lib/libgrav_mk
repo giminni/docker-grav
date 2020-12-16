@@ -113,6 +113,9 @@ mkinit() {
          echo "GRAV_KEY=\"${_GRAV_KEY}\"" > "${_GRAV_CFG}"/.config.key
          echo "GRAV_LIB=\"${_GRAV_LIB}\"" > "${_GRAV_CFG}"/.config.lib 
          echo "GRAV_CTX=\"${_GRAV_CFG}\"" > "${_GRAV_HOME}"/.context
+
+         "${BIN_DIR}"/grav_setcore.sh prod
+         "${BIN_DIR}"/grav_setcore.sh dev
       ;;
       
       
