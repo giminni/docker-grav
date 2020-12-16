@@ -43,6 +43,8 @@ main() {
    local _GRAV_USER="${_ARGV[2]:-$(id -un)}"
    local _GRAV_PASS="${_ARGV[3]:-"${KEY_DIR}/grav_pass.key"}"
 
+   local _GRAV_LEN=11
+
    local _GRAV_TEXT="FAIL: Arguments are not provided!"
    local _GRAV_ARGS="ARGS: ${CMD} grav_pass [grav_user] [grav_passfile]"
    local _GRAV_NOTE="NOTE: (*) are default values, (#) are recommended values"
@@ -63,6 +65,8 @@ main() {
          "${_GRAV_ARG2}" \
          "${_GRAV_ARG3}"
    fi
+
+   if [ ${#_GRAV_SECS} -lt ${_GRAV_LEN} ]; then error 2 "FAIL: Password must contain at least ${_GRAV_LEN} chars!"; fi
 
    mkpass \
       "${_GRAV_SECS}" \
