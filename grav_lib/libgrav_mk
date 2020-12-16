@@ -52,18 +52,18 @@ mkpass() {
    local _GRAV_SECS="${1}"
    local _GRAV_USER="${2}"
    local _GRAV_PASS="${3}"
-   local _GRAV_PW
+   local _GRAV_PW=""
 
    _GRAV_PW="$(openssl passwd -6 -salt $(openssl rand -base64 32) ${_GRAV_SECS})"
    
    _RC=$?
 
-   chmod 600 ${_GRAV_PASS}
+   if [[ -f "${_GRAV_PASS}" ]]; then chmod 600 "${_GRAV_PASS}"; fi
 
-   echo ${_GRAV_USER}:${_GRAV_PW} > ${_GRAV_PASS}
+   echo ${_GRAV_USER}:${_GRAV_PW} > "${_GRAV_PASS}"
    _RC=$?
    
-   chmod 400 ${_GRAV_PASS}
+   chmod 400 "${_GRAV_PASS}"
 
    return ${_RC}
 }
