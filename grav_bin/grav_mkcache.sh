@@ -49,8 +49,8 @@ main() {
    local _GRAV_ARGS="ARGS: ${CMD} grav_cachename [grav_cachefile]"
    local _GRAV_NOTE="NOTE: (*) are default values, (#) are recommended values"
    local _GRAV_ARG1="ARG1:   grav_cachename: any|(#) - (#=grav_cache)"
-   local _GRAV_ARG2="ARG2: [grav_cachefile]: any|(*) - (*=<PROJECT_HOME>/<grav_cachename>)"
-   local _GRAV_INFO="INFO: ${CMD} grav_cache <PROJECT_HOME>/grav_cache"
+   local _GRAV_ARG2="ARG2: [grav_cachefile]: any|(*) - (*=${CACHE_DIR}/<grav_cachename>)"
+   local _GRAV_INFO="INFO: ${CMD} grav_cache ${CACHE_DIR}"
    local _GRAV_HELP="HELP: ${CMD}: Create the required cache directory depending from some entered arguments. (See NOTE, INFO and ARGS)"
 
    if [ ${_ARGC} -lt 1 ]; then 

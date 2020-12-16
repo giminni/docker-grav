@@ -69,7 +69,7 @@ main() {
    local _GRAV_ARG4="ARG4: [grav_passfile]: any|(*)         - (*=<current-dir>/grav_keys/grav_pass.key)"
    local _GRAV_ARG5="ARG5: [grav_privfile]: any|(*)         - (*=<current-dir>/grav_keys/grav_rsa)"
    local _GRAV_ARG6="ARG6:  [grav_pubfile]: any|(*)         - (*=<current-dir>/grav_keys/grav_rsa.pub)"
-   local _GRAV_INFO="INFO: ${CMD} grav grav-admin latest <PROJECT_HOME>/grav_keys/grav_pass.key <PROJECT_HOME>/grav_keys/grav_rsa <PROJECT_HOME>/grav_keys/grav_rsa.pub"
+   local _GRAV_INFO="INFO: ${CMD} grav grav-admin latest ${KEY_DIR}/grav_pass.key ${KEY_DIR}/grav_rsa ${KEY_DIR}/grav_rsa.pub"
    local _GRAV_HELP="HELP: ${CMD}: Builds the docker file from some entered arguments. (See NOTE, INFO and ARGS)"
 
    if [ ${_ARGC} -lt 1 ]; then 
@@ -88,11 +88,11 @@ main() {
    fi
 
    # Check if essential configuration files exists
-   if [ ! -f ${CFG_DIR}/.config.pass ] || [ ! -f $(cat ${CFG_DIR}/.config.pass | cut -d'=' -f2) ]; then error 2 "FAIL: User and password not provided! Please run grav_mkpass.sh first...";
-      elif [ ! -f ${CFG_DIR}/.config.ssh ] || [ ! -f $(cat ${CFG_DIR}/.config.ssh | cut -d'=' -f2) ]; then error 2 "FAIL: SSH files not provided! Please run grav_mkssh.sh first...";
-      elif [ ! -f ${CFG_DIR}/.config.cache ] || [ ! -d $(cat ${CFG_DIR}/.config.cache | cut -d'=' -f2) ]; then error 2 "FAIL: Cache directory not provided! Please run grav_mkcache.sh first...";
-      elif [ ! -f ${CFG_DIR}/.config.dev ] || [ ! -n $(cat ${CFG_DIR}/.config.dev | cut -d'=' -f2) ]; then error 2 "FAIL: Grav dev version not provided! Please run grav_getver.sh first...";
-      elif [ ! -f ${CFG_DIR}/.config.prod ] || [ ! -n $(cat ${CFG_DIR}/.config.prod | cut -d'=' -f2) ]; then error 2 "FAIL: Grav prod version not provided! Please run grav_getver.sh first...";
+   if [ ! -f ${CFG_DIR}/.config.pass ] || [ ! -f $(cat ${CFG_DIR}/.config.pass | cut -d'=' -f2) ]; then error 2 "FAIL: User and password not provided! Please run ${BIN_DIR}/grav_mkpass.sh first...";
+      elif [ ! -f ${CFG_DIR}/.config.ssh ] || [ ! -f $(cat ${CFG_DIR}/.config.ssh | cut -d'=' -f2) ]; then error 2 "FAIL: SSH files not provided! Please run ${BIN_DIR}/grav_mkssh.sh first...";
+      elif [ ! -f ${CFG_DIR}/.config.cache ] || [ ! -d $(cat ${CFG_DIR}/.config.cache | cut -d'=' -f2) ]; then error 2 "FAIL: Cache directory not provided! Please run ${BIN_DIR}/grav_mkcache.sh first...";
+      elif [ ! -f ${CFG_DIR}/.config.dev ] || [ ! -n $(cat ${CFG_DIR}/.config.dev | cut -d'=' -f2) ]; then error 2 "FAIL: Grav dev version not provided! Please run ${BIN_DIR}/grav_getver.sh first...";
+      elif [ ! -f ${CFG_DIR}/.config.prod ] || [ ! -n $(cat ${CFG_DIR}/.config.prod | cut -d'=' -f2) ]; then error 2 "FAIL: Grav prod version not provided! Please run ${BIN_DIR}/grav_getver.sh first...";
    fi
 
    # Define core or skeleton package for download

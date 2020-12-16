@@ -51,8 +51,8 @@ main() {
    local _GRAV_NOTE="NOTE: (*) are default values, (#) are recommended values"
    local _GRAV_ARG1="ARG1:       grav_pass: any|(#) - (#=minimum 11 chars length)"
    local _GRAV_ARG2="ARG2:     [grav_user]: any|(*) - (*=<current-user>,#=grav)"
-   local _GRAV_ARG3="ARG3: [grav_passfile]: any|(*) - (*=<PROJECT_HOME>/grav_key/grav_pass.key]"
-   local _GRAV_INFO="INFO: ${CMD} my-secret-pass grav <PROJECT_HOME>/grav_key/grav_pass.key"
+   local _GRAV_ARG3="ARG3: [grav_passfile]: any|(*) - (*=${KEY_DIR}/grav_pass.key]"
+   local _GRAV_INFO="INFO: ${CMD} my-secret-pass grav ${KEY_DIR}/grav_pass.key"
    local _GRAV_HELP="HELP: ${CMD}: Create the required user password depending from some entered arguments. (See NOTE, INFO and ARGS)"
 
    if [ ${_ARGC} -lt 1 ]; then 
