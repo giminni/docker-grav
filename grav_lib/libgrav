@@ -1,6 +1,29 @@
 #!/usr/bin/env bash
+
+
 #
 #
+#
+userinput() {
+   local _TEXT="${1}"
+
+   local _RC=0
+
+   while true; do
+      read -p "${_TEXT} (y/n)? " _ANSWER
+      if [ $? -ge 128 ]; then _RC=1; break; fi
+      case ${_ANSWER} in
+         [yY]* ) _RC=1; break; ;;
+         [nN]* ) _RC=0; break; ;;
+             * ) _RC=0; ;;
+      esac
+   done
+
+   echo ${_RC}
+}
+
+#
+# Init function for setting all directory variables globally
 #
 init() {
    # Remove enclosing double quotes
