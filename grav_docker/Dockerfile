@@ -11,6 +11,7 @@ ARG PATH \
     TZ \
     TERM \
     CCACHE_DIR \
+    PHPCACHE_DIR \
     CACHE_DIR \
     CACHE_USER \
     CACHE_HOST \
@@ -31,10 +32,11 @@ ENV PATH="${PATH:-"/var/www/html/bin:$PATH"}" \
     LC_ALL="${LC_ALL:-"C.UTF-8"}" \
     TZ="${TZ:-"Europe/Berlin"}" \
     TERM="${TERM:-"xterm-256color"}" \
-    CCACHE_DIR="${CCACHE_DIR:-"/tmp/cache/.ccache"}" \
-    CACHE_DIR="${CACHE_DIR:-"/home/rpiadmin/Workspace/docker-grav"}" \
     CACHE_USER="${CACHE_USER:-"rpiadmin"}" \
     CACHE_HOST="${CACHE_HOST:-"172.17.0.1"}" \
+    CCACHE_DIR="${CCACHE_DIR:-"/tmp/cache/.ccache"}" \
+    PHPCACHE_DIR="${PHPCACHE_DIR:-"/tmp/cache/.phpcache"}" \
+    CACHE_DIR="${CACHE_DIR:-"/home/${CACHE_USER}/Workspace/docker-grav/grav_cache"}" \
     GRAV_NAME="${GRAV_NAME:-"grav-admin"}" \
     GRAV_TAG=="${GRAV_TAG:-"latest"}" \
     GRAV_USER="${GRAV_USER:-"grav"}" \
@@ -47,7 +49,8 @@ ENV PATH="${PATH:-"/var/www/html/bin:$PATH"}" \
     GRAV_GID=${GRAV_GID:-1000} \
     GRAV_SHELL="${GRAV_SHELL:-"/bin/bash"}"
 
-COPY ./grav_rootfs/* /
+# COPY grav_rootfs/ /rootfs
+COPY grav_rootfs/tmp/ /tmp
 # COPY docker-entrypoint.sh /entrypoint.sh
 
 RUN set -eux; \    
@@ -141,13 +144,18 @@ RUN set -eux; \
     echo "Configuring Ccache tool..."; \
     /usr/sbin/update-ccache-symlinks; \
     for PROG in $(ls /usr/lib/ccache); do ln -s $(which ccache) /usr/local/bin/${PROG}; done; \
-    echo "Downloading cached packages from global cache repository..."; \
+    echo "Downloading cached C/C++ packages from global cache repository..."; \
     rsync -avz -e "ssh -i /home/${GRAV_USER}/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" \
-    ${CACHE_USER}@${CACHE_HOST}:${CACHE_DIR}/.ccache ${CCACHE_DIR%/*};
+    ${CACHE_USER}@${CACHE_HOST}:${CACHE_DIR}/.ccache ${CCACHE_DIR%/*}; \
+    echo "Downloading cached PHP packages from global cache repository..."; \
+    rsync -avz -e "ssh -i /home/${GRAV_USER}/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" \
+    ${CACHE_USER}@${CACHE_HOST}:${CACHE_DIR}/.phpcache ${PHPCACHE_DIR%/*};
 
 RUN set -eux; \
     echo "[STAGE] PHP installation..."; \
     echo "Installing PHP extensions..."; \
+    pear config-set cache_dir /tmp/cache/.phpcache; \
+    pear config-set php_ini /usr/local/etc/php/conf.d/php-recommended.ini; \
     docker-php-ext-install opcache pdo pdo_mysql pdo_pgsql pgsql; \
     docker-php-ext-configure intl; \
     docker-php-ext-install intl; \
@@ -156,8 +164,14 @@ RUN set -eux; \
     docker-php-ext-install zip; \
     pecl install apcu yaml-2.0.4; \
     docker-php-ext-enable apcu yaml; \
-    pear config-set php_ini /usr/local/etc/php/conf.d/php-recommended.ini; \
-    pecl install xdebug;
+    pecl install xdebug; \
+    echo "Uploading compiled C/C++ files to global cache repository"; \
+    rsync -avz -e "ssh -i /home/${GRAV_USER}/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" \
+       ${CCACHE_DIR} ${CACHE_USER}@${CACHE_HOST}:${CACHE_DIR}; \
+    echo "Uploading compiled PHP files to global cache repository"; \
+    rsync -avz -e "ssh -i /home/${GRAV_USER}/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" \
+       ${PHPCACHE_DIR} ${CACHE_USER}@${CACHE_HOST}:${CACHE_DIR};
+
 
 RUN set -eux; \
     echo "[STAGE] PHP configuration..."; \
@@ -181,12 +195,13 @@ RUN set -eux; \
 RUN set -eux; \
     echo "[STAGE] Grav installation..."; \
     echo "Installing ${GRAV_URLFILE}..."; \
-    test -f /tmp/${GRAV_URLFILE} || wget --progress=bar:force \
-        -O /tmp/${GRAV_URLFILE} \
+    ls -lasr /tmp/grav/*; \
+    test -f "/tmp/grav/${GRAV_URLFILE}" || wget --progress=bar:force \
+        -O "/tmp/grav/${GRAV_URLFILE}" \
         ${GRAV_URL}; \
     cd /var/www; \
     rm -rf /var/www/html;\
-    unzip /tmp/${GRAV_URLFILE}; \
+    unzip "/tmp/grav/${GRAV_URLFILE}"; \
     echo "Creating symlink for URL access..."; \
     ln -s /var/www/${GRAV_NAME} /var/www/html; \
     echo "Exporting ${GRAV_NAME} path to users..."; \
@@ -208,17 +223,17 @@ RUN set -eux; \
         -O /tmp/${GRAV_SUEXEC_FILE} \
     ${GRAV_SUEXEC_URL}/${GRAV_SUEXEC_FILE}; \
     echo "Compiling su-exec..."; \
-    gcc -Wall /tmp/${GRAV_SUEXEC_FILE} -o /usr/local/bin/su-exec;
-
-RUN set -eux; \
+    gcc -Wall /tmp/${GRAV_SUEXEC_FILE} -o /usr/local/bin/su-exec; \
     echo "Uploading compiled files to global cache repository"; \
     rsync -avz -e "ssh -i /home/${GRAV_USER}/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" \
-       ${CCACHE_DIR} ${CACHE_USER}@${CACHE_HOST}:${CACHE_DIR}; \
-    echo "[STAGE] Cleanup installation..."; \
-    echo "Removing installation artefacts..."; \
-    apt autoremove -y; \
-    rm -rf /var/lib/apt/lists/*; \
-    rm -rf /tmp/*;
+       ${CCACHE_DIR} ${CACHE_USER}@${CACHE_HOST}:${CACHE_DIR};
+
+#RUN set -eux; \
+#    echo "[STAGE] Cleanup installation..."; \
+#    echo "Removing installation artefacts..."; \
+#    apt autoremove -y; \
+#    rm -rf /var/lib/apt/lists/*; \
+#    rm -rf /tmp/*;
 
 WORKDIR /var/www/html
 
