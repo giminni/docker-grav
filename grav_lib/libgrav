@@ -1,17 +1,42 @@
 #!/usr/bin/env bash
 
+#
+# Boolean user input function settings 0 for no and 1 for yes
+#
+threeinput() {
+   local _TEXT="${1}"
+
+   local _RC=1
+
+   while true; do
+      read -p "${_TEXT} (1/2/3)? " _ANSWER
+      
+      if [ $? -ge 128 ]; then _RC=1; break; fi
+
+      case ${_ANSWER} in
+            1 ) _RC=1; break; ;;
+            2 ) _RC=2; break; ;;
+            3 ) _RC=3; break; ;;
+            * ) _RC=1; ;;
+      esac
+   done
+
+   echo ${_RC}
+}
 
 #
+# Boolean user input function settings 0 for no and 1 for yes
 #
-#
-userinput() {
+boolinput() {
    local _TEXT="${1}"
 
    local _RC=0
 
    while true; do
       read -p "${_TEXT} (y/n)? " _ANSWER
+      
       if [ $? -ge 128 ]; then _RC=1; break; fi
+
       case ${_ANSWER} in
          [yY]* ) _RC=1; break; ;;
          [nN]* ) _RC=0; break; ;;
@@ -27,13 +52,13 @@ userinput() {
 #
 init() {
    # Remove enclosing double quotes
-   ROOT_DIR="$(cat ${CTX_DIR}/.config.root | tr -d '"' | cut -d'=' -f2)"
-   CACHE_DIR="$(cat ${CTX_DIR}/.config.cache | tr -d '"' | cut -d'=' -f2)"
-   DATA_DIR="$(cat ${CTX_DIR}/.config.data | tr -d '"' | cut -d'=' -f2)"
-   DOCK_DIR="$(cat ${CTX_DIR}/.config.docker | tr -d '"' | cut -d'=' -f2)"
-   BIN_DIR="$(cat ${CTX_DIR}/.config.bin | tr -d '"' | cut -d'=' -f2)"
-   CFG_DIR="$(cat ${CTX_DIR}/.config.cfg | tr -d '"' | cut -d'=' -f2)"
-   KEY_DIR="$(cat ${CTX_DIR}/.config.key | tr -d '"' | cut -d'=' -f2)"
+   if [[ -e "${CTX_DIR}/.config.root" ]]; then ROOT_DIR="$(cat ${CTX_DIR}/.config.root | tr -d '"' | cut -d'=' -f2)"; fi
+   if [[ -e "${CTX_DIR}/.config.cache" ]]; then CACHE_DIR="$(cat ${CTX_DIR}/.config.cache | tr -d '"' | cut -d'=' -f2)"; fi
+   if [[ -e "${CTX_DIR}/.config.data" ]]; then DATA_DIR="$(cat ${CTX_DIR}/.config.data | tr -d '"' | cut -d'=' -f2)"; fi
+   if [[ -e "${CTX_DIR}/.config.docker" ]]; then DOCK_DIR="$(cat ${CTX_DIR}/.config.docker | tr -d '"' | cut -d'=' -f2)"; fi
+   if [[ -e "${CTX_DIR}/.config.bin" ]]; then BIN_DIR="$(cat ${CTX_DIR}/.config.bin | tr -d '"' | cut -d'=' -f2)"; fi
+   if [[ -e "${CTX_DIR}/.config.cfg" ]]; then CFG_DIR="$(cat ${CTX_DIR}/.config.cfg | tr -d '"' | cut -d'=' -f2)"; fi
+   if [[ -e "${CTX_DIR}/.config.key" ]]; then KEY_DIR="$(cat ${CTX_DIR}/.config.key | tr -d '"' | cut -d'=' -f2)"; fi
 }
 
 #
