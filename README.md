@@ -103,10 +103,9 @@ This project includes the following features:
 * Install the prerequisite software (See [Prerequisites](#-prerequisites)
 * Download project with git `git clone https://github.com/giminni/docker-grav`
 * Change into the current project directory with `cd docker-grav`
-* Add grav_bin directory to your .bashrc file with `echo "export PATH=${PWD}/grav_bin:${PATH} #-# docker-grav" >> ${HOME}/.bashrc`
+* Initialize the project with `${PWD}/grav_bin/grav_mkinit.sh init`
 * Reload bash shell with `source ${HOME}/.bashrc`
 * Check if scripts are available by entering `grav_` and pressing the TAB-key
-* Initialize the project with `grav_mkinit.sh init`
 * Check if the `.context` file is created in the project directory with `cat ${PWD}/.context`
 * Check if the configuration directory `grav_cfg` is populated with `.config.*` files with `ls -las ${PWD}/grav_cfg`
 * Create the encrypted password for user `grav` with `grav_mkpass.sh <user-password> grav`, the password must contain at least 11 characters
