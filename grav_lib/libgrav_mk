@@ -43,7 +43,7 @@ mkdata() {
    mkdir -p ${_GRAV_DATA}
    echo "GRAV_DATA=${_GRAV_DATA}" > ${CFG_DIR}/.config.data
    
-   help "INFO: Created data directory '_GRAV_NAME' in ${_GRAV_DATA}."
+   help "INFO: Created data directory '${_GRAV_NAME}' in ${_GRAV_DATA}."
 
    _RC=$?
 
