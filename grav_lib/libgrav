@@ -25,13 +25,6 @@ multichoice() {
       elif [ "${_ANSWER}" -eq 3 ] && [ "${_OK3}" == "ok" ]; then _RC=3; break;
       elif [ "${_ANSWER}" -eq 4 ] && [ "${_OK4}" == "ok" ]; then _RC=4; break;
       fi
-
-      #case ${_ANSWER} in
-      #      1 ) _RC=1; break; ;;
-      #      2 ) _RC=2; break; ;;
-      #      3 ) _RC=3; break; ;;
-      #      * ) _RC=1; ;;
-      #esac
    done
 
    echo ${_RC}
