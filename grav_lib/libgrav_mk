@@ -14,10 +14,10 @@ mkcache() {
       --opt device="${_GRAV_CACHE}" \
       --opt o=bind "${_GRAV_NAME}" 1>/dev/stderr
    
-   mkdir -vp ${_GRAV_CACHE}/.ccache
+   mkdir -vp "${_GRAV_CACHE}"/.ccache
    echo "GRAV_CACHE=${_GRAV_CACHE}" > ${CFG_DIR}/.config.cache
    
-   echo _RC=$?
+   _RC=$?
 
    return ${_RC}
 }
@@ -40,6 +40,56 @@ mkdata() {
    echo "GRAV_DATA=${_GRAV_DATA}" > ${CFG_DIR}/.config.data
    
    echo _RC=$?
+
+   return ${_RC}
+}
+
+#
+# Mkinit function for grav_mkinit.sh script
+#
+mkinit() {
+   local _RC=0
+   local _GRAV_CMD="${1}"
+   local _GRAV_HOME="${2}" 
+   local _GRAV_ROOT="${3}" 
+   local _GRAV_CACHE="${4}" 
+   local _GRAV_DATA="${5}" 
+   local _GRAV_DOCK="${6}" 
+   local _GRAV_BIN="${7}" 
+   local _GRAV_CFG="${8}" 
+   local _GRAV_KEY="${9}" 
+   local _GRAV_LIB="${10}"
+
+   case "${_GRAV_CMD}" in
+      init)
+         # Set global directory variables
+         echo "GRAV_HOME=\"${_GRAV_HOME}\"" > "${_GRAV_CFG}"/.config.home 
+         echo "GRAV_ROOT=\"${_GRAV_ROOT}\"" > "${_GRAV_CFG}"/.config.root 
+         #echo "GRAV_CACHE=\"${_GRAV_CACHE}\"" > "${_GRAV_CFG}"/.config.cache
+         #echo "GRAV_DATA=\"${_GRAV_DATA}\"" > "${_GRAV_CFG}"/.config.data
+         echo "GRAV_DOCK=\"${_GRAV_DOCK}\"" > "${_GRAV_CFG}"/.config.docker
+         echo "GRAV_BIN=\"${_GRAV_BIN}\"" > "${_GRAV_CFG}"/.config.bin 
+         echo "GRAV_CFG=\"${_GRAV_CFG}\"" > "${_GRAV_CFG}"/.config.cfg
+         echo "GRAV_KEY=\"${_GRAV_KEY}\"" > "${_GRAV_CFG}"/.config.key
+         echo "GRAV_LIB=\"${_GRAV_LIB}\"" > "${_GRAV_CFG}"/.config.lib 
+         echo "GRAV_CTX=\"${_GRAV_CFG}\"" > "${_GRAV_HOME}"/.context
+
+         # Replace grav-bin entry in .bashrc file
+         if [ -e "${HOME}/.bashrc" ] && [ "${SHELL}" == "/bin/bash" ]; then 
+            sed -i "/# docker-grav #/d" ${HOME}/.bashrc
+            echo "export PATH=${PWD}/grav_bin:\${PATH} # docker-grav #" >> ${HOME}/.bashrc
+         fi
+
+         # Set current grav core version strings
+         "${BIN_DIR}"/grav_setcore.sh prod
+         "${BIN_DIR}"/grav_setcore.sh dev
+      ;;
+      
+      
+      *) error 2 "FAIL: Argument is not defined: ${_GRAV_CMD}!"
+      ;;
+
+   esac
 
    return ${_RC}
 }
@@ -77,52 +127,22 @@ mkssh() {
    local _GRAV_TYPE="${2}"
    local _GRAV_LENGTH="${3}"
    local _GRAV_SSH="${4}"
+   local _ANSWER=""
 
-   ssh-keygen -C "${_GRAV_EMAIL}" -t ${_GRAV_TYPE} -b ${_GRAV_LENGTH} -f "${_GRAV_SSH}" -N ''
+   if [ -e "${_GRAV_SSH}" ] && [ -e "${_GRAV_SSH}.pub" ]; then
+      _ANSWER=$(userinput "${_GRAV_SSH} already exists.
+Reuse it")
+      # Create new one if answer is false
+      if [ ${_ANSWER} -eq 0 ]; then
+         rm -f ${_GRAV_SSH}
+         rm -f ${_GRAV_SSH}.pub
+         ssh-keygen -q -C "${_GRAV_EMAIL}" -t ${_GRAV_TYPE} -b ${_GRAV_LENGTH} -f "${_GRAV_SSH}" -N ''
+      fi
+   else
+      ssh-keygen -q -C "${_GRAV_EMAIL}" -t ${_GRAV_TYPE} -b ${_GRAV_LENGTH} -f "${_GRAV_SSH}" -N ''
+   fi
 
    _RC=$?
-
-   return ${_RC}
-}
-
-#
-# Mkinit function for grav_mkinit.sh script
-#
-mkinit() {
-   local _RC=0
-   local _GRAV_CMD="${1}"
-   local _GRAV_HOME="${2}" 
-   local _GRAV_ROOT="${3}" 
-   local _GRAV_CACHE="${4}" 
-   local _GRAV_DATA="${5}" 
-   local _GRAV_DOCK="${6}" 
-   local _GRAV_BIN="${7}" 
-   local _GRAV_CFG="${8}" 
-   local _GRAV_KEY="${9}" 
-   local _GRAV_LIB="${10}"
-
-   case "${_GRAV_CMD}" in
-      init)
-         echo "GRAV_HOME=\"${_GRAV_HOME}\"" > "${_GRAV_CFG}"/.config.home 
-         echo "GRAV_ROOT=\"${_GRAV_ROOT}\"" > "${_GRAV_CFG}"/.config.root 
-         echo "GRAV_CACHE=\"${_GRAV_CACHE}\"" > "${_GRAV_CFG}"/.config.cache
-         echo "GRAV_DATA=\"${_GRAV_DATA}\"" > "${_GRAV_CFG}"/.config.data
-         echo "GRAV_DOCK=\"${_GRAV_DOCK}\"" > "${_GRAV_CFG}"/.config.docker
-         echo "GRAV_BIN=\"${_GRAV_BIN}\"" > "${_GRAV_CFG}"/.config.bin 
-         echo "GRAV_CFG=\"${_GRAV_CFG}\"" > "${_GRAV_CFG}"/.config.cfg
-         echo "GRAV_KEY=\"${_GRAV_KEY}\"" > "${_GRAV_CFG}"/.config.key
-         echo "GRAV_LIB=\"${_GRAV_LIB}\"" > "${_GRAV_CFG}"/.config.lib 
-         echo "GRAV_CTX=\"${_GRAV_CFG}\"" > "${_GRAV_HOME}"/.context
-
-         "${BIN_DIR}"/grav_setcore.sh prod
-         "${BIN_DIR}"/grav_setcore.sh dev
-      ;;
-      
-      
-      *) error 2 "FAIL: Argument is not defined: ${_GRAV_CMD}!"
-      ;;
-
-   esac
 
    return ${_RC}
 }
