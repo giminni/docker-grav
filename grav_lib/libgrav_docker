@@ -30,7 +30,7 @@ build() {
             --node grav_builder0 \
             --platform linux/amd64 \
             --use
-
+            
          sudo docker buildx "${_GRAV_CMD}" \
             --platform linux/amd64 \
             --progress=text \
@@ -87,6 +87,8 @@ purge() {
    sudo rm -rf ${CACHE_DIR}/.ccache/*
    RC=$?
    sudo rm -rf ${CACHE_DIR}/.dcache/*
+   RC=$?
+   sudo docker rm -f buildx_buildkit_grav_builder0
    RC=$?
 
    return ${_RC}
