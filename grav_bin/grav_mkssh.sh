@@ -75,6 +75,7 @@ main() {
       
    RC=$?
 
+   # Adjust ACL
    chmod 400 "${_GRAV_SSH}"
    chmod 600 "${_GRAV_SSH}.pub"
 
