@@ -155,6 +155,7 @@ RUN set -eux; \
     echo "[STAGE] PHP installation..."; \
     echo "Installing PHP extensions..."; \
     pear config-set cache_dir /tmp/cache/.phpcache; \
+    pear config-set download_dir /tmp/cache/.phpcache/download; \
     pear config-set php_ini /usr/local/etc/php/conf.d/php-recommended.ini; \
     docker-php-ext-install opcache pdo pdo_mysql pdo_pgsql pgsql; \
     docker-php-ext-configure intl; \
@@ -195,12 +196,11 @@ RUN set -eux; \
 RUN set -eux; \
     echo "[STAGE] Grav installation..."; \
     echo "Installing ${GRAV_URLFILE}..."; \
-    ls -lasr /tmp/grav/*; \
     test -f "/tmp/grav/core/${GRAV_URLFILE}" || wget --progress=bar:force \
         -O "/tmp/grav/core/${GRAV_URLFILE}" \
         ${GRAV_URL}; \
     cd /var/www; \
-    rm -rf /var/www/html;\
+    rm -rf /var/www/html; \
     unzip "/tmp/grav/core/${GRAV_URLFILE}"; \
     echo "Creating symlink for URL access..."; \
     ln -s /var/www/${GRAV_NAME} /var/www/html; \
