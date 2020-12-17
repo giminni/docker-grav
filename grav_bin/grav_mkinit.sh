@@ -76,6 +76,8 @@ main() {
 
    _RC=$?
    
+   if [ ${_RC} -eq 0 ]; then help "INFO: Reload bash from the command line with 'source \${HOME}/.bashrc'"; fi
+
    return ${_RC}
 }
 
