@@ -25,4 +25,4 @@
 !grav_cfg/.gitkeep
 !grav_data/.gitkeep 
 !grav_key/.gitkeep
-!grav_rootfs/.gitkeep
+!grav_rootfs/tmp/grav/core/.gitkeep
