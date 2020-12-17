@@ -130,26 +130,30 @@ mkssh() {
    local _ANSWER=""
 
    if [ -e "${_GRAV_SSH}" ] && [ -e "${_GRAV_SSH}.pub" ]; then
-      _ANSWER=$(threeinput "${_GRAV_SSH} already exists.
-(1) Reuse it, (2) Overwrite, (3) Use own ")
+      _ANSWER=$(multichoice 3 "${_GRAV_SSH} already exists.
+(1) Overwrite, (2) Use own, (3) Reuse it ")
+   else
+      _ANSWER=$(multichoice 2 "${_GRAV_SSH} already exists.
+(1) Create, (2) Use own ")
+   fi
       case "${_ANSWER}" in
-         1) break; ;;
-         2) 
-            rm -f ${_GRAV_SSH}
-            rm -f ${_GRAV_SSH}.pub
+         1) 
+            if [[ -e "${_GRAV_SSH}" ]]; then rm -f ${_GRAV_SSH}; fi
+            if [[ -e "${_GRAV_SSH}".pub ]]; then rm -f ${_GRAV_SSH}.pub; fi
             ssh-keygen -q -C "${_GRAV_EMAIL}" -t ${_GRAV_TYPE} -b ${_GRAV_LENGTH} -f "${_GRAV_SSH}" -N ''
          ;;
 
-         3) 
-            rm -f ${_GRAV_SSH}
-            rm -f ${_GRAV_SSH}.pub
+         2) 
+            if [[ -e "${_GRAV_SSH}" ]]; then rm -f ${_GRAV_SSH}; fi
+            if [[ -e "${_GRAV_SSH}".pub ]]; then rm -f ${_GRAV_SSH}.pub; fi
             cp $HOME/.ssh/id_rsa ${KEY_DIR}/grav_rsa
             cp $HOME/.ssh/id_rsa.pub ${KEY_DIR}/grav_rsa.pub
          ;;
+         3) break; ;;
       esac
-   else
-      ssh-keygen -q -C "${_GRAV_EMAIL}" -t ${_GRAV_TYPE} -b ${_GRAV_LENGTH} -f "${_GRAV_SSH}" -N ''
-   fi
+   #else
+   #   ssh-keygen -q -C "${_GRAV_EMAIL}" -t ${_GRAV_TYPE} -b ${_GRAV_LENGTH} -f "${_GRAV_SSH}" -N ''
+   #fi
 
    _RC=$?
 

@@ -1,47 +1,37 @@
 #!/usr/bin/env bash
 
 #
-# Boolean user input function settings 0 for no and 1 for yes
+# Multichoice user input function
 #
-threeinput() {
-   local _TEXT="${1}"
+multichoice() {
+   local _TYPE=${1:-2}
+   local _TEXT="${2}"
 
    local _RC=1
+   local _INFO=""
 
-   while true; do
-      read -p "${_TEXT} (1/2/3)? " _ANSWER
-      
-      if [ $? -ge 128 ]; then _RC=1; break; fi
-
-      case ${_ANSWER} in
-            1 ) _RC=1; break; ;;
-            2 ) _RC=2; break; ;;
-            3 ) _RC=3; break; ;;
-            * ) _RC=1; ;;
-      esac
+   for (( idx=1; idx<=${_TYPE}; idx++ )); do  
+      local _OK${idx}="ok"
+      local _INFO="${_INFO}${idx}/"
    done
-
-   echo ${_RC}
-}
-
-#
-# Boolean user input function settings 0 for no and 1 for yes
-#
-boolinput() {
-   local _TEXT="${1}"
-
-   local _RC=0
-
+   
    while true; do
-      read -p "${_TEXT} (y/n)? " _ANSWER
+      read -p "${_TEXT} (${_INFO:0:-1})? " _ANSWER
       
       if [ $? -ge 128 ]; then _RC=1; break; fi
 
-      case ${_ANSWER} in
-         [yY]* ) _RC=1; break; ;;
-         [nN]* ) _RC=0; break; ;;
-             * ) _RC=0; ;;
-      esac
+      if [ "${_ANSWER}" -eq 1 ] && [ "${_OK1}" == "ok" ]; then _RC=1; break;
+      elif [ "${_ANSWER}" -eq 2 ] && [ "${_OK2}" == "ok" ]; then _RC=2; break;
+      elif [ "${_ANSWER}" -eq 3 ] && [ "${_OK3}" == "ok" ]; then _RC=3; break;
+      elif [ "${_ANSWER}" -eq 4 ] && [ "${_OK4}" == "ok" ]; then _RC=4; break;
+      fi
+
+      #case ${_ANSWER} in
+      #      1 ) _RC=1; break; ;;
+      #      2 ) _RC=2; break; ;;
+      #      3 ) _RC=3; break; ;;
+      #      * ) _RC=1; ;;
+      #esac
    done
 
    echo ${_RC}
