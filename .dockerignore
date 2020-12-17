@@ -4,6 +4,7 @@
 **/.ccache
 **/.dcache
 **/.gocache
+**/.phpcache
 **/.pycache
 **/.config**
 **/.context
