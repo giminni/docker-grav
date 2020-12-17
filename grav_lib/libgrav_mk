@@ -12,11 +12,13 @@ mkcache() {
       --driver local \
       --opt type=none \
       --opt device="${_GRAV_CACHE}" \
-      --opt o=bind "${_GRAV_NAME}" 1>/dev/stderr
+      --opt o=bind "${_GRAV_NAME}" 1>/dev/stderr 1>/dev/null 2>&1
    
    mkdir -p "${_GRAV_CACHE}"/.ccache
+   mkdir -p "${_GRAV_CACHE}"/.phpcache
    echo "GRAV_CACHE=${_GRAV_CACHE}" > ${CFG_DIR}/.config.cache
    
+
    help "INFO: Created cached directory '${_GRAV_NAME}' in ${_GRAV_CACHE}."
 
    _RC=$?
@@ -36,7 +38,7 @@ mkdata() {
       --driver local \
       --opt type=none \
       --opt device="${_GRAV_DATA}" \
-      --opt o=bind "${_GRAV_NAME}" 1>/dev/stderr
+      --opt o=bind "${_GRAV_NAME}" 1>/dev/null 2>&1
    
    mkdir -p ${_GRAV_DATA}
    echo "GRAV_DATA=${_GRAV_DATA}" > ${CFG_DIR}/.config.data
@@ -83,6 +85,24 @@ mkinit() {
             sed -i "/# docker-grav #/d" ${HOME}/.bashrc
             echo "export PATH=${PWD}/grav_bin:\${PATH} # docker-grav #" >> ${HOME}/.bashrc
          fi
+
+         if [ ! -e "${HOME}/.bash_aliases" ] && [ "${SHELL}" == "/bin/bash" ]; then 
+            touch ${HOME}/.bash_aliases
+         else
+            sed -i "/# docker-grav #/d" ${HOME}/.bash_aliases
+         fi
+
+         echo 'alias "grav_build"="grav_build.sh" # docker-grav #' >> ${HOME}/.bash_aliases
+         echo 'alias "grav_getcore"="grav_getcore.sh" # docker-grav #' >> ${HOME}/.bash_aliases
+         echo 'alias "grav_mkcache"="grav_mkcache.sh" # docker-grav #' >> ${HOME}/.bash_aliases
+         echo 'alias "grav_mkdata"="grav_mkdata.sh" # docker-grav #' >> ${HOME}/.bash_aliases
+         echo 'alias "grav_mkinit"="grav_mkinit.sh" # docker-grav #' >> ${HOME}/.bash_aliases
+         echo 'alias "grav_mkpass"="grav_mkpass.sh" # docker-grav #' >> ${HOME}/.bash_aliases
+         echo 'alias "grav_mkssh"="grav_mkssh.sh" # docker-grav #' >> ${HOME}/.bash_aliases
+         echo 'alias "grav_purge"="grav_purge.sh" # docker-grav #' >> ${HOME}/.bash_aliases
+         echo 'alias "grav_run"="grav_run.sh" # docker-grav #' >> ${HOME}/.bash_aliases
+         echo 'alias "grav_setcore"="grav_setcore.sh" # docker-grav #' >> ${HOME}/.bash_aliases
+         echo 'alias "grav_shell"="grav_shell.sh" # docker-grav #' >> ${HOME}/.bash_aliases
 
          # Set current grav core version strings
          "${BIN_DIR}"/grav_setcore.sh prod
