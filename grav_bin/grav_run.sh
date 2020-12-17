@@ -68,9 +68,9 @@ main() {
    fi
 
    # Check if essential configuration files exists
-   if [ ! -f ${CFG_DIR}/.config.pass ] || [ ! -f $(cat ${CFG_DIR}/.config.pass | cut -d'=' -f2) ]; then error 2 "FAIL: User and password not provided! Please run ${BIN_DIR}/grav_mkpass.sh first...";
-      elif [ ! -f ${CFG_DIR}/.config.ssh ] || [ ! -f $(cat ${CFG_DIR}/.config.ssh | cut -d'=' -f2) ]; then error 2 "FAIL: SSH files not provided! Please run ${BIN_DIR}/grav_mkssh.sh first...";
-      elif [ ! -f ${CFG_DIR}/.config.data ] || [ ! -d $(cat ${CFG_DIR}/.config.data | cut -d'=' -f2) ]; then error 2 "FAIL: Data volume not provided! Please run ${BIN_DIR}/grav_mkdata.sh first...";
+   if [ ! -f ${CFG_DIR}/.config.pass ] || [ ! -f $(cat ${CFG_DIR}/.config.pass | tr -d'"' | cut -d'=' -f2) ]; then error 2 "FAIL: User and password not provided! Please run ${BIN_DIR}/grav_mkpass.sh first...";
+      elif [ ! -f ${CFG_DIR}/.config.ssh ] || [ ! -f $(cat ${CFG_DIR}/.config.ssh | tr -d'"' | cut -d'=' -f2) ]; then error 2 "FAIL: SSH files not provided! Please run ${BIN_DIR}/grav_mkssh.sh first...";
+      elif [ ! -f ${CFG_DIR}/.config.data ] || [ ! -d $(cat ${CFG_DIR}/.config.data | tr -d'"' | cut -d'=' -f2) ]; then error 2 "FAIL: Data volume not provided! Please run ${BIN_DIR}/grav_mkdata.sh first...";
    fi
 
    run \

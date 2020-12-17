@@ -40,8 +40,8 @@ main() {
    local _RC=0
 
    # Get Grav version strings from context files
-   local _GRAV_DEV="$(cat ${CFG_DIR}/.config.dev | cut -d'=' -f2)"
-   local _GRAV_PROD="$(cat ${CFG_DIR}/.config.prod | cut -d'=' -f2)"
+   local _GRAV_DEV="$(cat ${CFG_DIR}/.config.dev | tr -d'"' | cut -d'=' -f2)"
+   local _GRAV_PROD="$(cat ${CFG_DIR}/.config.prod | tr -d'"' | cut -d'=' -f2)"
 
    # Enter latest or testing
    local _GRAV_USER="${_ARGV[1]}"
@@ -85,11 +85,11 @@ main() {
    fi
 
    # Check if essential configuration files exists
-   if [ ! -f ${CFG_DIR}/.config.pass ] || [ ! -f $(cat ${CFG_DIR}/.config.pass | cut -d'=' -f2) ]; then error 2 "FAIL: User and password not provided! Please run ${BIN_DIR}/grav_mkpass.sh first...";
-      elif [ ! -f ${CFG_DIR}/.config.ssh ] || [ ! -f $(cat ${CFG_DIR}/.config.ssh | cut -d'=' -f2) ]; then error 2 "FAIL: SSH files not provided! Please run ${BIN_DIR}/grav_mkssh.sh first...";
-      elif [ ! -f ${CFG_DIR}/.config.cache ] || [ ! -d $(cat ${CFG_DIR}/.config.cache | cut -d'=' -f2) ]; then error 2 "FAIL: Cache directory not provided! Please run ${BIN_DIR}/grav_mkcache.sh first...";
-      elif [ ! -f ${CFG_DIR}/.config.dev ] || [ ! -n $(cat ${CFG_DIR}/.config.dev | cut -d'=' -f2) ]; then error 2 "FAIL: Grav dev version not provided! Please run ${BIN_DIR}/grav_getver.sh first...";
-      elif [ ! -f ${CFG_DIR}/.config.prod ] || [ ! -n $(cat ${CFG_DIR}/.config.prod | cut -d'=' -f2) ]; then error 2 "FAIL: Grav prod version not provided! Please run ${BIN_DIR}/grav_getver.sh first...";
+   if [ ! -f ${CFG_DIR}/.config.pass ] || [ ! -f $(cat ${CFG_DIR}/.config.pass | tr -d'"' | cut -d'=' -f2) ]; then error 2 "FAIL: User and password not provided! Please run ${BIN_DIR}/grav_mkpass.sh first...";
+      elif [ ! -f ${CFG_DIR}/.config.ssh ] || [ ! -f $(cat ${CFG_DIR}/.config.ssh | tr -d'"' | cut -d'=' -f2) ]; then error 2 "FAIL: SSH files not provided! Please run ${BIN_DIR}/grav_mkssh.sh first...";
+      elif [ ! -f ${CFG_DIR}/.config.cache ] || [ ! -d $(cat ${CFG_DIR}/.config.cache | tr -d'"' | cut -d'=' -f2) ]; then error 2 "FAIL: Cache directory not provided! Please run ${BIN_DIR}/grav_mkcache.sh first...";
+      elif [ ! -f ${CFG_DIR}/.config.dev ] || [ ! -n $(cat ${CFG_DIR}/.config.dev | tr -d'"' | cut -d'=' -f2) ]; then error 2 "FAIL: Grav dev version not provided! Please run ${BIN_DIR}/grav_getver.sh first...";
+      elif [ ! -f ${CFG_DIR}/.config.prod ] || [ ! -n $(cat ${CFG_DIR}/.config.prod | tr -d'"' | cut -d'=' -f2) ]; then error 2 "FAIL: Grav prod version not provided! Please run ${BIN_DIR}/grav_getver.sh first...";
    fi
 
    # Define core or skeleton package for download
