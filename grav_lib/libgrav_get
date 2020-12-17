@@ -18,7 +18,7 @@ getcore() {
    case "${_GRAV_CORE}" in
       dev)
          _GRAV_DEV=$(cat "${CFG_DIR}"/.config.dev | tr -d '"' | cut -d'=' -f2)
-         _GRAV_OUTPUT="${ROOT_DIR}/tmp/${_GRAV_NAME}-${_GRAV_DEV}?testing.zip"
+         _GRAV_OUTPUT="${ROOT_DIR}/tmp/grav/core/${_GRAV_NAME}-${_GRAV_DEV}?testing.zip"
          if [[ -e "${_GRAV_OUTPUT}" ]]; then error 2 "FAIL: File ${_GRAV_OUTPUT} exists, download not needed."; fi
 
          wget -O "${_GRAV_OUTPUT}" \
@@ -26,7 +26,7 @@ getcore() {
       ;;
 
       [0-9]*.[0-9]*.[0-9]*-[a-z][a-z].[0-9]*)
-         _GRAV_OUTPUT="${ROOT_DIR}/tmp/${_GRAV_NAME}-${_GRAV_CORE}?testing.zip"
+         _GRAV_OUTPUT="${ROOT_DIR}/tmp/grav/core/${_GRAV_NAME}-${_GRAV_CORE}?testing.zip"
          if [[ -e "${_GRAV_OUTPUT}" ]]; then error 2 "FAIL: File ${_GRAV_OUTPUT} exists, download not needed."; fi
 
          wget -O "${_GRAV_OUTPUT}" \
@@ -35,7 +35,7 @@ getcore() {
 
       prod)
          _GRAV_PROD=$(cat "${CFG_DIR}"/.config.prod | tr -d '"' | cut -d'=' -f2)
-         _GRAV_OUTPUT="${ROOT_DIR}/tmp/${_GRAV_NAME}-${_GRAV_PROD}.zip"
+         _GRAV_OUTPUT="${ROOT_DIR}/tmp/grav/core/${_GRAV_NAME}-${_GRAV_PROD}.zip"
          if [[ -e "${_GRAV_OUTPUT}" ]]; then error 2 "FAIL: File ${_GRAV_OUTPUT} exists, download not needed."; fi
 
          wget -O "${_GRAV_OUTPUT}" \
@@ -43,7 +43,7 @@ getcore() {
       ;;
       
       [0-9]*.[0-9]*.[0-9]*)
-         _GRAV_OUTPUT="${ROOT_DIR}/tmp/${_GRAV_NAME}-${_GRAV_CORE}.zip"
+         _GRAV_OUTPUT="${ROOT_DIR}/tmp/grav/core/${_GRAV_NAME}-${_GRAV_CORE}.zip"
          if [[ -e "${_GRAV_OUTPUT}" ]]; then error 2 "FAIL: File ${_GRAV_OUTPUT} exists, download not needed."; fi
 
          wget -O "${_GRAV_OUTPUT}" \
