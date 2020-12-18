@@ -105,8 +105,8 @@ mkinit() {
          echo 'alias "grav_shell"="grav_shell.sh" # docker-grav #' >> ${HOME}/.bash_aliases
 
          # Set current grav core version strings
-         "${BIN_DIR}"/grav_setcore.sh prod
-         "${BIN_DIR}"/grav_setcore.sh dev
+         # "${BIN_DIR}"/grav_setcore.sh prod
+         # "${BIN_DIR}"/grav_setcore.sh dev
       ;;
       
       
