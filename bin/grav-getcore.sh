@@ -11,7 +11,7 @@ NAME=$(echo ${CMD} | cut -d'.' -f1)
 CUR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOME_DIR="${CUR_DIR%/*}"
 
-if [[ ! -e "${HOME_DIR}/.context" ]]; then echo -e "\nFAIL: Context is not initialized! Please run '<PROJECT_HOME>/grav_bin/grav-mkinit.sh init' first... "; exit 1; fi
+if [[ ! -e "${HOME_DIR}/.context" ]]; then echo -e "\nFAIL: Context is not initialized! Please run '<PROJECT_HOME>/bin/grav-mkinit.sh init' first... "; exit 1; fi
 
 # Remove enclosing double quotes
 CTX_DIR="$(cat ${HOME_DIR}/.context | tr -d '"' | cut -d'=' -f2)"
@@ -28,15 +28,11 @@ RC=0
 # LIBS #
 # #### #
 source "${LIB_DIR}"/libgrav
-source "${LIB_DIR}"/libgrav_docker
+source "${LIB_DIR}"/libgrav_get
 
 # ##### #
 # FUNCS #
 # ##### #
-
-# #### #
-# MAIN #
-# #### #
 function main() {
    # Initialize context
    libgrav::init
@@ -46,18 +42,20 @@ function main() {
    
    local _RC=0
 
-   local _GRAV_SHELL="${_ARGV[1]-""}"
+   local _GRAV_CORE="${_ARGV[1]-""}"
    local _GRAV_NAME="${_ARGV[2]:-"grav"}"
-   
-   local _GRAV_TEXT="FAIL: Arguments are not provided!"
-   local _GRAV_ARGS="ARGS: ${CMD} grav_shell [grav_imgname]"
-   local _GRAV_NOTE="NOTE: (*) are default values, (#) are recommended values"
-   local _GRAV_ARG1="ARG1:     grav_shell: sh|ash|bash - (#=bash)"
-   local _GRAV_ARG2="ARG2: [grav_imgname]: any|(*)     - (*=grav-admin)"
-   local _GRAV_INFO="INFO: ${CMD} bash grav"
-   local _GRAV_HELP="HELP: ${CMD}: Open a named shell into the running '${_GRAV_NAME}' container depending from some entered arguments. (See NOTE, INFO and ARGS)"
+   local _GRAV_KIND="${_ARGV[3]:-"core"}"
 
-   if [ ${_ARGC} -lt 1 ]; then 
+   local _GRAV_TEXT="FAIL: Arguments are not provided!"
+   local _GRAV_ARGS="ARGS: ${CMD} grav_core grav_imgname [grav_kindname]"
+   local _GRAV_NOTE="NOTE: (*) are default values, (#) are recommended values"
+   local _GRAV_ARG1="ARG1:       grav_core: all|prod|dev|X.Y.Z - (#=all)"
+   local _GRAV_ARG2="ARG2:    grav_imgname: grav-admin|grav    - (*=grav-admin)"
+   local _GRAV_ARG3="ARG3: [grav_kindname]: core|skeletons     - (*=core)"
+   local _GRAV_INFO="INFO: ${CMD} prod grav-admin"
+   local _GRAV_HELP="HELP: ${CMD}: Download grav core packages depending from some entered arguments. (See NOTE, INFO and ARGS)"
+
+   if [ ${_ARGC} -lt 2 ]; then 
       libgrav::usage 1 \
          "${_GRAV_TEXT}" \
          "${_GRAV_ARGS}" \
@@ -65,15 +63,17 @@ function main() {
          "${_GRAV_INFO}" \
          "${_GRAV_HELP}" \
          "${_GRAV_ARG1}" \
-         "${_GRAV_ARG2}"
+         "${_GRAV_ARG2}" \
+         "${_GRAV_ARG3}"
    fi
-   
-   libgrav_docker::shell \
+
+   libgrav_get::get_core \
+      "${_GRAV_CORE}" \
       "${_GRAV_NAME}" \
-      "${_GRAV_SHELL}"
+      "${_GRAV_KIND}"
 
    _RC=$?
-
+   
    return ${_RC}
 }
 

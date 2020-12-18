@@ -11,7 +11,7 @@ NAME=$(echo ${CMD} | cut -d'.' -f1)
 CUR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOME_DIR="${CUR_DIR%/*}"
 
-if [[ ! -e "${HOME_DIR}/.context" ]]; then echo -e "\nFAIL: Context is not initialized! Please run '<PROJECT_HOME>/grav_bin/grav-mkinit.sh init' first... "; exit 1; fi
+if [[ ! -e "${HOME_DIR}/.context" ]]; then echo -e "\nFAIL: Context is not initialized! Please run '<PROJECT_HOME>/bin/grav-mkinit.sh init' first... "; exit 1; fi
 
 # Remove enclosing double quotes
 CTX_DIR="$(cat ${HOME_DIR}/.context | tr -d '"' | cut -d'=' -f2)"
@@ -48,9 +48,9 @@ function main() {
    local _GRAV_TEXT="FAIL: Arguments are not provided!"
    local _GRAV_ARGS="ARGS: ${CMD} grav_volname [grav_voldata]"
    local _GRAV_NOTE="NOTE: (*) are default values, (#) are recommended values"
-   local _GRAV_ARG1="ARG1:   grav_volname: any|(#) - (#=grav_data)"
+   local _GRAV_ARG1="ARG1:   grav_volname: any|(#) - (#=data)"
    local _GRAV_ARG2="ARG2: [grav_voldata]: any|(*) - (*=${DATA_DIR}/<grav_volname>)"
-   local _GRAV_INFO="INFO: ${CMD} grav_data ${DATA_DIR}"
+   local _GRAV_INFO="INFO: ${CMD} data ${DATA_DIR}"
    local _GRAV_HELP="HELP: ${CMD}: Create the required named data volume depending from some entered arguments. (See NOTE, INFO and ARGS)"
 
    if [ ${_ARGC} -lt 1 ]; then 

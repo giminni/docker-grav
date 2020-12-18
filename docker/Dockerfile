@@ -36,7 +36,7 @@ ENV PATH="${PATH:-"/var/www/html/bin:$PATH"}" \
     CACHE_HOST="${CACHE_HOST:-"172.17.0.1"}" \
     CCACHE_DIR="${CCACHE_DIR:-"/tmp/cache/.ccache"}" \
     PHPCACHE_DIR="${PHPCACHE_DIR:-"/tmp/cache/.phpcache"}" \
-    CACHE_DIR="${CACHE_DIR:-"/home/${CACHE_USER}/Workspace/docker-grav/grav_cache"}" \
+    CACHE_DIR="${CACHE_DIR:-"/home/${CACHE_USER}/Workspace/docker-grav/cache"}" \
     GRAV_NAME="${GRAV_NAME:-"grav-admin"}" \
     GRAV_TAG=="${GRAV_TAG:-"latest"}" \
     GRAV_USER="${GRAV_USER:-"grav"}" \

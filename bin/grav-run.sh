@@ -11,7 +11,7 @@ NAME=$(echo ${CMD} | cut -d'.' -f1)
 CUR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOME_DIR="${CUR_DIR%/*}"
 
-if [[ ! -e "${HOME_DIR}/.context" ]]; then echo -e "\nFAIL: Context is not initialized! Please run '<PROJECT_HOME>/grav_bin/grav-mkinit.sh init' first... "; exit 1; fi
+if [[ ! -e "${HOME_DIR}/.context" ]]; then echo -e "\nFAIL: Context is not initialized! Please run '<PROJECT_HOME>/bin/grav-mkinit.sh init' first... "; exit 1; fi
 
 # Remove enclosing double quotes
 CTX_DIR="$(cat ${HOME_DIR}/.context | tr -d '"' | cut -d'=' -f2)"
@@ -45,16 +45,16 @@ function main() {
    local _GRAV_USER="${_ARGV[1]-""}"
    local _GRAV_NAME="${_ARGV[2]:-"grav-admin"}"
    local _GRAV_TAG="${_ARGV[3]:-"latest"}"
-   local _GRAV_DATA="${_ARGV[4]:-"grav_data"}"
+   local _GRAV_DATA="${_ARGV[4]:-"data"}"
    
    local _GRAV_TEXT="FAIL: Arguments are not provided!"
-   local _GRAV_ARGS="ARGS: ${CMD} grav_user [grav_imgname=grav] [grav_imgtag=latest] [grav_voldata=grav_data]"
+   local _GRAV_ARGS="ARGS: ${CMD} grav_user [grav_imgname=grav] [grav_imgtag=latest] [grav_voldata=data]"
    local _GRAV_NOTE="NOTE: (*) are default values, (#) are recommended values"
    local _GRAV_ARG1="ARG1:      grav_user: any|(#) - (#=grav)"
    local _GRAV_ARG2="ARG2: [grav_imgname|: any|(*) - (*=grav-admin)"
    local _GRAV_ARG3="ARG3:  [grav_imgtag|: any|(*) - (*=latest)"
-   local _GRAV_ARG4="ARG4: [grav_voldata]: any|(*) - (*=grav_data)"
-   local _GRAV_INFO="INFO: ${CMD} grav grav-admin latest grav_data"
+   local _GRAV_ARG4="ARG4: [grav_voldata]: any|(*) - (*=data)"
+   local _GRAV_INFO="INFO: ${CMD} grav grav-admin latest data"
    local _GRAV_HELP="HELP: ${CMD}: Instantiate a docker container depending from some entered arguments. (See NOTE, INFO and ARGS)"
 
    if [ ${_ARGC} -lt 1 ]; then 

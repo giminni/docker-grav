@@ -85,7 +85,7 @@ function libgrav_mk::mk_init() { # Public: mk_init() function for grav-mkinit.sh
          # Replace grav-bin entry in .bashrc file
          if [[ -e "${HOME}/.bashrc" ]] && [ "${SHELL}" == "/bin/bash" ]; then 
             sed -i "/# docker-grav #/d" ${HOME}/.bashrc
-            echo "export PATH=${PWD}/grav_bin:\${PATH} # docker-grav #" >> ${HOME}/.bashrc
+            echo "export PATH=${PWD}/bin:\${PATH} # docker-grav #" >> ${HOME}/.bashrc
          fi
 
          if [[ ! -e "${HOME}/.bash_aliases" ]] && [ "${SHELL}" == "/bin/bash" ]; then 
@@ -94,17 +94,17 @@ function libgrav_mk::mk_init() { # Public: mk_init() function for grav-mkinit.sh
             sed -i "/# docker-grav #/d" ${HOME}/.bash_aliases
          fi
 
-         echo 'alias "grav_build"="grav-build.sh" # docker-grav #' >> ${HOME}/.bash_aliases
-         echo 'alias "grav_getcore"="grav-getcore.sh" # docker-grav #' >> ${HOME}/.bash_aliases
-         echo 'alias "grav_mkcache"="grav-mkcache.sh" # docker-grav #' >> ${HOME}/.bash_aliases
-         echo 'alias "grav_mkdata"="grav-mkdata.sh" # docker-grav #' >> ${HOME}/.bash_aliases
-         echo 'alias "grav_mkinit"="grav-mkinit.sh" # docker-grav #' >> ${HOME}/.bash_aliases
-         echo 'alias "grav_mkpass"="grav-mkpass.sh" # docker-grav #' >> ${HOME}/.bash_aliases
-         echo 'alias "grav_mkssh"="grav-mkssh.sh" # docker-grav #' >> ${HOME}/.bash_aliases
-         echo 'alias "grav_purge"="grav-purge.sh" # docker-grav #' >> ${HOME}/.bash_aliases
-         echo 'alias "grav_run"="grav-run.sh" # docker-grav #' >> ${HOME}/.bash_aliases
-         echo 'alias "grav_setcore"="grav-setcore.sh" # docker-grav #' >> ${HOME}/.bash_aliases
-         echo 'alias "grav_shell"="grav-shell.sh" # docker-grav #' >> ${HOME}/.bash_aliases
+         echo 'alias "grav-build"="grav-build.sh" # docker-grav #' >> ${HOME}/.bash_aliases
+         echo 'alias "grav-getcore"="grav-getcore.sh" # docker-grav #' >> ${HOME}/.bash_aliases
+         echo 'alias "grav-mkcache"="grav-mkcache.sh" # docker-grav #' >> ${HOME}/.bash_aliases
+         echo 'alias "grav-mkdata"="grav-mkdata.sh" # docker-grav #' >> ${HOME}/.bash_aliases
+         echo 'alias "grav-mkinit"="grav-mkinit.sh" # docker-grav #' >> ${HOME}/.bash_aliases
+         echo 'alias "grav-mkpass"="grav-mkpass.sh" # docker-grav #' >> ${HOME}/.bash_aliases
+         echo 'alias "grav-mkssh"="grav-mkssh.sh" # docker-grav #' >> ${HOME}/.bash_aliases
+         echo 'alias "grav-purge"="grav-purge.sh" # docker-grav #' >> ${HOME}/.bash_aliases
+         echo 'alias "grav-run"="grav-run.sh" # docker-grav #' >> ${HOME}/.bash_aliases
+         echo 'alias "grav-setcore"="grav-setcore.sh" # docker-grav #' >> ${HOME}/.bash_aliases
+         echo 'alias "grav-shell"="grav-shell.sh" # docker-grav #' >> ${HOME}/.bash_aliases
 
          # Set current grav core version strings
          # "${BIN_DIR}"/grav-setcore.sh prod

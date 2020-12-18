@@ -8,7 +8,7 @@
 **/.pycache
 **/.config**
 **/.context
-**/grav_data/**
+**/data/**
 **/.vscode
 **/.idea
 **/.DS_store

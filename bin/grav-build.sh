@@ -11,7 +11,7 @@ NAME=$(echo ${CMD} | cut -d'.' -f1)
 CUR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOME_DIR="${CUR_DIR%/*}"
 
-if [[ ! -e "${HOME_DIR}/.context" ]]; then echo -e "\nFAIL: Context is not initialized! Please run '<PROJECT_HOME>/grav_bin/grav-mkinit.sh init' first... "; exit 1; fi
+if [[ ! -e "${HOME_DIR}/.context" ]]; then echo -e "\nFAIL: Context is not initialized! Please run '<PROJECT_HOME>/bin/grav-mkinit.sh init' first... "; exit 1; fi
 
 # Remove enclosing double quotes
 CTX_DIR="$(cat ${HOME_DIR}/.context | tr -d '"' | cut -d'=' -f2)"
@@ -66,9 +66,9 @@ function main() {
    local _GRAV_ARG1="ARG1:       grav_user: any|(#)         - (#=grav)"
    local _GRAV_ARG2="ARG2:  [grav_imgname]: grav-admin|grav - (*=grav-admin)"
    local _GRAV_ARG3="ARG3:  [grav_tagname]: latest|testing  - (*=latest)"
-   local _GRAV_ARG4="ARG4: [grav_passfile]: any|(*)         - (*=<PROJECT_HOME>/grav_keys/grav_pass.key)"
-   local _GRAV_ARG5="ARG5: [grav_privfile]: any|(*)         - (*=<PROJECT_HOME>/grav_keys/grav_rsa)"
-   local _GRAV_ARG6="ARG6:  [grav_pubfile]: any|(*)         - (*=<PROJECT_HOME>/grav_keys/grav_rsa.pub)"
+   local _GRAV_ARG4="ARG4: [grav_passfile]: any|(*)         - (*=<PROJECT_HOME>/keys/grav_pass.key)"
+   local _GRAV_ARG5="ARG5: [grav_privfile]: any|(*)         - (*=<PROJECT_HOME>/keys/grav_rsa)"
+   local _GRAV_ARG6="ARG6:  [grav_pubfile]: any|(*)         - (*=<PROJECT_HOME>/keys/grav_rsa.pub)"
    local _GRAV_INFO="INFO: ${CMD} grav grav-admin latest ${KEY_DIR}/grav_pass.key ${KEY_DIR}/grav_rsa ${KEY_DIR}/grav_rsa.pub"
    local _GRAV_HELP="HELP: ${CMD}: Builds the docker file from some entered arguments. (See NOTE, INFO and ARGS)"
 

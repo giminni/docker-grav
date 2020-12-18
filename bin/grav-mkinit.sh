@@ -19,14 +19,14 @@ CUR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOME_DIR="${CUR_DIR%/*}"
 
 # Preset directories
-ROOT_DIR="${HOME_DIR}/grav_rootfs"
-CACHE_DIR="${HOME_DIR}/grav_cache"
-DATA_DIR="${HOME_DIR}/grav_data"
-DOCK_DIR="${HOME_DIR}/grav_docker"
-BIN_DIR="${HOME_DIR}/grav_bin"
-CFG_DIR="${HOME_DIR}/grav_cfg"
-KEY_DIR="${HOME_DIR}/grav_key"
-LIB_DIR="${HOME_DIR}/grav_lib"
+ROOT_DIR="${HOME_DIR}/rootfs"
+CACHE_DIR="${HOME_DIR}/cache"
+DATA_DIR="${HOME_DIR}/data"
+DOCK_DIR="${HOME_DIR}/docker"
+BIN_DIR="${HOME_DIR}/bin"
+CFG_DIR="${HOME_DIR}/cfg"
+KEY_DIR="${HOME_DIR}/key"
+LIB_DIR="${HOME_DIR}/lib"
 
 # #### #
 # LIBS #
