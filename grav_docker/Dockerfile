@@ -154,7 +154,7 @@ RUN set -eux; \
 RUN set -eux; \
     echo "[STAGE] PHP installation..."; \
     echo "Installing PHP extensions..."; \
-    pear config-set cache_dir /tmp/cache/.phpcache; \
+    pear config-set cache_dir /tmp/cache/.phpcache/cache; \
     pear config-set download_dir /tmp/cache/.phpcache/download; \
     pear config-set php_ini /usr/local/etc/php/conf.d/php-recommended.ini; \
     docker-php-ext-install opcache pdo pdo_mysql pdo_pgsql pgsql; \
@@ -228,12 +228,12 @@ RUN set -eux; \
     rsync -avz -e "ssh -i /home/${GRAV_USER}/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" \
        ${CCACHE_DIR} ${CACHE_USER}@${CACHE_HOST}:${CACHE_DIR};
 
-#RUN set -eux; \
-#    echo "[STAGE] Cleanup installation..."; \
-#    echo "Removing installation artefacts..."; \
-#    apt autoremove -y; \
-#    rm -rf /var/lib/apt/lists/*; \
-#    rm -rf /tmp/*;
+RUN set -eux; \
+    echo "[STAGE] Cleanup installation..."; \
+    echo "Removing installation artefacts..."; \
+    apt autoremove -y; \
+    rm -rf /var/lib/apt/lists/*; \
+    rm -rf /tmp/*;
 
 WORKDIR /var/www/html
 
