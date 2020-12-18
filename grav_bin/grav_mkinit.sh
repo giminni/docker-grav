@@ -2,7 +2,7 @@
 # #### #
 # INIT #
 # #### #
-set -e
+set -euo pipefail
 
 if [ "$(set | grep xtrace)" -o ${DEBUG:-0} -ne 0 ]; then DEBUG=1; set -x; else DEBUG=0; set +x; fi
 
@@ -37,13 +37,13 @@ source "${LIB_DIR}"/libgrav_mk
 # ##### #
 # FUNCS #
 # ##### #
-main() {
+function main() {
    local _ARGC=${1}
    local _ARGV=("${@}")
    
    local _RC=0
 
-   local _GRAV_CMD="${_ARGV[1]}"
+   local _GRAV_CMD="${_ARGV[1]-""}"
 
    local _GRAV_TEXT="FAIL: Arguments are not provided!"
    local _GRAV_ARGS="ARGS: ${CMD} grav_command"

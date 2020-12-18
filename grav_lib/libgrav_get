@@ -55,7 +55,7 @@ function libgrav_get::get_core() { # Public: get_core() function for grav_getcor
             ${_GRAV_URL}/${_GRAV_KIND}/${_GRAV_NAME}/${_GRAV_CORE}
       ;;
 
-      *) error 2 "FAIL: Argument is not defined: ${_GRAV_CORE}!"
+      *) libgrav::error 2 "FAIL: Argument is not defined: ${_GRAV_CORE}!"
       ;;
 
    esac

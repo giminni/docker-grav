@@ -83,12 +83,12 @@ function libgrav_mk::mk_init() { # Public: mk_init() function for grav_mkinit.sh
          echo "GRAV_CTX=\"${_GRAV_CFG}\"" > "${_GRAV_HOME}"/.context
 
          # Replace grav-bin entry in .bashrc file
-         if [ -e "${HOME}/.bashrc" ] && [ "${SHELL}" == "/bin/bash" ]; then 
+         if [[ -e "${HOME}/.bashrc" ]] && [ "${SHELL}" == "/bin/bash" ]; then 
             sed -i "/# docker-grav #/d" ${HOME}/.bashrc
             echo "export PATH=${PWD}/grav_bin:\${PATH} # docker-grav #" >> ${HOME}/.bashrc
          fi
 
-         if [ ! -e "${HOME}/.bash_aliases" ] && [ "${SHELL}" == "/bin/bash" ]; then 
+         if [[ ! -e "${HOME}/.bash_aliases" ]] && [ "${SHELL}" == "/bin/bash" ]; then 
             touch ${HOME}/.bash_aliases
          else
             sed -i "/# docker-grav #/d" ${HOME}/.bash_aliases
@@ -166,7 +166,7 @@ function libgrav_mk::mk_ssh() { # Public: mk_ssh() function for grav_mkssh.sh sc
    local _GRAV_VERB2="Used own"
    local _GRAV_VERB3="Reused"
 
-   if [ -e "${_GRAV_SSH}" ] && [ -e "${_GRAV_SSH}.pub" ]; then
+   if [[ -e "${_GRAV_SSH}" ]] && [[ -e "${_GRAV_SSH}.pub" ]]; then
       _GRAV_CHOICE=3
       _GRAV_ANSWER=$(libgrav::multi_choice ${_GRAV_CHOICE} "${_GRAV_SSH} already exists.
 (1) Overwrite, (2) Use own, (3) Reuse it ")

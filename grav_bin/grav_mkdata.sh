@@ -2,7 +2,7 @@
 # #### #
 # INIT #
 # #### #
-set -e
+set -euo pipefail
 
 if [ "$(set | grep xtrace)" -o ${DEBUG:-0} -ne 0 ]; then DEBUG=1; set -x; else DEBUG=0; set +x; fi
 
@@ -11,7 +11,7 @@ NAME=$(echo ${CMD} | cut -d'.' -f1)
 CUR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOME_DIR="${CUR_DIR%/*}"
 
-if [ ! -e "${HOME_DIR}/.context" ]; then echo -e "\nFAIL: Context is not initialized! Please run '<PROJECT_HOME>/grav_bin/grav_mkinit.sh init' first... "; exit 1; fi
+if [[ ! -e "${HOME_DIR}/.context" ]]; then echo -e "\nFAIL: Context is not initialized! Please run '<PROJECT_HOME>/grav_bin/grav_mkinit.sh init' first... "; exit 1; fi
 
 # Remove enclosing double quotes
 CTX_DIR="$(cat ${HOME_DIR}/.context | tr -d '"' | cut -d'=' -f2)"
@@ -33,7 +33,7 @@ source "${LIB_DIR}"/libgrav_mk
 # ##### #
 # FUNCS #
 # ##### #
-main() {
+function main() {
    # Initialize context
    libgrav::init
 
@@ -42,7 +42,7 @@ main() {
 
    local _RC=0
 
-   local _GRAV_NAME="${_ARGV[1]}"
+   local _GRAV_NAME="${_ARGV[1]-""}"
    local _GRAV_DATA="${_ARGV[2]:-"${HOME_DIR}/${_GRAV_NAME}"}"
 
    local _GRAV_TEXT="FAIL: Arguments are not provided!"

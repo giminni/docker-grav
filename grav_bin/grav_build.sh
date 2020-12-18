@@ -2,7 +2,7 @@
 # #### #
 # INIT #
 # #### #
-set -e
+set -euo pipefail
 
 if [ "$(set | grep xtrace)" -o ${DEBUG:-0} -ne 0 ]; then DEBUG=1; set -x; else DEBUG=0; set +x; fi
 
@@ -11,7 +11,7 @@ NAME=$(echo ${CMD} | cut -d'.' -f1)
 CUR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOME_DIR="${CUR_DIR%/*}"
 
-if [ ! -e "${HOME_DIR}/.context" ]; then echo -e "\nFAIL: Context is not initialized! Please run '<PROJECT_HOME>/grav_bin/grav_mkinit.sh init' first... "; exit 1; fi
+if [[ ! -e "${HOME_DIR}/.context" ]]; then echo -e "\nFAIL: Context is not initialized! Please run '<PROJECT_HOME>/grav_bin/grav_mkinit.sh init' first... "; exit 1; fi
 
 # Remove enclosing double quotes
 CTX_DIR="$(cat ${HOME_DIR}/.context | tr -d '"' | cut -d'=' -f2)"
@@ -33,7 +33,7 @@ source "${LIB_DIR}"/libgrav_docker
 # ##### #
 # FUNCS #
 # ##### #
-main() {
+function main() {
    # Initialize context
    libgrav::init
 
@@ -47,7 +47,7 @@ main() {
    local _GRAV_PROD="$(cat ${CFG_DIR}/.config.prod | tr -d '"' | cut -d'=' -f2)"
 
    # Enter latest or testing
-   local _GRAV_USER="${_ARGV[1]}"
+   local _GRAV_USER="${_ARGV[1]-""}"
    local _GRAV_NAME="${_ARGV[2]:-"grav-admin"}"
    local _GRAV_TAG="${_ARGV[3]:-"latest"}"
    local _GRAV_PASS="${_ARGV[4]:-"${KEY_DIR}/grav_pass.key"}"
@@ -88,19 +88,19 @@ main() {
    fi
 
    # Check if essential configuration settings are done
-   if [ ! -f ${CFG_DIR}/.config.pass ] || [ ! -f $(cat ${CFG_DIR}/.config.pass | tr -d '"' | cut -d'=' -f2) ]; then libgrav::error 2 "FAIL: User and password not provided! Please run ${BIN_DIR}/grav_mkpass.sh first...";
-      elif [ ! -f ${CFG_DIR}/.config.ssh ] || [ ! -f $(cat ${CFG_DIR}/.config.ssh | tr -d '"' | cut -d'=' -f2) ]; then libgrav::error 2 "FAIL: SSH files not provided! Please run ${BIN_DIR}/grav_mkssh.sh first...";
-      elif [ ! -f ${CFG_DIR}/.config.cache ] || [ ! -d $(cat ${CFG_DIR}/.config.cache | tr -d '"' | cut -d'=' -f2) ]; then libgrav::error 2 "FAIL: Cache directory not provided! Please run ${BIN_DIR}/grav_mkcache.sh first...";
+   if [ ! -f "${CFG_DIR}"/.config.pass ] || [ ! -f $(cat "${CFG_DIR}"/.config.pass | tr -d '"' | cut -d'=' -f2) ]; then libgrav::error 2 "FAIL: User and password not provided! Please run '${BIN_DIR}'/grav_mkpass.sh first...";
+      elif [ ! -f "${CFG_DIR}"/.config.ssh ] || [ ! -f $(cat "${CFG_DIR}"/.config.ssh | tr -d '"' | cut -d'=' -f2) ]; then libgrav::error 2 "FAIL: SSH files not provided! Please run '${BIN_DIR}'/grav_mkssh.sh first...";
+      elif [ ! -f "${CFG_DIR}"/.config.cache ] || [ ! -d $(cat "${CFG_DIR}"/.config.cache | tr -d '"' | cut -d'=' -f2) ]; then libgrav::error 2 "FAIL: Cache directory not provided! Please run '${BIN_DIR}'/grav_mkcache.sh first...";
    fi
 
    # Check if version string is set for development
    if [ "${_GRAV_TAG}" == "latest" ]; then 
-      if [ ! -f ${CFG_DIR}/.config.prod ] || [ ! -n $(cat ${CFG_DIR}/.config.prod | tr -d '"' | cut -d'=' -f2) ]; then libgrav::error 2 "FAIL: Grav prod version not provided! Please run ${BIN_DIR}/grav_getver.sh first..."; fi
+      if [ ! -f "${CFG_DIR}"/.config.prod ] || [ ! -n $(cat "${CFG_DIR}"/.config.prod | tr -d '"' | cut -d'=' -f2) ]; then libgrav::error 2 "FAIL: Grav prod version not provided! Please run '${BIN_DIR}'/grav_getver.sh first..."; fi
    fi
 
    # Check if version string is set for development
    if [ "${_GRAV_TAG}" == "testing" ]; then 
-      if [ ! -f ${CFG_DIR}/.config.dev ] || [ ! -n $(cat ${CFG_DIR}/.config.dev | tr -d '"' | cut -d'=' -f2) ]; then libgrav::error 2 "FAIL: Grav dev version not provided! Please run ${BIN_DIR}/grav_getver.sh first..."; fi
+      if [ ! -f "${CFG_DIR}"/.config.dev ] || [ ! -n $(cat "${CFG_DIR}"/.config.dev | tr -d '"' | cut -d'=' -f2) ]; then libgrav::error 2 "FAIL: Grav dev version not provided! Please run '${BIN_DIR}'/grav_getver.sh first..."; fi
    fi
 
    # Define core or skeleton package for download

@@ -2,7 +2,7 @@
 # #### #
 # INIT #
 # #### #
-set -e
+set -euo pipefail
 
 if [ "$(set | grep xtrace)" -o ${DEBUG:-0} -ne 0 ]; then DEBUG=1; set -x; else DEBUG=0; set +x; fi
 
@@ -11,7 +11,7 @@ NAME=$(echo ${CMD} | cut -d'.' -f1)
 CUR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOME_DIR="${CUR_DIR%/*}"
 
-if [ ! -e "${HOME_DIR}/.context" ]; then echo -e "\nFAIL: Context is not initialized! Please run '<PROJECT_HOME>/grav_bin/grav_mkinit.sh init' first... "; exit 1; fi
+if [[ ! -e "${HOME_DIR}/.context" ]]; then echo -e "\nFAIL: Context is not initialized! Please run '<PROJECT_HOME>/grav_bin/grav_mkinit.sh init' first... "; exit 1; fi
 
 # Remove enclosing double quotes
 CTX_DIR="$(cat ${HOME_DIR}/.context | tr -d '"' | cut -d'=' -f2)"
@@ -33,7 +33,7 @@ source "${LIB_DIR}"/libgrav_get
 # ##### #
 # FUNCS #
 # ##### #
-main() {
+function main() {
    # Initialize context
    libgrav::init
 
@@ -42,16 +42,16 @@ main() {
    
    local _RC=0
 
-   local _GRAV_CORE="${_ARGV[1]}"
+   local _GRAV_CORE="${_ARGV[1]-""}"
    local _GRAV_NAME="${_ARGV[2]:-"grav"}"
    local _GRAV_KIND="${_ARGV[3]:-"core"}"
 
    local _GRAV_TEXT="FAIL: Arguments are not provided!"
    local _GRAV_ARGS="ARGS: ${CMD} grav_core grav_imgname [grav_kindname]"
    local _GRAV_NOTE="NOTE: (*) are default values, (#) are recommended values"
-   local _GRAV_ARG1="ARG1:       grav_core: all|prod|dev|X.Y.Z  - (#=all)"
-   local _GRAV_ARG2="ARG2:    grav_imgname: grav-admin|grav - (*=grav-admin)"
-   local _GRAV_ARG3="ARG3: [grav_kindname]: core|skeletons  - (*=core)"
+   local _GRAV_ARG1="ARG1:       grav_core: all|prod|dev|X.Y.Z - (#=all)"
+   local _GRAV_ARG2="ARG2:    grav_imgname: grav-admin|grav    - (*=grav-admin)"
+   local _GRAV_ARG3="ARG3: [grav_kindname]: core|skeletons     - (*=core)"
    local _GRAV_INFO="INFO: ${CMD} prod grav-admin"
    local _GRAV_HELP="HELP: ${CMD}: Download grav core packages depending from some entered arguments. (See NOTE, INFO and ARGS)"
 
