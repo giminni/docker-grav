@@ -55,7 +55,7 @@ main() {
    local _GRAV_ARG1="ARG1:     grav_shell: sh|ash|bash - (#=bash)"
    local _GRAV_ARG2="ARG2: [grav_imgname]: any|(*)     - (*=grav-admin)"
    local _GRAV_INFO="INFO: ${CMD} bash grav"
-   local _GRAV_HELP="HELP: ${CMD}: Open a named shell into the running (${_GRAV_ARG2}) container depending from some entered arguments. (See NOTE, INFO and ARGS)"
+   local _GRAV_HELP="HELP: ${CMD}: Open a named shell into the running '${_GRAV_NAME}' container depending from some entered arguments. (See NOTE, INFO and ARGS)"
 
    if [ ${_ARGC} -lt 1 ]; then 
       usage 1 \
