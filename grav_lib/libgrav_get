@@ -16,6 +16,11 @@ getcore() {
    local _GRAV_URL="https://getgrav.org/download"
 
    case "${_GRAV_CORE}" in
+      all)
+         ${0} dev ${_GRAV_NAME}
+         ${0} prod ${_GRAV_NAME}
+      ;;
+
       dev)
          _GRAV_DEV=$(cat "${CFG_DIR}"/.config.dev | tr -d '"' | cut -d'=' -f2)
          _GRAV_OUTPUT="${ROOT_DIR}/tmp/grav/core/${_GRAV_NAME}-${_GRAV_DEV}?testing.zip"
