@@ -47,7 +47,7 @@ main() {
    local _GRAV_TEXT="FAIL: Arguments are not provided!"
    local _GRAV_ARGS="ARGS: ${CMD} grav_core"
    local _GRAV_NOTE="NOTE: (*) are default values, (#) are recommended values"
-   local _GRAV_ARG1="ARG1: grav_core: prod|dev - (#=prod)"
+   local _GRAV_ARG1="ARG1: grav_core: all|prod|dev - (#=all)"
    local _GRAV_INFO="INFO: ${CMD} prod"
    local _GRAV_HELP="HELP: ${CMD}: Set the core version information depending from some entered arguments. (See NOTE, INFO and ARGS)"
 
