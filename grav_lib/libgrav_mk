@@ -40,7 +40,9 @@ mkdata() {
       --opt device="${_GRAV_DATA}" \
       --opt o=bind "${_GRAV_NAME}" 1>/dev/null 2>&1
    
-   mkdir -p ${_GRAV_DATA}
+   if [[ -e "${_GRAV_DATA}/.gitkeep" ]]; then rm -f "${_GRAV_DATA}/.gitkeep"; fi
+   if [[ ! -e "${_GRAV_DATA}" ]]; then mkdir -p ${_GRAV_DATA}; fi
+
    echo "GRAV_DATA=${_GRAV_DATA}" > ${CFG_DIR}/.config.data
    
    help "INFO: Created data directory '${_GRAV_NAME}' in ${_GRAV_DATA}."
