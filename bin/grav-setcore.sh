@@ -45,10 +45,10 @@ function main() {
    local _GRAV_CORE="${_ARGV[1]-""}"
 
    local _GRAV_TEXT="FAIL: Arguments are not provided!"
-   local _GRAV_ARGS="ARGS: ${CMD} grav_core"
+   local _GRAV_ARGS="ARGS: ${CMD} grav-ver"
    local _GRAV_NOTE="NOTE: (*) are default values, (#) are recommended values"
-   local _GRAV_ARG1="ARG1: grav_core: all|prod|dev - (#=all)"
-   local _GRAV_INFO="INFO: ${CMD} prod"
+   local _GRAV_ARG1="ARG1: grav-ver: all|prod|dev|X.Y.Z - (#=all)"
+   local _GRAV_INFO="INFO: ${CMD} all"
    local _GRAV_HELP="HELP: ${CMD}: Set the core version information depending from some entered arguments. (See NOTE, INFO and ARGS)"
 
    if [ ${_ARGC} -lt 1 ]; then 

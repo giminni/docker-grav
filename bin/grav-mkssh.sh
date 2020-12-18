@@ -48,12 +48,12 @@ function main() {
    local _GRAV_SSH="${_ARGV[4]:-${KEY_DIR}/grav_${_GRAV_TYPE}}"
 
    local _GRAV_TEXT="FAIL: Arguments are not provided!"
-   local _GRAV_ARGS="ARGS: ${CMD} grav_email [keytype] [keylen] [keyfile]"
+   local _GRAV_ARGS="ARGS: ${CMD} user_email [key-type] [key-len] [key-file]"
    local _GRAV_NOTE="NOTE: (*) are default values, (#) are recommended values"
-   local _GRAV_ARG1="ARG1:     grav_email: any|(#)  - (#=email-address)"
-   local _GRAV_ARG2="ARG2: [keytype]: rsa|dsa|ecdsa - (*=rsa)"
-   local _GRAV_ARG3="ARG3:  [keylen]: 2048-8192     - (*=4096)"
-   local _GRAV_ARG4="ARG4: [keyfile]: any|(*)       - (*=${KEY_DIR}/grav_<grav-keytype>)"
+   local _GRAV_ARG1="ARG1: user-email: any|(#)  - (#=email-address)"
+   local _GRAV_ARG2="ARG2: [key-type]: rsa|dsa|ecdsa - (*=rsa)"
+   local _GRAV_ARG3="ARG3:  [key-len]: 2048-8192     - (*=4096)"
+   local _GRAV_ARG4="ARG4: [key-file]: any|(*)       - (*=${KEY_DIR}/grav_<grav-keytype>)"
    local _GRAV_INFO="INFO: ${CMD} grav@example.com rsa 4096 ${KEY_DIR}/grav_rsa"
    local _GRAV_HELP="HELP: ${CMD}: Create the required user SSH keys depending from some entered arguments. (See NOTE, INFO and ARGS)"
 

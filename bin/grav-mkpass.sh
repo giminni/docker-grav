@@ -49,11 +49,11 @@ function main() {
    local _GRAV_LEN=11
 
    local _GRAV_TEXT="FAIL: Arguments are not provided!"
-   local _GRAV_ARGS="ARGS: ${CMD} grav_pass [grav_user] [grav_passfile]"
+   local _GRAV_ARGS="ARGS: ${CMD} user-pass [user-name] [pass-file]"
    local _GRAV_NOTE="NOTE: (*) are default values, (#) are recommended values"
-   local _GRAV_ARG1="ARG1:       grav_pass: any|(#) - (#=minimum 11 chars length)"
-   local _GRAV_ARG2="ARG2:     [grav_user]: any|(*) - (*=<current-user>,#=grav)"
-   local _GRAV_ARG3="ARG3: [grav_passfile]: any|(*) - (*=${KEY_DIR}/grav_pass.key]"
+   local _GRAV_ARG1="ARG1:   user-pass: any|(#) - (#=minimum length: 11 chars)"
+   local _GRAV_ARG2="ARG2: [user-name]: any|(*) - (*=<current-user>,#=grav)"
+   local _GRAV_ARG3="ARG3: [pass-file]: any|(*) - (*=${KEY_DIR}/grav_pass.key]"
    local _GRAV_INFO="INFO: ${CMD} my-secret-pass grav ${KEY_DIR}/grav_pass.key"
    local _GRAV_HELP="HELP: ${CMD}: Create the required user password depending from some entered arguments. (See NOTE, INFO and ARGS)"
 

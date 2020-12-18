@@ -47,11 +47,11 @@ function main() {
    local _GRAV_KIND="${_ARGV[3]:-"core"}"
 
    local _GRAV_TEXT="FAIL: Arguments are not provided!"
-   local _GRAV_ARGS="ARGS: ${CMD} grav_core grav_imgname [grav_kindname]"
+   local _GRAV_ARGS="ARGS: ${CMD} core-ver img-name [kind-name]"
    local _GRAV_NOTE="NOTE: (*) are default values, (#) are recommended values"
-   local _GRAV_ARG1="ARG1:       grav_core: all|prod|dev|X.Y.Z - (#=all)"
-   local _GRAV_ARG2="ARG2:    grav_imgname: grav-admin|grav    - (*=grav-admin)"
-   local _GRAV_ARG3="ARG3: [grav_kindname]: core|skeletons     - (*=core)"
+   local _GRAV_ARG1="ARG1:    core-ver: all|prod|dev|X.Y.Z - (#=all)"
+   local _GRAV_ARG2="ARG2:    img-name: grav-admin|grav    - (*=grav-admin)"
+   local _GRAV_ARG3="ARG3: [kind-name]: core|skeletons     - (*=core)"
    local _GRAV_INFO="INFO: ${CMD} prod grav-admin"
    local _GRAV_HELP="HELP: ${CMD}: Download grav core packages depending from some entered arguments. (See NOTE, INFO and ARGS)"
 

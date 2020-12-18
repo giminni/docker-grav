@@ -46,10 +46,10 @@ function main() {
    local _GRAV_DATA="${_ARGV[2]:-"${HOME_DIR}/${_GRAV_NAME}"}"
 
    local _GRAV_TEXT="FAIL: Arguments are not provided!"
-   local _GRAV_ARGS="ARGS: ${CMD} grav_volname [grav_voldata]"
+   local _GRAV_ARGS="ARGS: ${CMD} vol-name [vol-data]"
    local _GRAV_NOTE="NOTE: (*) are default values, (#) are recommended values"
-   local _GRAV_ARG1="ARG1:   grav_volname: any|(#) - (#=data)"
-   local _GRAV_ARG2="ARG2: [grav_voldata]: any|(*) - (*=${DATA_DIR}/<grav_volname>)"
+   local _GRAV_ARG1="ARG1:   vol-name: any|(#) - (#=data)"
+   local _GRAV_ARG2="ARG2: [vol-data]: any|(*) - (*=${DATA_DIR}/<grav_volname>)"
    local _GRAV_INFO="INFO: ${CMD} data ${DATA_DIR}"
    local _GRAV_HELP="HELP: ${CMD}: Create the required named data volume depending from some entered arguments. (See NOTE, INFO and ARGS)"
 

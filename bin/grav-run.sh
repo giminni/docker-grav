@@ -48,12 +48,12 @@ function main() {
    local _GRAV_DATA="${_ARGV[4]:-"data"}"
    
    local _GRAV_TEXT="FAIL: Arguments are not provided!"
-   local _GRAV_ARGS="ARGS: ${CMD} grav_user [grav_imgname=grav] [grav_imgtag=latest] [grav_voldata=data]"
+   local _GRAV_ARGS="ARGS: ${CMD} user-name [img-name] [tag-name] [vol-data]"
    local _GRAV_NOTE="NOTE: (*) are default values, (#) are recommended values"
-   local _GRAV_ARG1="ARG1:      grav_user: any|(#) - (#=grav)"
-   local _GRAV_ARG2="ARG2: [grav_imgname|: any|(*) - (*=grav-admin)"
-   local _GRAV_ARG3="ARG3:  [grav_imgtag|: any|(*) - (*=latest)"
-   local _GRAV_ARG4="ARG4: [grav_voldata]: any|(*) - (*=data)"
+   local _GRAV_ARG1="ARG1:  user-name: any|(#) - (#=grav)"
+   local _GRAV_ARG2="ARG2: [img-name]: any|(*) - (*=grav-admin)"
+   local _GRAV_ARG3="ARG3: [tag-name]: any|(*) - (*=latest)"
+   local _GRAV_ARG4="ARG4: [vol-data]: any|(*) - (*=data)"
    local _GRAV_INFO="INFO: ${CMD} grav grav-admin latest data"
    local _GRAV_HELP="HELP: ${CMD}: Instantiate a docker container depending from some entered arguments. (See NOTE, INFO and ARGS)"
 
