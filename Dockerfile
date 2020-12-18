@@ -1,1 +1,1 @@
-./grav_docker/Dockerfile
+./docker/Dockerfile
