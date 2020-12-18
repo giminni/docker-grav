@@ -101,28 +101,31 @@ This project includes the following features:
 ## Installation procedure
 
 * Install the prerequisite software (See [Prerequisites](#-prerequisites)
-* Download project with git `git clone https://github.com/giminni/docker-grav`
+* Download the project with git `git clone https://github.com/giminni/docker-grav`
 * Change into the current project directory with `cd docker-grav`
 * Initialize the project with `${PWD}/grav_bin/grav_mkinit.sh init`
 * Reload bash shell with `source ${HOME}/.bashrc`
+* Set the current grav core production and development package version with `grav_setcore.sh all`, older grav core packages version can be set manually, for example with `grav_setcore.sh 1.6.0` for production package version or `grav_setcore.sh 1.7.0-rc.19` for development package version.
+* Download the grav core production packages with `grav_getcore all grav` or the core development packages with `grav_getcore all grav-admin`, older grav core packages can be set manually, for example with `grav_getcore.sh 1.6.0 grav` for production package version or `grav_getcore.sh 1.7.0-rc.19 grav-admin` for development package version.
+* Create the encrypted password for user `grav` with `grav_mkpass.sh <user-password> grav`, the password must contain at least 11 characters
+* Create new or use your own SSH private and public key with `grav_mkssh.sh <email-address>` by answering with `1` for create new SSH key or `2` for use own SSH key. The latter case will copy the key from your `${HOME}/.ssh` directory.
+* Create the cache directory with `grav_mkcache.sh grav_cache`
+* Build the docker image with `grav_build grav grav-admin testing` for the development version or `grav_build.sh grav` for the production version.
+* Create the data directory with `grav_mkdata.sh grav_data`
+* Run the docker image with `grav_run grav grav-admin testing` for the development version or `grab_run.sh grav` for the production version.
+* Enter the command line of the running grav image, with `grav_shell.sh bash grav-admin` for the development version or `grav_shell.sh bash grav` for the production version.
+
+## Installation checklist
+
 * Check if scripts are available by entering `grav_` and pressing the TAB-key
 * Check if the `.context` file is created in the project directory with `cat ${PWD}/.context`
 * Check if the configuration directory `grav_cfg` is populated with `.config.*` files with `ls -las ${PWD}/grav_cfg`
-* Create the encrypted password for user `grav` with `grav_mkpass.sh <user-password> grav`, the password must contain at least 11 characters
 * Check `grav_pass.key` file under the key directory `grav_key` with `cat ${PWD}/grav_key/grav_pass.key`
-* If you have your own SSH keys for an external user, copy this to the key directory `grav_key` using this scheme `grav_rsa` for the private SSH key and `grav_rsa.pub` for the public SSH key.
-* Otherwise create a new SSH private and public key with `grav_mkssh.sh <user-address>`
 * Check if the SSH keys exists with `ls -las ${PWD}/grav_key/grav_rsa*` if you are using the `rsa` algorithm. Other algorithm that can be used are `dsa` and `ecdsa`.
-* The latest core production and development version are automatically set at init time, other version can be installed using `grav_setcore.sh`, for example with `grav_setcore.sh 1.6.0` for production version or `grav_setcore.sh 1.7.0-rc.19` for production version.
-* Reduce internet bandwith by downloading the grav core file with `grav_getcore.sh 1.6.0` for production version or `grav_getcore.sh 1.7.0-rc.19` for development version.
 * Check if the grav core file was downloaded correctly into the `grav_rootfs` directory, with `ls -las ${PWD}/grav_rootfs/tmp`.
-* Create the cache directory with `grav_mkcache.sh grav_cache`
 * Check if the cache directory exists with `ls -las ${PWD}/grav_cache`. A subdirectory `.ccache` must exists, otherwise the `grav-build.sh` script throw an error.
-* Build the docker image with `grav_build grav grav-admin testing` for the development version or `grav_build.sh grav` for the production version.
 * Check if the docker grav image exists, with `sudo docker images`
-* Run the docker image with `grav_run grav grav-admin testing` for the development version or `grab_run.sh grav` for the production version.
 * Check if the docker grav image is running, with `sudo docker ps -a`
-* Enter the command line of the running grav image, with `grav_shell.sh bash grav-admin` for the development version or `grav_shell.sh bash grav` for the production version.
 
 ## Using local key/value files for configuration
 
