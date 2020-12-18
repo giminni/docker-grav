@@ -71,9 +71,9 @@ function main() {
    fi
 
    # Check if essential configuration files exists
-   if [ ! -f "${CFG_DIR}"/.config.pass ] || [ ! -f $(cat "${CFG_DIR}"/.config.pass | tr -d '"' | cut -d'=' -f2) ]; then libgrav::error 2 "FAIL: User and password not provided! Please run '${BIN_DIR}'/grav-mkpass.sh first...";
-      elif [ ! -f "${CFG_DIR}"/.config.ssh ] || [ ! -f $(cat "${CFG_DIR}"/.config.ssh | tr -d '"' | cut -d'=' -f2) ]; then libgrav::error 2 "FAIL: SSH files not provided! Please run '${BIN_DIR}'/grav-mkssh.sh first...";
-      elif [ ! -f "${CFG_DIR}"/.config.data ] || [ ! -d $(cat "${CFG_DIR}"/.config.data | tr -d '"' | cut -d'=' -f2) ]; then libgrav::error 2 "FAIL: Data volume not provided! Please run '${BIN_DIR}'/grav-mkdata.sh first...";
+   if [ ! -f "${CFG_DIR}"/.config.pass ] || [ ! -f $(cat "${CFG_DIR}"/.config.pass | tr -d '"' | cut -d'=' -f2) ]; then libgrav::error 2 "FAIL: User and password not provided. Please run '${BIN_DIR}'/grav-mkpass.sh first...";
+      elif [ ! -f "${CFG_DIR}"/.config.ssh ] || [ ! -f $(cat "${CFG_DIR}"/.config.ssh | tr -d '"' | cut -d'=' -f2) ]; then libgrav::error 2 "FAIL: SSH files not provided. Please run '${BIN_DIR}'/grav-mkssh.sh first...";
+      elif [ ! -f "${CFG_DIR}"/.config.data ] || [ ! -d $(cat "${CFG_DIR}"/.config.data | tr -d '"' | cut -d'=' -f2) ]; then libgrav::error 2 "FAIL: Data volume not provided. Please run '${BIN_DIR}'/grav-mkdata.sh first...";
    fi
 
    libgrav_docker::run \

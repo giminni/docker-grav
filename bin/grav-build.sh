@@ -88,19 +88,19 @@ function main() {
    fi
 
    # Check if essential configuration settings are done
-   if [ ! -f "${CFG_DIR}"/.config.pass ] || [ ! -f $(cat "${CFG_DIR}"/.config.pass | tr -d '"' | cut -d'=' -f2) ]; then libgrav::error 2 "FAIL: User and password not provided! Please run '${BIN_DIR}'/grav-mkpass.sh first...";
-      elif [ ! -f "${CFG_DIR}"/.config.ssh ] || [ ! -f $(cat "${CFG_DIR}"/.config.ssh | tr -d '"' | cut -d'=' -f2) ]; then libgrav::error 2 "FAIL: SSH files not provided! Please run '${BIN_DIR}'/grav-mkssh.sh first...";
-      elif [ ! -f "${CFG_DIR}"/.config.cache ] || [ ! -d $(cat "${CFG_DIR}"/.config.cache | tr -d '"' | cut -d'=' -f2) ]; then libgrav::error 2 "FAIL: Cache directory not provided! Please run '${BIN_DIR}'/grav-mkcache.sh first...";
+   if [ ! -f "${CFG_DIR}"/.config.pass ] || [ ! -f $(cat "${CFG_DIR}"/.config.pass | tr -d '"' | cut -d'=' -f2) ]; then libgrav::error 2 "FAIL: User and password not provided. Please run ${BIN_DIR}/grav-mkpass.sh first...";
+      elif [ ! -f "${CFG_DIR}"/.config.ssh ] || [ ! -f $(cat "${CFG_DIR}"/.config.ssh | tr -d '"' | cut -d'=' -f2) ]; then libgrav::error 2 "FAIL: SSH files not provided. Please run ${BIN_DIR}/grav-mkssh.sh first...";
+      elif [ ! -f "${CFG_DIR}"/.config.cache ] || [ ! -d $(cat "${CFG_DIR}"/.config.cache | tr -d '"' | cut -d'=' -f2) ]; then libgrav::error 2 "FAIL: Cache directory not provided. Please run ${BIN_DIR}/grav-mkcache.sh first...";
    fi
 
    # Check if version string is set for development
    if [ "${_GRAV_TAG}" == "latest" ]; then 
-      if [ ! -f "${CFG_DIR}"/.config.prod ] || [ ! -n $(cat "${CFG_DIR}"/.config.prod | tr -d '"' | cut -d'=' -f2) ]; then libgrav::error 2 "FAIL: Grav prod version not provided! Please run '${BIN_DIR}'/grav_getver.sh first..."; fi
+      if [ ! -f "${CFG_DIR}"/.config.prod ] || [ ! -n $(cat "${CFG_DIR}"/.config.prod | tr -d '"' | cut -d'=' -f2) ]; then libgrav::error 2 "FAIL: Grav prod version not provided! Please run ${BIN_DIR}/grav-getcore.sh first..."; fi
    fi
 
    # Check if version string is set for development
    if [ "${_GRAV_TAG}" == "testing" ]; then 
-      if [ ! -f "${CFG_DIR}"/.config.dev ] || [ ! -n $(cat "${CFG_DIR}"/.config.dev | tr -d '"' | cut -d'=' -f2) ]; then libgrav::error 2 "FAIL: Grav dev version not provided! Please run '${BIN_DIR}'/grav_getver.sh first..."; fi
+      if [ ! -f "${CFG_DIR}"/.config.dev ] || [ ! -n $(cat "${CFG_DIR}"/.config.dev | tr -d '"' | cut -d'=' -f2) ]; then libgrav::error 2 "FAIL: Grav dev version not provided! Please run ${BIN_DIR}/grav-getcore.sh first..."; fi
    fi
 
    # Define core or skeleton package for download

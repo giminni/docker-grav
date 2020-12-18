@@ -67,6 +67,16 @@ function main() {
          "${_GRAV_ARG3}"
    fi
 
+   if  [ "${_GRAV_CORE}" == "dev" ]; then
+      # Check if essential configuration settings are done
+      if [[ ! -f "${CFG_DIR}"/.config.dev ]] || [[ ! -n $(cat "${CFG_DIR}"/.config.dev | tr -d '"' | cut -d'=' -f2) ]]; then libgrav::error 2 "FAIL: Core development package not provided. Please run ${BIN_DIR}/grav-setcore.sh first..."; fi
+   fi
+
+   if  [ "${_GRAV_CORE}" == "prod" ]; then
+      # Check if essential configuration settings are done
+      if [[ ! -f "${CFG_DIR}"/.config.prod ]] || [[ ! -n $(cat "${CFG_DIR}"/.config.prod | tr -d '"' | cut -d'=' -f2) ]]; then libgrav::error 2 "FAIL: Core production package not provided. Please run ${BIN_DIR}/grav-setcore.sh first..."; fi
+   fi
+
    libgrav_get::get_core \
       "${_GRAV_CORE}" \
       "${_GRAV_NAME}" \
