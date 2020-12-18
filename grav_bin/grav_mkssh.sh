@@ -50,7 +50,7 @@ main() {
    local _GRAV_TEXT="FAIL: Arguments are not provided!"
    local _GRAV_ARGS="ARGS: ${CMD} grav_email [grav_keytype] [grav_keylen] [grav_keyfile]"
    local _GRAV_NOTE="NOTE: (*) are default values, (#) are recommended values"
-   local _GRAV_ARG1="ARG1:     grav_email: any|(#)       - (#=own-email-address)"
+   local _GRAV_ARG1="ARG1:     grav_email: any|(#)       - (#=email-address)"
    local _GRAV_ARG2="ARG2: [grav_keytype]: rsa|dsa|ecdsa - (*=rsa)"
    local _GRAV_ARG3="ARG3:  [grav_keylen]: 2048-8192     - (*=4096)"
    local _GRAV_ARG4="ARG4: [grav_keyfile]: any|(*)       - (*=${KEY_DIR}/grav_<grav-keytype>)"
