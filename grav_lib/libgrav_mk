@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 #
-# mkcache function for grav_mkcache.sh script
+# Public: mk_cache() function for grav_mkcache.sh script.
 #
-mkcache() {
+function libgrav_mk::mk_cache() { # Public: mk_cache() function for grav_mkcache.sh script.
    local _RC=0
    local _GRAV_NAME="${1}"
    local _GRAV_CACHE="${2}"
@@ -19,7 +19,7 @@ mkcache() {
    echo "GRAV_CACHE=${_GRAV_CACHE}" > ${CFG_DIR}/.config.cache
    
 
-   help "INFO: Created cached directory '${_GRAV_NAME}' in ${_GRAV_CACHE}."
+   libgrav::help "INFO: Created cached directory '${_GRAV_NAME}' in ${_GRAV_CACHE}."
 
    _RC=$?
 
@@ -27,9 +27,9 @@ mkcache() {
 }
 
 #
-# mkdata function for grav_mkdata.sh script
+# Public: mk_data() function for grav_mkdata.sh script.
 #
-mkdata() {
+function libgrav_mk::mk_data() { # Public: mk_data() function for grav_mkdata.sh script.
    local _RC=0
    local _GRAV_NAME="${1}"
    local _GRAV_DATA="${2}"
@@ -45,7 +45,7 @@ mkdata() {
 
    echo "GRAV_DATA=${_GRAV_DATA}" > ${CFG_DIR}/.config.data
    
-   help "INFO: Created data directory '${_GRAV_NAME}' in ${_GRAV_DATA}."
+   libgrav::help "INFO: Created data directory '${_GRAV_NAME}' in ${_GRAV_DATA}."
 
    _RC=$?
 
@@ -53,9 +53,9 @@ mkdata() {
 }
 
 #
-# Mkinit function for grav_mkinit.sh script
+# Public: mk_init() function for grav_mkinit.sh script.
 #
-mkinit() {
+function libgrav_mk::mk_init() { # Public: mk_init() function for grav_mkinit.sh script.
    local _RC=0
    local _GRAV_CMD="${1}"
    local _GRAV_HOME="${2}" 
@@ -112,7 +112,7 @@ mkinit() {
       ;;
       
       
-      *) error 2 "FAIL: Argument is not defined: ${_GRAV_CMD}!"
+      *) libgrav::error 2 "FAIL: Argument is not defined: ${_GRAV_CMD}!"
       ;;
 
    esac
@@ -121,9 +121,9 @@ mkinit() {
 }
 
 #
-# mkpass function for grav_mkpass.sh script
+# Public: mk_pass() function for grav_mkpass.sh script.
 #
-mkpass() {
+function libgrav_mk::mk_pass() { # Public: mk_pass() function for grav_mkpass.sh script.
    local _RC=0
    local _GRAV_SECS="${1}"
    local _GRAV_USER="${2}"
@@ -144,15 +144,15 @@ mkpass() {
    echo "GRAV_USER=${_GRAV_USER}" > "${CFG_DIR}"/.config.user
    echo "GRAV_PASS=${_GRAV_PASS}" > "${CFG_DIR}"/.config.pass
    
-   help "INFO: Created encrypted password for user '${_GRAV_USER}' in ${KEY_DIR} directory."
+   libgrav::help "INFO: Created encrypted password for user '${_GRAV_USER}' in ${KEY_DIR} directory."
 
    return ${_RC}
 }
 
 #
-# mkssh function for grav_mkssh.sh script
+# Public: mk_ssh() function for grav_mkssh.sh script.
 #
-mkssh() {
+function libgrav_mk::mk_ssh() { # Public: mk_ssh() function for grav_mkssh.sh script.
    local _RC=0
    local _GRAV_EMAIL="${1}"
    local _GRAV_TYPE="${2}"
@@ -168,11 +168,11 @@ mkssh() {
 
    if [ -e "${_GRAV_SSH}" ] && [ -e "${_GRAV_SSH}.pub" ]; then
       _GRAV_CHOICE=3
-      _GRAV_ANSWER=$(multichoice ${_GRAV_CHOICE} "${_GRAV_SSH} already exists.
+      _GRAV_ANSWER=$(libgrav::multi_choice ${_GRAV_CHOICE} "${_GRAV_SSH} already exists.
 (1) Overwrite, (2) Use own, (3) Reuse it ")
    else
       _GRAV_CHOICE=2
-      _GRAV_ANSWER=$(multichoice ${_GRAV_CHOICE} "${_GRAV_SSH} already exists.
+      _GRAV_ANSWER=$(libgrav::multi_choice ${_GRAV_CHOICE} "${_GRAV_SSH} already exists.
 (1) Create, (2) Use own ")
    fi
    while true; do
@@ -203,7 +203,7 @@ mkssh() {
 
    echo "GRAV_SSH=${_GRAV_SSH}" > ${CFG_DIR}/.config.ssh
 
-   help "INFO: ${_GRAV_VERB} SSH keys in ${KEY_DIR} directory."
+   libgrav::help "INFO: ${_GRAV_VERB} SSH keys in ${KEY_DIR} directory."
 
    _RC=$?
 

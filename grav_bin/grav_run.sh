@@ -35,7 +35,7 @@ source "${LIB_DIR}"/libgrav_docker
 # ##### #
 main() {
    # Initialize context
-   init
+   libgrav::init
 
    local _ARGC=${1}
    local _ARGV=("${@}")
@@ -58,7 +58,7 @@ main() {
    local _GRAV_HELP="HELP: ${CMD}: Instantiate a docker container depending from some entered arguments. (See NOTE, INFO and ARGS)"
 
    if [ ${_ARGC} -lt 1 ]; then 
-      usage 1 \
+      libgrav::usage 1 \
          "${_GRAV_TEXT}" \
          "${_GRAV_ARGS}" \
          "${_GRAV_NOTE}" \
@@ -71,12 +71,12 @@ main() {
    fi
 
    # Check if essential configuration files exists
-   if [ ! -f ${CFG_DIR}/.config.pass ] || [ ! -f $(cat ${CFG_DIR}/.config.pass | tr -d '"' | cut -d'=' -f2) ]; then error 2 "FAIL: User and password not provided! Please run ${BIN_DIR}/grav_mkpass.sh first...";
-      elif [ ! -f ${CFG_DIR}/.config.ssh ] || [ ! -f $(cat ${CFG_DIR}/.config.ssh | tr -d '"' | cut -d'=' -f2) ]; then error 2 "FAIL: SSH files not provided! Please run ${BIN_DIR}/grav_mkssh.sh first...";
-      elif [ ! -f ${CFG_DIR}/.config.data ] || [ ! -d $(cat ${CFG_DIR}/.config.data | tr -d '"' | cut -d'=' -f2) ]; then error 2 "FAIL: Data volume not provided! Please run ${BIN_DIR}/grav_mkdata.sh first...";
+   if [ ! -f ${CFG_DIR}/.config.pass ] || [ ! -f $(cat ${CFG_DIR}/.config.pass | tr -d '"' | cut -d'=' -f2) ]; then libgrav::error 2 "FAIL: User and password not provided! Please run ${BIN_DIR}/grav_mkpass.sh first...";
+      elif [ ! -f ${CFG_DIR}/.config.ssh ] || [ ! -f $(cat ${CFG_DIR}/.config.ssh | tr -d '"' | cut -d'=' -f2) ]; then libgrav::error 2 "FAIL: SSH files not provided! Please run ${BIN_DIR}/grav_mkssh.sh first...";
+      elif [ ! -f ${CFG_DIR}/.config.data ] || [ ! -d $(cat ${CFG_DIR}/.config.data | tr -d '"' | cut -d'=' -f2) ]; then libgrav::error 2 "FAIL: Data volume not provided! Please run ${BIN_DIR}/grav_mkdata.sh first...";
    fi
 
-   run \
+   libgrav_docker::run \
       "${_GRAV_USER}" \
       "${_GRAV_NAME}" \
       "${_GRAV_TAG}" \

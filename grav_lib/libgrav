@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 #
-# Multichoice user input function
+# Public: multi_choice() user input function.
 #
-multichoice() {
+function libgrav::multi_choice() { # Public: multi_choice() user input function.
    local _TYPE=${1:-2}
    local _TEXT="${2}"
 
@@ -31,9 +31,10 @@ multichoice() {
 }
 
 #
-# Init function for setting all directory variables globally
+# Public: init() function for setting all directory variables globally.
 #
-init() {
+function libgrav::init() { # Public: init() function for setting all directory variables globally.
+#
    # Remove enclosing double quotes
    if [[ -e "${CTX_DIR}/.config.root" ]]; then ROOT_DIR="$(cat ${CTX_DIR}/.config.root | tr -d '"' | cut -d'=' -f2)"; fi
    if [[ -e "${CTX_DIR}/.config.cache" ]]; then CACHE_DIR="$(cat ${CTX_DIR}/.config.cache | tr -d '"' | cut -d'=' -f2)"; fi
@@ -45,9 +46,9 @@ init() {
 }
 
 #
-# help function for all shell scripts
+# Public: help() function for all shell scripts.
 #
-help() {
+function libgrav::help() { # Public: help() function for all shell scripts.
    local _HELP="${1}"
    
    echo ""
@@ -56,9 +57,9 @@ help() {
 }
 
 #
-# usage function for all shell scripts
+# Public: usage() function for all shell scripts.
 #
-usage() {
+function libgrav::usage() { # Public: usage() function for all shell scripts.
    local _RC=${1}
    local _TEXT="${2}"
    local _ARGS="${3:-""}"
@@ -89,7 +90,7 @@ usage() {
          test ! -z "${_ARG7}" && echo "${_ARG7}"
          echo ""
          echo "${_INFO}"
-         help "${_HELP}"
+         libgrav::help "${_HELP}"
       ;;
 
       *)
@@ -103,9 +104,9 @@ usage() {
 }
 
 #
-# error function for all shell scripts
+# Public: error() function for all shell scripts.
 #
-error() {
+function libgrav::error() { # Public: error() function for all shell scripts.
    local _RC=${1}
    local _TEXT="${2}"
 

@@ -39,7 +39,7 @@ source "${LIB_DIR}"/libgrav_docker
 # #### #
 main() {
    # Initialize context
-   init
+   libgrav::init
 
    local _ARGC=${1}
    local _ARGV=("${@}")
@@ -58,7 +58,7 @@ main() {
    local _GRAV_HELP="HELP: ${CMD}: Open a named shell into the running '${_GRAV_NAME}' container depending from some entered arguments. (See NOTE, INFO and ARGS)"
 
    if [ ${_ARGC} -lt 1 ]; then 
-      usage 1 \
+      libgrav::usage 1 \
          "${_GRAV_TEXT}" \
          "${_GRAV_ARGS}" \
          "${_GRAV_NOTE}" \
@@ -68,7 +68,7 @@ main() {
          "${_GRAV_ARG2}"
    fi
    
-   shell \
+   libgrav_docker::shell \
       "${_GRAV_NAME}" \
       "${_GRAV_SHELL}"
 

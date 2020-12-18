@@ -35,7 +35,7 @@ source "${LIB_DIR}"/libgrav_get
 # ##### #
 main() {
    # Initialize context
-   init
+   libgrav::init
 
    local _ARGC=${1}
    local _ARGV=("${@}")
@@ -56,7 +56,7 @@ main() {
    local _GRAV_HELP="HELP: ${CMD}: Download grav core packages depending from some entered arguments. (See NOTE, INFO and ARGS)"
 
    if [ ${_ARGC} -lt 2 ]; then 
-      usage 1 \
+      libgrav::usage 1 \
          "${_GRAV_TEXT}" \
          "${_GRAV_ARGS}" \
          "${_GRAV_NOTE}" \
@@ -67,7 +67,7 @@ main() {
          "${_GRAV_ARG3}"
    fi
 
-   getcore \
+   libgrav_get::get_core \
       "${_GRAV_CORE}" \
       "${_GRAV_NAME}" \
       "${_GRAV_KIND}"

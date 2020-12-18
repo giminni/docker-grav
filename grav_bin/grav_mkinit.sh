@@ -53,7 +53,7 @@ main() {
    local _GRAV_HELP="HELP: ${CMD}: Use the 'init' command to initialize the project environment with context files under the ${CFG_DIR} directory. (See NOTE, INFO and ARGS)"
 
    if [ ${_ARGC} -lt 1 ]; then 
-      usage 1 \
+      libgrav::usage 1 \
          "${_GRAV_TEXT}" \
          "${_GRAV_ARGS}" \
          "${_GRAV_NOTE}" \
@@ -62,7 +62,7 @@ main() {
          "${_GRAV_ARG1}"
    fi
    
-   mkinit \
+   libgrav_mk::mk_init \
       "${_GRAV_CMD}" \
       "${HOME_DIR}" \
       "${ROOT_DIR}" \
@@ -76,7 +76,7 @@ main() {
 
    _RC=$?
    
-   if [ ${_RC} -eq 0 ]; then help "INFO: Reload bash from the command line with 'source \${HOME}/.bashrc'"; fi
+   if [ ${_RC} -eq 0 ]; then libgrav::help "INFO: Reload bash from the command line with 'source \${HOME}/.bashrc'"; fi
 
    return ${_RC}
 }

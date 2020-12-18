@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 #
-# build function for grav_build.sh script
+# Public: build() function for grav_build.sh script.
 #
-build() {
+function libgrav_docker::build() { # Public: build() function for grav_build.sh script.
    local _RC=0
    local _GRAV_USER="${1}"
    local _GRAV_NAME="${2}"
@@ -57,7 +57,7 @@ build() {
       ;;
 
       *)
-         error 2 "FAIL: Buildx command not found: ${_GRAV_CMD}!"
+         libgrav::error 2 "FAIL: Buildx command not found: ${_GRAV_CMD}!"
       ;;
    esac
            
@@ -68,9 +68,9 @@ build() {
 }
 
 #
-# Purge function for grav_prune.sh script
+# Public: purge() function for grav_prune.sh script.
 #
-purge() {
+function libgrav_docker::purge() { # Public: purge() function for grav_prune.sh script.
    local _RC=0
    local _GRAV_NAME="${1}"
 
@@ -97,9 +97,9 @@ purge() {
 }
 
 #
-# run function for grav_run.sh script
+# Public: run() function for grav_run.sh script.
 #
-run() {
+function libgrav_docker::run() { # Public: run() function for grav_run.sh script.
    local _GRAV_USER="${1}"
    local _GRAV_NAME="${2}"
    local _GRAV_TAG="${3}"
@@ -124,9 +124,9 @@ run() {
 }
 
 #
-# shell function for grav_shell.sh script
+# Public: shell() function for grav_shell.sh script.
 #
-shell() {
+function libgrav_docker::shell() { # Public: shell() function for grav_shell.sh script.
    local _RC=0
    local _GRAV_NAME="${1}"
    local _GRAV_SHELL="${2}"

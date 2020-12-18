@@ -35,7 +35,7 @@ source "${LIB_DIR}"/libgrav_docker
 # ##### #
 main() {
    # Initialize context
-   init
+   libgrav::init
 
    local _ARGC=${1}
    local _ARGV=("${@}")
@@ -52,7 +52,7 @@ main() {
    local _GRAV_HELP="HELP: ${CMD}: Purge all generated docker artefacts depending from some entered arguments. (See NOTE, INFO and ARGS)"
 
    if [ ${_ARGC} -lt 1 ]; then 
-      usage 1 \
+      libgrav::usage 1 \
          "${_GRAV_TEXT}" \
          "${_GRAV_ARGS}" \
          "${_GRAV_NOTE}" \
@@ -61,7 +61,7 @@ main() {
          "${_GRAV_ARG1}"
    fi
    
-   purge \
+   libgrav_docker::purge \
       "${_GRAV_NAME}"
    
    _RC=$?

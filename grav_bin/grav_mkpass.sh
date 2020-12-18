@@ -35,7 +35,7 @@ source "${LIB_DIR}"/libgrav_mk
 # ##### #
 main() {
    # Initialize context
-   init
+   libgrav::init
 
    local _ARGC=${1}
    local _ARGV=("${@}")
@@ -69,9 +69,9 @@ main() {
          "${_GRAV_ARG3}"
    fi
 
-   if [ ${#_GRAV_SECS} -lt ${_GRAV_LEN} ]; then error 2 "FAIL: Password must contain at least ${_GRAV_LEN} chars!"; fi
+   if [ ${#_GRAV_SECS} -lt ${_GRAV_LEN} ]; then libgrav::error 2 "FAIL: Password must contain at least ${_GRAV_LEN} chars!"; fi
 
-   mkpass \
+   libgrav_mk::mk_pass \
       "${_GRAV_SECS}" \
       "${_GRAV_USER}" \
       "${_GRAV_PASS}"

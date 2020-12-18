@@ -35,7 +35,7 @@ source "${LIB_DIR}"/libgrav_mk
 # ##### #
 main() {
    # Initialize context
-   init
+   libgrav::init
 
    local _ARGC=${1}
    local _ARGV=("${@}")
@@ -54,7 +54,7 @@ main() {
    local _GRAV_HELP="HELP: ${CMD}: Create the required cache directory depending from some entered arguments. (See NOTE, INFO and ARGS)"
 
    if [ ${_ARGC} -lt 1 ]; then 
-      usage 1 \
+      libgrav::usage 1 \
          "${_GRAV_TEXT}" \
          "${_GRAV_ARGS}" \
          "${_GRAV_NOTE}" \
@@ -64,7 +64,7 @@ main() {
          "${_GRAV_ARG2}"
    fi
 
-   mkcache \
+   libgrav_mk::mk_cache \
       "${_GRAV_NAME}" \
       "${_GRAV_CACHE}"
 
