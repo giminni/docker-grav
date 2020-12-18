@@ -196,12 +196,12 @@ RUN set -eux; \
 RUN set -eux; \
     echo "[STAGE] Grav installation..."; \
     echo "Installing ${GRAV_URLFILE}..."; \
-    test -f "/tmp/grav/core/${GRAV_URLFILE}" || wget --progress=bar:force \
-        -O "/tmp/grav/core/${GRAV_URLFILE}" \
+    test -f "/tmp/grav/${GRAV_KIND}/${GRAV_URLFILE}" || wget --progress=bar:force \
+        -O "/tmp/grav/${GRAV_KIND}/${GRAV_URLFILE}" \
         ${GRAV_URL}; \
     cd /var/www; \
     rm -rf /var/www/html; \
-    unzip "/tmp/grav/core/${GRAV_URLFILE}"; \
+    unzip "/tmp/grav/${GRAV_KIND}/${GRAV_URLFILE}"; \
     echo "Creating symlink for URL access..."; \
     ln -s /var/www/${GRAV_NAME} /var/www/html; \
     echo "Exporting ${GRAV_NAME} path to users..."; \
