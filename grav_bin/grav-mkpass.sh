@@ -11,7 +11,7 @@ NAME=$(echo ${CMD} | cut -d'.' -f1)
 CUR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOME_DIR="${CUR_DIR%/*}"
 
-if [[ ! -e "${HOME_DIR}/.context" ]]; then echo -e "\nFAIL: Context is not initialized! Please run '<PROJECT_HOME>/grav_bin/grav_mkinit.sh init' first... "; exit 1; fi
+if [[ ! -e "${HOME_DIR}/.context" ]]; then echo -e "\nFAIL: Context is not initialized! Please run '<PROJECT_HOME>/grav_bin/grav-mkinit.sh init' first... "; exit 1; fi
 
 # Remove enclosing double quotes
 CTX_DIR="$(cat ${HOME_DIR}/.context | tr -d '"' | cut -d'=' -f2)"
@@ -42,20 +42,20 @@ function main() {
    
    local _RC=0
 
-   local _GRAV_EMAIL="${_ARGV[1]-""}"
-   local _GRAV_TYPE="${_ARGV[2]:-"rsa"}"
-   local _GRAV_LEN="${_ARGV[3]:-4096}"
-   local _GRAV_SSH="${_ARGV[4]:-${KEY_DIR}/grav_${_GRAV_TYPE}}"
+   local _GRAV_SECS="${_ARGV[1]-""}"
+   local _GRAV_USER="${_ARGV[2]:-$(id -un)}"
+   local _GRAV_PASS="${_ARGV[3]:-"${KEY_DIR}/grav_pass.key"}"
+
+   local _GRAV_LEN=11
 
    local _GRAV_TEXT="FAIL: Arguments are not provided!"
-   local _GRAV_ARGS="ARGS: ${CMD} grav_email [grav_keytype] [grav_keylen] [grav_keyfile]"
+   local _GRAV_ARGS="ARGS: ${CMD} grav_pass [grav_user] [grav_passfile]"
    local _GRAV_NOTE="NOTE: (*) are default values, (#) are recommended values"
-   local _GRAV_ARG1="ARG1:     grav_email: any|(#)       - (#=email-address)"
-   local _GRAV_ARG2="ARG2: [grav_keytype]: rsa|dsa|ecdsa - (*=rsa)"
-   local _GRAV_ARG3="ARG3:  [grav_keylen]: 2048-8192     - (*=4096)"
-   local _GRAV_ARG4="ARG4: [grav_keyfile]: any|(*)       - (*=${KEY_DIR}/grav_<grav-keytype>)"
-   local _GRAV_INFO="INFO: ${CMD} grav@example.com rsa 4096 ${KEY_DIR}/grav_rsa"
-   local _GRAV_HELP="HELP: ${CMD}: Create the required user SSH keys depending from some entered arguments. (See NOTE, INFO and ARGS)"
+   local _GRAV_ARG1="ARG1:       grav_pass: any|(#) - (#=minimum 11 chars length)"
+   local _GRAV_ARG2="ARG2:     [grav_user]: any|(*) - (*=<current-user>,#=grav)"
+   local _GRAV_ARG3="ARG3: [grav_passfile]: any|(*) - (*=${KEY_DIR}/grav_pass.key]"
+   local _GRAV_INFO="INFO: ${CMD} my-secret-pass grav ${KEY_DIR}/grav_pass.key"
+   local _GRAV_HELP="HELP: ${CMD}: Create the required user password depending from some entered arguments. (See NOTE, INFO and ARGS)"
 
    if [ ${_ARGC} -lt 1 ]; then 
       libgrav::usage 1 \
@@ -66,21 +66,15 @@ function main() {
          "${_GRAV_HELP}" \
          "${_GRAV_ARG1}" \
          "${_GRAV_ARG2}" \
-         "${_GRAV_ARG3}" \
-         "${_GRAV_ARG4}"
+         "${_GRAV_ARG3}"
    fi
 
-   libgrav_mk::mk_ssh \
-      "${_GRAV_EMAIL}" \
-      "${_GRAV_TYPE}" \
-      "${_GRAV_LEN}" \
-      "${_GRAV_SSH}"
-      
-   RC=$?
+   if [ ${#_GRAV_SECS} -lt ${_GRAV_LEN} ]; then libgrav::error 2 "FAIL: Password must contain at least ${_GRAV_LEN} chars!"; fi
 
-   # Adjust ACL
-   chmod 400 "${_GRAV_SSH}"
-   chmod 600 "${_GRAV_SSH}.pub"
+   libgrav_mk::mk_pass \
+      "${_GRAV_SECS}" \
+      "${_GRAV_USER}" \
+      "${_GRAV_PASS}"
 
    RC=$?
 

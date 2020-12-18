@@ -11,7 +11,7 @@ NAME=$(echo ${CMD} | cut -d'.' -f1)
 CUR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOME_DIR="${CUR_DIR%/*}"
 
-if [[ ! -e "${HOME_DIR}/.context" ]]; then echo -e "\nFAIL: Context is not initialized! Please run '<PROJECT_HOME>/grav_bin/grav_mkinit.sh init' first... "; exit 1; fi
+if [[ ! -e "${HOME_DIR}/.context" ]]; then echo -e "\nFAIL: Context is not initialized! Please run '<PROJECT_HOME>/grav_bin/grav-mkinit.sh init' first... "; exit 1; fi
 
 # Remove enclosing double quotes
 CTX_DIR="$(cat ${HOME_DIR}/.context | tr -d '"' | cut -d'=' -f2)"
@@ -71,9 +71,9 @@ function main() {
    fi
 
    # Check if essential configuration files exists
-   if [ ! -f "${CFG_DIR}"/.config.pass ] || [ ! -f $(cat "${CFG_DIR}"/.config.pass | tr -d '"' | cut -d'=' -f2) ]; then libgrav::error 2 "FAIL: User and password not provided! Please run '${BIN_DIR}'/grav_mkpass.sh first...";
-      elif [ ! -f "${CFG_DIR}"/.config.ssh ] || [ ! -f $(cat "${CFG_DIR}"/.config.ssh | tr -d '"' | cut -d'=' -f2) ]; then libgrav::error 2 "FAIL: SSH files not provided! Please run '${BIN_DIR}'/grav_mkssh.sh first...";
-      elif [ ! -f "${CFG_DIR}"/.config.data ] || [ ! -d $(cat "${CFG_DIR}"/.config.data | tr -d '"' | cut -d'=' -f2) ]; then libgrav::error 2 "FAIL: Data volume not provided! Please run '${BIN_DIR}'/grav_mkdata.sh first...";
+   if [ ! -f "${CFG_DIR}"/.config.pass ] || [ ! -f $(cat "${CFG_DIR}"/.config.pass | tr -d '"' | cut -d'=' -f2) ]; then libgrav::error 2 "FAIL: User and password not provided! Please run '${BIN_DIR}'/grav-mkpass.sh first...";
+      elif [ ! -f "${CFG_DIR}"/.config.ssh ] || [ ! -f $(cat "${CFG_DIR}"/.config.ssh | tr -d '"' | cut -d'=' -f2) ]; then libgrav::error 2 "FAIL: SSH files not provided! Please run '${BIN_DIR}'/grav-mkssh.sh first...";
+      elif [ ! -f "${CFG_DIR}"/.config.data ] || [ ! -d $(cat "${CFG_DIR}"/.config.data | tr -d '"' | cut -d'=' -f2) ]; then libgrav::error 2 "FAIL: Data volume not provided! Please run '${BIN_DIR}'/grav-mkdata.sh first...";
    fi
 
    libgrav_docker::run \
@@ -86,7 +86,7 @@ function main() {
 
    if [ ${_RC} -eq 125 ]; then
       # usage 3 "FAIL: Docker image does not exists! Execute grav-build.sh first..."
-      "${BIN_DIR}"/grav_build.sh "${_GRAV_USER}" "${_GRAV_NAME}" "${_GRAV_TAG}"
+      "${BIN_DIR}"/grav-build.sh "${_GRAV_USER}" "${_GRAV_NAME}" "${_GRAV_TAG}"
       "${0}" "${_GRAV_USER}" "${_GRAV_NAME}" "${_GRAV_TAG}"
    fi
 

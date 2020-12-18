@@ -69,7 +69,7 @@ The project consists of different directories, each one has a specific role:
 
 > NOTE: The files or directory content marked with `[*]` are not uploaded to Git. They must be build with the appropriate `(<PROJECT_HOME>/grav_bin/grav_mk*)` script.
 
-> NOTE: To initialize the project, execute `./grav_bin/grav_mkinit.sh init` first from the `(<PROJECT_HOME>)` directory.
+> NOTE: To initialize the project, execute `./grav_bin/grav-mkinit.sh init` first from the `(<PROJECT_HOME>)` directory.
 
 ## Project features
 
@@ -103,17 +103,17 @@ This project includes the following features:
 * Install the prerequisite software (See [Prerequisites](#-prerequisites)
 * Download the project with git `git clone https://github.com/giminni/docker-grav`
 * Change into the current project directory with `cd docker-grav`
-* Initialize the project with `${PWD}/grav_bin/grav_mkinit.sh init`
+* Initialize the project with `${PWD}/grav_bin/grav-mkinit.sh init`
 * Reload bash shell with `source ${HOME}/.bashrc`
-* Set the current grav core production and development package version with `grav_setcore.sh all`, older grav core packages version can be set manually, for example with `grav_setcore.sh 1.6.0` for production package version or `grav_setcore.sh 1.7.0-rc.19` for development package version.
-* Download the grav core production packages with `grav_getcore all grav` or the core development packages with `grav_getcore all grav-admin`, older grav core packages can be set manually, for example with `grav_getcore.sh 1.6.0 grav` for production package version or `grav_getcore.sh 1.7.0-rc.19 grav-admin` for development package version.
-* Create the encrypted password for user `grav` with `grav_mkpass.sh <user-password> grav`, the password must contain at least 11 characters
-* Create new or use your own SSH private and public key with `grav_mkssh.sh <email-address>` by answering with `1` for create new SSH key or `2` for use own SSH key. The latter case will copy the key from your `${HOME}/.ssh` directory.
-* Create the cache directory with `grav_mkcache.sh grav_cache`
-* Build the docker image with `grav_build grav grav-admin testing` for the development version or `grav_build.sh grav` for the production version.
-* Create the data directory with `grav_mkdata.sh grav_data`
+* Set the current grav core production and development package version with `grav-setcore.sh all`, older grav core packages version can be set manually, for example with `grav-setcore.sh 1.6.0` for production package version or `grav-setcore.sh 1.7.0-rc.19` for development package version.
+* Download the grav core production packages with `grav_getcore all grav` or the core development packages with `grav_getcore all grav-admin`, older grav core packages can be set manually, for example with `grav-getcore.sh 1.6.0 grav` for production package version or `grav-getcore.sh 1.7.0-rc.19 grav-admin` for development package version.
+* Create the encrypted password for user `grav` with `grav-mkpass.sh <user-password> grav`, the password must contain at least 11 characters
+* Create new or use your own SSH private and public key with `grav-mkssh.sh <email-address>` by answering with `1` for create new SSH key or `2` for use own SSH key. The latter case will copy the key from your `${HOME}/.ssh` directory.
+* Create the cache directory with `grav-mkcache.sh grav_cache`
+* Build the docker image with `grav_build grav grav-admin testing` for the development version or `grav-build.sh grav` for the production version.
+* Create the data directory with `grav-mkdata.sh grav_data`
 * Run the docker image with `grav_run grav grav-admin testing` for the development version or `grab_run.sh grav` for the production version.
-* Enter the command line of the running grav image, with `grav_shell.sh bash grav-admin` for the development version or `grav_shell.sh bash grav` for the production version.
+* Enter the command line of the running grav image, with `grav-shell.sh bash grav-admin` for the development version or `grav-shell.sh bash grav` for the production version.
 
 ## Installation checklist
 
@@ -129,7 +129,7 @@ This project includes the following features:
 
 ## Using local key/value files for configuration
 
-To persist some project configuration data a couple of key/value files are created in the `(<PROJECT_HOME>/grav_cfg)` directory. A `(<PROJECT_HOME>/.context)` file will be generated with `(<PROJECT_HOME/grav_bin/grav_mkinit.sh init)` at init time holding the configuration directory where all configuration files are stored. 
+To persist some project configuration data a couple of key/value files are created in the `(<PROJECT_HOME>/grav_cfg)` directory. A `(<PROJECT_HOME>/.context)` file will be generated with `(<PROJECT_HOME/grav_bin/grav-mkinit.sh init)` at init time holding the configuration directory where all configuration files are stored. 
 
 E.g. `.context` file in `(<PROJECT_HOME>/)` directory:
 
@@ -186,10 +186,10 @@ Point your vscode remote-SSH plugin to the localhost host or to the designated I
 
 There are a couple of local bash scripts to create, run and delete a container:
 
-* `grav_build.sh` is used for building a container
-* `grav_run.sh` is used for running a container
-* `grav_shell.sh` is used for accessing the command line inside a container
-* `grav_purge.sh` is used for deleting all cached data, container and image artefacts.
+* `grav-build.sh` is used for building a container
+* `grav-run.sh` is used for running a container
+* `grav-shell.sh` is used for accessing the command line inside a container
+* `grav-purge.sh` is used for deleting all cached data, container and image artefacts.
 
 ## Configuring a container from the command line
 
@@ -212,17 +212,17 @@ The following data is needed to be able to build or run a container:
 
 This information is stored into local project connfig files that begins with `(<PROJECT_HOME>/grav_cfg/.*)`. To insert this data locally some local bash scripts are used `grav_mk*`. Every file is filled with a default value, however feel free to change it to suite your needs.
 
-* `(<PROJECT_HOME>/grav_bin/grav_build.sh)` = Build the grav docker image from the specified values
-* `(<PROJECT_HOME>/grav_bin/grav_getcore.sh)`= Download the corresponding production/development core file into `(<PROJECT_HOME>/rootfs)` directory
-* `(<PROJECT_HOME>/grav_bin/grav_mkcache.sh)` = Configures the local cache volume path `(<PROJECT_HOME>/grav_cache/*)`
-* `(<PROJECT_HOME>/grav_bin/grav_mkdata.sh)` = Configures the local data volume path `(<PROJECT_HOME>/grav_data)`
-* `(<PROJECT_HOME>/grav_bin/grav_mkinit.sh)` = Initialize project, must run first. (See [Installation procecure](#-installation-procedure))
-* `(<PROJECT_HOME>/grav_bin/grav_mkpass.sh)` = Configures the named container user and password
-* `(<PROJECT_HOME>/grav_bin/grav_mkssh.sh)` = Configures the SSH private and public files for rsync, git, ...
-* `(<PROJECT_HOME>/grav_bin/grav_purge.sh)` = Remove all grav artefacts, build cache, container and images
-* `(<PROJECT_HOME>/grav_bin/grav_run.sh)` = Run the grav docker container from the specified values
-* `(<PROJECT_HOME>/grav_bin/grav_setcore.sh)` = Configures the grav production/development core version string
-* `(<PROJECT_HOME>/grav_bin/grav_shell.sh)` = Access the container over SSH on port `2222` using the provided SSH keys
+* `(<PROJECT_HOME>/grav_bin/grav-build.sh)` = Build the grav docker image from the specified values
+* `(<PROJECT_HOME>/grav_bin/grav-getcore.sh)`= Download the corresponding production/development core file into `(<PROJECT_HOME>/rootfs)` directory
+* `(<PROJECT_HOME>/grav_bin/grav-mkcache.sh)` = Configures the local cache volume path `(<PROJECT_HOME>/grav_cache/*)`
+* `(<PROJECT_HOME>/grav_bin/grav-mkdata.sh)` = Configures the local data volume path `(<PROJECT_HOME>/grav_data)`
+* `(<PROJECT_HOME>/grav_bin/grav-mkinit.sh)` = Initialize project, must run first. (See [Installation procecure](#-installation-procedure))
+* `(<PROJECT_HOME>/grav_bin/grav-mkpass.sh)` = Configures the named container user and password
+* `(<PROJECT_HOME>/grav_bin/grav-mkssh.sh)` = Configures the SSH private and public files for rsync, git, ...
+* `(<PROJECT_HOME>/grav_bin/grav-purge.sh)` = Remove all grav artefacts, build cache, container and images
+* `(<PROJECT_HOME>/grav_bin/grav-run.sh)` = Run the grav docker container from the specified values
+* `(<PROJECT_HOME>/grav_bin/grav-setcore.sh)` = Configures the grav production/development core version string
+* `(<PROJECT_HOME>/grav_bin/grav-shell.sh)` = Access the container over SSH on port `2222` using the provided SSH keys
 
 > NOTE: Please consult the usage information of each local bash script by executing the command without arguments.
 
@@ -230,12 +230,12 @@ This information is stored into local project connfig files that begins with `(<
 
 To be able to create the project in offline situation or minimize the download time from the internet, two tasks must be executed:
 
-* Define wich grav version is needed to be installed from the grav download site using a local script `(<PROJECT_HOME>/grav_bin/grav_mkcore.sh)`.  Insert as first argument `(prod)` or `(dev)`. To download a specific version use `(<PROJECT_HOME/grav_bin/grav_getcore.sh)`. Use the same arguments like `(<PROJECT_HOME>/grav_bin/grav_mkcore.sh)`
+* Define wich grav version is needed to be installed from the grav download site using a local script `(<PROJECT_HOME>/grav_bin/grav_mkcore.sh)`.  Insert as first argument `(prod)` or `(dev)`. To download a specific version use `(<PROJECT_HOME/grav_bin/grav-getcore.sh)`. Use the same arguments like `(<PROJECT_HOME>/grav_bin/grav_mkcore.sh)`
 
 E.g. to download a specific version of grav-admin core `(1.6.0)` enter:
 
 ```bash
-<PROJECT_HOME>/grav_bin/grav_getcore.sh 1.6.0 grav-admin
+<PROJECT_HOME>/grav_bin/grav-getcore.sh 1.6.0 grav-admin
 ```
 
 > NOTE: The files are stored into the `(<PROJECT_HOME>/grav_rootfs/tmp)`. To reduce the container size, remove all superfluous artefacts before starting the build.
@@ -248,29 +248,29 @@ To save the Grav site data to the host file system (so that it persists even aft
 
 ## Building the image from Dockerfile
 
-To build the image from the command line a local bash script `(<PROJECT_HOME>/grav_bin/grav_build.sh)` is used.
+To build the image from the command line a local bash script `(<PROJECT_HOME>/grav_bin/grav-build.sh)` is used.
 
 This script as a lot of presetted arguments. The first argument is mandatory if not set, the script emits a usage string.
 
 Here an example, how to create a user `(grav)` and build the latest grav+admin development package.
 
 ```bash
-<PROJECT_HOME>/grav_bin/grav_build.sh grav grav-admin testing
+<PROJECT_HOME>/grav_bin/grav-build.sh grav grav-admin testing
 ```
 
 Here an example how to create a user `(grav)` and build the latest grav+admin production package. Observe that the last two arguments are omitted while presetted.
 
 ```bash
-<PROJECT_HOME>/grav_bin/grav_build.sh grav
+<PROJECT_HOME>/grav_bin/grav-build.sh grav
 ```
 
-Here the complete usage string of `(<PROJECT_HOME>/grav_bin/grav_build.sh)` script:
+Here the complete usage string of `(<PROJECT_HOME>/grav_bin/grav-build.sh)` script:
 
 ```bash
-<PROJECT_HOME> $ ./grav_bin/grav_build.sh 
+<PROJECT_HOME> $ ./grav_bin/grav-build.sh 
 FAIL: Arguments are not provided!
 
-ARGS: grav_build.sh grav_user [grav_imgname] [grav_tagname] [grav_passfile] [grav_privfile] [grav_pubfile]
+ARGS: grav-build.sh grav_user [grav_imgname] [grav_tagname] [grav_passfile] [grav_privfile] [grav_pubfile]
 NOTE: (*) are default values, (#) are recommended values
 
 ARG1:       grav_user: any|(#)         - (#=grav)
@@ -280,35 +280,35 @@ ARG4: [grav_passfile]: any|(*)         - (*=<PROJECT_HOME>/grav_keys/grav_pass.k
 ARG5: [grav_privfile]: any|(*)         - (*=<PROJECT_HOME>/grav_keys/grav_rsa)
 ARG6:  [grav_pubfile]: any|(*)         - (*=<PROJECT_HOME>/grav_keys/grav_rsa.pub)
 
-INFO: grav_build.sh grav grav-admin latest /home/rpiadmin/Workspace/docker-grav/grav_key/grav_pass.key /home/rpiadmin/Workspace/docker-grav/grav_key/grav_rsa /home/rpiadmin/Workspace/docker-grav/grav_key/grav_rsa.pub
+INFO: grav-build.sh grav grav-admin latest /home/rpiadmin/Workspace/docker-grav/grav_key/grav_pass.key /home/rpiadmin/Workspace/docker-grav/grav_key/grav_rsa /home/rpiadmin/Workspace/docker-grav/grav_key/grav_rsa.pub
 
-HELP: grav_build.sh: Builds the docker file from some entered arguments. (See NOTE, INFO and ARGS)
+HELP: grav-build.sh: Builds the docker file from some entered arguments. (See NOTE, INFO and ARGS)
 ```
 
 ## Running the image from Dockerfile
 
-To run the image from the command line a local bash script `(<PROJECT_HOME>/grav_bin/grav_run.sh)` is needed.
+To run the image from the command line a local bash script `(<PROJECT_HOME>/grav_bin/grav-run.sh)` is needed.
 This script as a lot of presetted arguments. The first argument is mandatory if not set the script emits a usage string.
 
 Here an example how to run as user `(grav)` and use the latest `(grav-admin)` development package.
 
 ```bash
-<PROJECT_HOME>/grav_bin/grav_run.sh grav grav-admin testing
+<PROJECT_HOME>/grav_bin/grav-run.sh grav grav-admin testing
 ```
 
 Here an example how to run as user `(grav)` and use the latest `(grav-admin)` production package. Observe that the last two arguments are omitted while presetted.
 
 ```bash
-<PROJECT_HOME>/grav_bin/grav_run.sh grav grav-admin
+<PROJECT_HOME>/grav_bin/grav-run.sh grav grav-admin
 ```
 
-Here the complete usage string of `(<PROJECT_HOME>/grav_bin/grav_run.sh)` script:
+Here the complete usage string of `(<PROJECT_HOME>/grav_bin/grav-run.sh)` script:
 
 ```bash
-<PROJECT_HOME> $ ./grab_bin/grav_run.sh
+<PROJECT_HOME> $ ./grab_bin/grav-run.sh
 FAIL: Arguments are not provided!
 
-ARGS: grav_run.sh grav_user [grav_imgname=grav] [grav_imgtag=latest] [grav_voldata=grav_data]
+ARGS: grav-run.sh grav_user [grav_imgname=grav] [grav_imgtag=latest] [grav_voldata=grav_data]
 NOTE: (*) are default values, (#) are recommended values
 
 ARG1:      grav_user: any|(#) - (#=grav)
@@ -316,9 +316,9 @@ ARG2: [grav_imgname|: any|(*) - (*=grav-admin)
 ARG3:  [grav_imgtag|: any|(*) - (*=latest)
 ARG4: [grav_voldata]: any|(*) - (*=grav_data)
 
-INFO: grav_run.sh grav grav-admin latest grav_data
+INFO: grav-run.sh grav grav-admin latest grav_data
 
-HELP: grav_run.sh: Instantiate a docker container depending from some entered arguments. (See NOTE, INFO and ARGS)
+HELP: grav-run.sh: Instantiate a docker container depending from some entered arguments. (See NOTE, INFO and ARGS)
 ```
 
 IF you installed the `(grav-admin)` package the point the browser to `http://localhost:8000/admin` and create a user account, otherwise point the browser to `http://localhost:8000/` directly.

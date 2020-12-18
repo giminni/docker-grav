@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 #
-# Public: get_core() function for grav_getcore.sh script.
+# Public: get_core() function for grav-getcore.sh script.
 #
-function libgrav_get::get_core() { # Public: get_core() function for grav_getcore.sh script.
+function libgrav_get::get_core() { # Public: get_core() function for grav-getcore.sh script.
    local _RC=0
    local _GRAV_CORE="${1}"
    local _GRAV_NAME="${2}"

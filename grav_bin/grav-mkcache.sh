@@ -11,7 +11,7 @@ NAME=$(echo ${CMD} | cut -d'.' -f1)
 CUR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOME_DIR="${CUR_DIR%/*}"
 
-if [[ ! -e "${HOME_DIR}/.context" ]]; then echo -e "\nFAIL: Context is not initialized! Please run '<PROJECT_HOME>/grav_bin/grav_mkinit.sh init' first... "; exit 1; fi
+if [[ ! -e "${HOME_DIR}/.context" ]]; then echo -e "\nFAIL: Context is not initialized! Please run '<PROJECT_HOME>/grav_bin/grav-mkinit.sh init' first... "; exit 1; fi
 
 # Remove enclosing double quotes
 CTX_DIR="$(cat ${HOME_DIR}/.context | tr -d '"' | cut -d'=' -f2)"
@@ -28,34 +28,30 @@ RC=0
 # LIBS #
 # #### #
 source "${LIB_DIR}"/libgrav
-source "${LIB_DIR}"/libgrav_docker
+source "${LIB_DIR}"/libgrav_mk
 
 # ##### #
 # FUNCS #
 # ##### #
-
-# #### #
-# MAIN #
-# #### #
 function main() {
    # Initialize context
    libgrav::init
 
    local _ARGC=${1}
    local _ARGV=("${@}")
-   
+
    local _RC=0
 
-   local _GRAV_SHELL="${_ARGV[1]-""}"
-   local _GRAV_NAME="${_ARGV[2]:-"grav"}"
-   
+   local _GRAV_NAME="${_ARGV[1]-""}"
+   local _GRAV_CACHE="${_ARGV[2]:-"${HOME_DIR}/${_GRAV_NAME}"}"
+
    local _GRAV_TEXT="FAIL: Arguments are not provided!"
-   local _GRAV_ARGS="ARGS: ${CMD} grav_shell [grav_imgname]"
+   local _GRAV_ARGS="ARGS: ${CMD} grav_cachename [grav_cachefile]"
    local _GRAV_NOTE="NOTE: (*) are default values, (#) are recommended values"
-   local _GRAV_ARG1="ARG1:     grav_shell: sh|ash|bash - (#=bash)"
-   local _GRAV_ARG2="ARG2: [grav_imgname]: any|(*)     - (*=grav-admin)"
-   local _GRAV_INFO="INFO: ${CMD} bash grav"
-   local _GRAV_HELP="HELP: ${CMD}: Open a named shell into the running '${_GRAV_NAME}' container depending from some entered arguments. (See NOTE, INFO and ARGS)"
+   local _GRAV_ARG1="ARG1:   grav_cachename: any|(#) - (#=grav_cache)"
+   local _GRAV_ARG2="ARG2: [grav_cachefile]: any|(*) - (*=${CACHE_DIR}/<grav_cachename>)"
+   local _GRAV_INFO="INFO: ${CMD} grav_cache ${CACHE_DIR}"
+   local _GRAV_HELP="HELP: ${CMD}: Create the required cache directory depending from some entered arguments. (See NOTE, INFO and ARGS)"
 
    if [ ${_ARGC} -lt 1 ]; then 
       libgrav::usage 1 \
@@ -67,12 +63,12 @@ function main() {
          "${_GRAV_ARG1}" \
          "${_GRAV_ARG2}"
    fi
-   
-   libgrav_docker::shell \
-      "${_GRAV_NAME}" \
-      "${_GRAV_SHELL}"
 
-   _RC=$?
+   libgrav_mk::mk_cache \
+      "${_GRAV_NAME}" \
+      "${_GRAV_CACHE}"
+
+   RC=$?
 
    return ${_RC}
 }

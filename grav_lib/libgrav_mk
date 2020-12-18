@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 #
-# Public: mk_cache() function for grav_mkcache.sh script.
+# Public: mk_cache() function for grav-mkcache.sh script.
 #
-function libgrav_mk::mk_cache() { # Public: mk_cache() function for grav_mkcache.sh script.
+function libgrav_mk::mk_cache() { # Public: mk_cache() function for grav-mkcache.sh script.
    local _RC=0
    local _GRAV_NAME="${1}"
    local _GRAV_CACHE="${2}"
@@ -27,9 +27,9 @@ function libgrav_mk::mk_cache() { # Public: mk_cache() function for grav_mkcache
 }
 
 #
-# Public: mk_data() function for grav_mkdata.sh script.
+# Public: mk_data() function for grav-mkdata.sh script.
 #
-function libgrav_mk::mk_data() { # Public: mk_data() function for grav_mkdata.sh script.
+function libgrav_mk::mk_data() { # Public: mk_data() function for grav-mkdata.sh script.
    local _RC=0
    local _GRAV_NAME="${1}"
    local _GRAV_DATA="${2}"
@@ -53,9 +53,9 @@ function libgrav_mk::mk_data() { # Public: mk_data() function for grav_mkdata.sh
 }
 
 #
-# Public: mk_init() function for grav_mkinit.sh script.
+# Public: mk_init() function for grav-mkinit.sh script.
 #
-function libgrav_mk::mk_init() { # Public: mk_init() function for grav_mkinit.sh script.
+function libgrav_mk::mk_init() { # Public: mk_init() function for grav-mkinit.sh script.
    local _RC=0
    local _GRAV_CMD="${1}"
    local _GRAV_HOME="${2}" 
@@ -94,21 +94,21 @@ function libgrav_mk::mk_init() { # Public: mk_init() function for grav_mkinit.sh
             sed -i "/# docker-grav #/d" ${HOME}/.bash_aliases
          fi
 
-         echo 'alias "grav_build"="grav_build.sh" # docker-grav #' >> ${HOME}/.bash_aliases
-         echo 'alias "grav_getcore"="grav_getcore.sh" # docker-grav #' >> ${HOME}/.bash_aliases
-         echo 'alias "grav_mkcache"="grav_mkcache.sh" # docker-grav #' >> ${HOME}/.bash_aliases
-         echo 'alias "grav_mkdata"="grav_mkdata.sh" # docker-grav #' >> ${HOME}/.bash_aliases
-         echo 'alias "grav_mkinit"="grav_mkinit.sh" # docker-grav #' >> ${HOME}/.bash_aliases
-         echo 'alias "grav_mkpass"="grav_mkpass.sh" # docker-grav #' >> ${HOME}/.bash_aliases
-         echo 'alias "grav_mkssh"="grav_mkssh.sh" # docker-grav #' >> ${HOME}/.bash_aliases
-         echo 'alias "grav_purge"="grav_purge.sh" # docker-grav #' >> ${HOME}/.bash_aliases
-         echo 'alias "grav_run"="grav_run.sh" # docker-grav #' >> ${HOME}/.bash_aliases
-         echo 'alias "grav_setcore"="grav_setcore.sh" # docker-grav #' >> ${HOME}/.bash_aliases
-         echo 'alias "grav_shell"="grav_shell.sh" # docker-grav #' >> ${HOME}/.bash_aliases
+         echo 'alias "grav_build"="grav-build.sh" # docker-grav #' >> ${HOME}/.bash_aliases
+         echo 'alias "grav_getcore"="grav-getcore.sh" # docker-grav #' >> ${HOME}/.bash_aliases
+         echo 'alias "grav_mkcache"="grav-mkcache.sh" # docker-grav #' >> ${HOME}/.bash_aliases
+         echo 'alias "grav_mkdata"="grav-mkdata.sh" # docker-grav #' >> ${HOME}/.bash_aliases
+         echo 'alias "grav_mkinit"="grav-mkinit.sh" # docker-grav #' >> ${HOME}/.bash_aliases
+         echo 'alias "grav_mkpass"="grav-mkpass.sh" # docker-grav #' >> ${HOME}/.bash_aliases
+         echo 'alias "grav_mkssh"="grav-mkssh.sh" # docker-grav #' >> ${HOME}/.bash_aliases
+         echo 'alias "grav_purge"="grav-purge.sh" # docker-grav #' >> ${HOME}/.bash_aliases
+         echo 'alias "grav_run"="grav-run.sh" # docker-grav #' >> ${HOME}/.bash_aliases
+         echo 'alias "grav_setcore"="grav-setcore.sh" # docker-grav #' >> ${HOME}/.bash_aliases
+         echo 'alias "grav_shell"="grav-shell.sh" # docker-grav #' >> ${HOME}/.bash_aliases
 
          # Set current grav core version strings
-         # "${BIN_DIR}"/grav_setcore.sh prod
-         # "${BIN_DIR}"/grav_setcore.sh dev
+         # "${BIN_DIR}"/grav-setcore.sh prod
+         # "${BIN_DIR}"/grav-setcore.sh dev
       ;;
       
       
@@ -121,9 +121,9 @@ function libgrav_mk::mk_init() { # Public: mk_init() function for grav_mkinit.sh
 }
 
 #
-# Public: mk_pass() function for grav_mkpass.sh script.
+# Public: mk_pass() function for grav-mkpass.sh script.
 #
-function libgrav_mk::mk_pass() { # Public: mk_pass() function for grav_mkpass.sh script.
+function libgrav_mk::mk_pass() { # Public: mk_pass() function for grav-mkpass.sh script.
    local _RC=0
    local _GRAV_SECS="${1}"
    local _GRAV_USER="${2}"
@@ -150,9 +150,9 @@ function libgrav_mk::mk_pass() { # Public: mk_pass() function for grav_mkpass.sh
 }
 
 #
-# Public: mk_ssh() function for grav_mkssh.sh script.
+# Public: mk_ssh() function for grav-mkssh.sh script.
 #
-function libgrav_mk::mk_ssh() { # Public: mk_ssh() function for grav_mkssh.sh script.
+function libgrav_mk::mk_ssh() { # Public: mk_ssh() function for grav-mkssh.sh script.
    local _RC=0
    local _GRAV_EMAIL="${1}"
    local _GRAV_TYPE="${2}"

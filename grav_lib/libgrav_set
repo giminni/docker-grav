@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 #
-# Public: set_core() function for grav_setcore.sh script.
+# Public: set_core() function for grav-setcore.sh script.
 #
-libgrav_set::set_core() { # Public: set_core() function for grav_setcore.sh script.
+libgrav_set::set_core() { # Public: set_core() function for grav-setcore.sh script.
    local _RC=0
    local _GRAV_CORE="${1}"
 

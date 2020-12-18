@@ -11,7 +11,7 @@ NAME=$(echo ${CMD} | cut -d'.' -f1)
 CUR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOME_DIR="${CUR_DIR%/*}"
 
-if [[ ! -e "${HOME_DIR}/.context" ]]; then echo -e "\nFAIL: Context is not initialized! Please run '<PROJECT_HOME>/grav_bin/grav_mkinit.sh init' first... "; exit 1; fi
+if [[ ! -e "${HOME_DIR}/.context" ]]; then echo -e "\nFAIL: Context is not initialized! Please run '<PROJECT_HOME>/grav_bin/grav-mkinit.sh init' first... "; exit 1; fi
 
 # Remove enclosing double quotes
 CTX_DIR="$(cat ${HOME_DIR}/.context | tr -d '"' | cut -d'=' -f2)"
@@ -28,7 +28,7 @@ RC=0
 # LIBS #
 # #### #
 source "${LIB_DIR}"/libgrav
-source "${LIB_DIR}"/libgrav_set
+source "${LIB_DIR}"/libgrav_get
 
 # ##### #
 # FUNCS #
@@ -43,26 +43,34 @@ function main() {
    local _RC=0
 
    local _GRAV_CORE="${_ARGV[1]-""}"
+   local _GRAV_NAME="${_ARGV[2]:-"grav"}"
+   local _GRAV_KIND="${_ARGV[3]:-"core"}"
 
    local _GRAV_TEXT="FAIL: Arguments are not provided!"
-   local _GRAV_ARGS="ARGS: ${CMD} grav_core"
+   local _GRAV_ARGS="ARGS: ${CMD} grav_core grav_imgname [grav_kindname]"
    local _GRAV_NOTE="NOTE: (*) are default values, (#) are recommended values"
-   local _GRAV_ARG1="ARG1: grav_core: all|prod|dev - (#=all)"
-   local _GRAV_INFO="INFO: ${CMD} prod"
-   local _GRAV_HELP="HELP: ${CMD}: Set the core version information depending from some entered arguments. (See NOTE, INFO and ARGS)"
+   local _GRAV_ARG1="ARG1:       grav_core: all|prod|dev|X.Y.Z - (#=all)"
+   local _GRAV_ARG2="ARG2:    grav_imgname: grav-admin|grav    - (*=grav-admin)"
+   local _GRAV_ARG3="ARG3: [grav_kindname]: core|skeletons     - (*=core)"
+   local _GRAV_INFO="INFO: ${CMD} prod grav-admin"
+   local _GRAV_HELP="HELP: ${CMD}: Download grav core packages depending from some entered arguments. (See NOTE, INFO and ARGS)"
 
-   if [ ${_ARGC} -lt 1 ]; then 
+   if [ ${_ARGC} -lt 2 ]; then 
       libgrav::usage 1 \
          "${_GRAV_TEXT}" \
          "${_GRAV_ARGS}" \
          "${_GRAV_NOTE}" \
          "${_GRAV_INFO}" \
          "${_GRAV_HELP}" \
-         "${_GRAV_ARG1}"
+         "${_GRAV_ARG1}" \
+         "${_GRAV_ARG2}" \
+         "${_GRAV_ARG3}"
    fi
-   
-   libgrav_set::set_core \
-      "${_GRAV_CORE}"
+
+   libgrav_get::get_core \
+      "${_GRAV_CORE}" \
+      "${_GRAV_NAME}" \
+      "${_GRAV_KIND}"
 
    _RC=$?
    
