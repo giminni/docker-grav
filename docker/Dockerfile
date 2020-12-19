@@ -49,8 +49,7 @@ ENV PATH="${PATH:-"/var/www/html/bin:$PATH"}" \
     GRAV_GID=${GRAV_GID:-1000} \
     GRAV_SHELL="${GRAV_SHELL:-"/bin/bash"}"
 
-# COPY grav_rootfs/ /rootfs
-COPY grav_rootfs/tmp/ /tmp
+COPY rootfs/tmp/ /tmp
 # COPY docker-entrypoint.sh /entrypoint.sh
 
 RUN set -eux; \    
