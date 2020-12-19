@@ -18,7 +18,7 @@ function libgrav_docker::build() { # Public: build() function for grav-build.sh 
    local _GRAV_URLFILE="${11}"
    local _GRAV_URL="${12}"
 
-   local _GRAV_CMD="${FUNCNAME[0]}"
+   local _GRAV_CMD="${FUNCNAME[0]#*::}"
 
    # sudo docker ps | grep "${_GRAV_NAME}" | awk '{print $1}' | xargs -r sudo docker rm -f
    # _RC=$?
@@ -57,7 +57,7 @@ function libgrav_docker::build() { # Public: build() function for grav-build.sh 
       ;;
 
       *)
-         libgrav::error 2 "FAIL: Buildx command not found: ${_GRAV_CMD}!"
+         libgrav::error 2 "FAIL: Command not found: ${_GRAV_CMD}!"
       ;;
    esac
            
