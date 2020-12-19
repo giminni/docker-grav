@@ -14,6 +14,7 @@
 **/.DS_store
 **/node_modules
 **/*.org
+**/*.swp
 
 # Exclude pattern only in .dockerignore
 **/.gitkeep
