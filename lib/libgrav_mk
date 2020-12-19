@@ -69,15 +69,15 @@ function libgrav_mk::mk_init() { # Public: mk_init() function for grav-mkinit.sh
    local _GRAV_LIB="${10}"
 
    # Minimal requirements
-   local _JQ_MIN="1.5"
-   local _OPENSSL_MIN="1.1.1"
    local _DOCKER_MIN="20.10"
    local _BUILDX_MIN="0.5.0"
+   local _JQ_MIN="1.5"
+   local _OPENSSL_MIN="1.1.1"
 
-   local _JQ_NOW="$(jq --version | cut -d'-' -f2)"
-   local _OPENSSL_NOW="$(openssl version|  awk '{print $2}' | tr -dc '0-9.')"
    local _DOCKER_NOW="$(docker info --format '{{json .ServerVersion}}' | tr -d '"')"
    local _BUILDX_NOW="$(docker info --format '{{json .ClientInfo}}' | jq -r '.Plugins[] | select(.Name | contains("buildx")) | .Version ' | cut -d'v' -f2)"
+   local _JQ_NOW="$(jq --version | cut -d'-' -f2)"
+   local _OPENSSL_NOW="$(openssl version|  awk '{print $2}' | tr -dc '0-9.')"
 
    # Do not check only important for multi architecture detection
    local _DISTRO_NOW="$(cat /etc/*release 2>/dev/null | grep -w ID | cut -d'=' -f2)"
@@ -85,14 +85,14 @@ function libgrav_mk::mk_init() { # Public: mk_init() function for grav-mkinit.sh
    case "${_GRAV_CMD}" in
       init)
          # Check all required minimal versions
-         if [ $(libgrav::version "${_JQ_NOW}") -lt $(libgrav::version ${_JQ_MIN}) ]; then 
-            libgrav::error 2 "FAIL: Required version of jq is not available or met.\nPlease install at least required version: ${_JQ_MIN}."
-         elif [ $(libgrav::version "${_OPENSSL_NOW}") -lt $(libgrav::version ${_OPENSSL_MIN}) ]; then 
-            libgrav::error 2 "FAIL: Required version of openssl is not available or met.\nPlease install at least required version: ${_OPENSSL_MIN}."
-         elif [ $(libgrav::version "${_DOCKER_NOW}") -lt $(libgrav::version ${_DOCKER_MIN}) ]; then 
+         if [ $(libgrav::version "${_DOCKER_NOW}") -lt $(libgrav::version ${_DOCKER_MIN}) ]; then 
             libgrav::error 2 "FAIL: Required version of docker is not available or met.\nPlease install at least required version: ${_DOCKER_MIN}."
          elif [ $(libgrav::version "${_BUILDX_NOW}") -lt $(libgrav::version ${_BUILDX_MIN}) ]; then 
             libgrav::error 2 "FAIL: Required version of docker buildx plugin is not available or met.\nPlease install at least required version: (${_BUILDX_MIN}."
+         elif [ $(libgrav::version "${_JQ_NOW}") -lt $(libgrav::version ${_JQ_MIN}) ]; then 
+            libgrav::error 2 "FAIL: Required version of jq is not available or met.\nPlease install at least required version: ${_JQ_MIN}."
+         elif [ $(libgrav::version "${_OPENSSL_NOW}") -lt $(libgrav::version ${_OPENSSL_MIN}) ]; then 
+            libgrav::error 2 "FAIL: Required version of openssl is not available or met.\nPlease install at least required version: ${_OPENSSL_MIN}."
          fi
 
          # Set global directory variables
