@@ -37,15 +37,15 @@ In addition other packages are included:
 
 ## Prerequisites
 
-This Dockerfile needs the following prerequisites:
+This project need the following prerequisites:
 
-* Insert `export PATH=${PWD}/bin:${PATH}` into your `.bashrc` script or execute it from the command line
-* Install at least docker-ce 20.10
+* Install at least jq >= 1.5
+* Install at least openssl >= 1.1.1
+* Install at least docker-ce >= 20.10
   (See https://docs.docker.com/engine/install/)
-* Install latest docker buildx plugin
+* Install at least docker buildx plugin >= 0.5.0
   (See https://docs.docker.com/buildx/working-with-buildx/)
-* Install a newer version of openssl not older than 1.1.1
-* Install uuid, jq, git, tree, vim or vscode for development
+* Install uuid, git, tree, vim or vscode for development
 
 ## Project structure
 

@@ -113,10 +113,46 @@ function libgrav::error() { # Public: error() function for all shell scripts.
    case ${_RC}  in
       *)
          echo ""
-         echo ${_TEXT}
+         echo -e ${_TEXT}
       ;;
    
    esac
    
    exit ${_RC}
+}
+
+#
+# Public: machine_arch() return the new machine architecture string
+#
+libgrav::machine_arch() {
+   local _ARCH=""
+
+   case "$(uname -m)" in
+      "x86_64") _ARCH="amd64"; ;;
+      "aarch64") _ARCH="arm64"; ;;
+   esac
+
+   echo ${_ARCH}
+}
+
+#
+# Public: os_type() return the current operating system string
+#
+libgrav::os_type() { # Public: os_type(): return the current operating system
+   local _OSTYPE=""
+
+   case "$(echo uname -o | tr [::upper::] [::lower::])" in
+      "GNU/Linux") _OSTYPE="linux"; ;;
+   esac
+
+   echo ${_OSTYPE}
+}
+
+#
+# Public: version(): Build version of a three digit string (X.Y.Z) to be compared arithmetically
+#
+libgrav::version() { # Public: version() Build version of a three digit string (X.Y.Z) to be compared arithmetically
+   local _VERSION="${@}"
+
+   echo "${_VERSION}" | awk -F. '{ printf("%d%04d%04d\n", $1,$2,$3); }'
 }
