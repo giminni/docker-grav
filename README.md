@@ -37,7 +37,7 @@ In addition other packages are included:
 
 ## Prerequisites
 
-This project need the following prerequisites:
+This project needs the following prerequisites:
 
 * Install at least jq >= 1.5
 * Install at least openssl >= 1.1.1
@@ -46,6 +46,9 @@ This project need the following prerequisites:
 * Install at least docker buildx plugin >= 0.5.0
   (See https://docs.docker.com/buildx/working-with-buildx/)
 * Install uuid, git, tree, vim or vscode for development
+
+This prerequisites are checked automatically with `mkinit.sh init`
+but before is advisable to set the home path
 
 ## Project structure
 
