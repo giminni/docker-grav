@@ -339,3 +339,7 @@ The docker image has the following scheme:
 * <grav-user=grav>/<grav-name=<grav|grav-admin>:<grav-tag=latest|testing>
 
 E.g. `grav/grav:latest` for production images or `grav/grav-admin:testing` for development images.
+
+## References
+
+* (Working with buildx)[https://docs.docker.com/buildx/working-with-buildx/]
