@@ -45,12 +45,12 @@ function main() {
 
    local _GRAV_CMD="${_ARGV[1]-""}"
 
-   local _GRAV_TEXT="FAIL: Arguments are not provided!"
-   local _GRAV_ARGS="ARGS: ${CMD} grav-cmd"
-   local _GRAV_NOTE="NOTE: (*) are default values, (#) are recommended values"
-   local _GRAV_ARG1="ARG1: grav-cmd: init - (#=init)"
-   local _GRAV_INFO="INFO: ${CMD} init"
-   local _GRAV_HELP="HELP: ${CMD}: Use the 'init' command to initialize the project environment with context files under the ${CFG_DIR} directory. (See NOTE, INFO and ARGS)"
+   local _GRAV_TEXT="Error: Arguments are not provided!"
+   local _GRAV_ARGS=" Args: ${CMD} grav-cmd"
+   local _GRAV_NOTE=" Note: (*) are default values, (#) are recommended values"
+   local _GRAV_ARG1=" Arg1: grav-cmd: init - (#=init)"
+   local _GRAV_INFO=" Info: ${CMD} init"
+   local _GRAV_HELP=" Help: ${CMD}: Use the 'init' command to initialize the project environment with context files under the ${CFG_DIR} directory. (See Note, Info and Args)"
 
    if [ ${_ARGC} -lt 1 ]; then 
       libgrav::usage 1 \
@@ -76,7 +76,7 @@ function main() {
 
    _RC=$?
    
-   if [ ${_RC} -eq 0 ]; then libgrav::help "INFO: Reload bash from the command line with 'source \${HOME}/.bashrc'"; fi
+   if [ ${_RC} -eq 0 ]; then libgrav::help " Info: Reload bash from the command line with 'source \${HOME}/.bashrc'"; fi
 
    return ${_RC}
 }

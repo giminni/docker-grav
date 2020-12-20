@@ -11,7 +11,7 @@ NAME=$(echo ${CMD} | cut -d'.' -f1)
 CUR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOME_DIR="${CUR_DIR%/*}"
 
-if [[ ! -e "${HOME_DIR}/.context" ]]; then echo -e "\nFAIL: Context is not initialized! Please run '<PROJECT_HOME>/bin/grav-mkinit.sh init' first... "; exit 1; fi
+if [[ ! -e "${HOME_DIR}/.context" ]]; then echo -e "\nError: Context is not initialized! Please run '<PROJECT_HOME>/bin/grav-mkinit.sh init' first... "; exit 1; fi
 
 # Remove enclosing double quotes
 CTX_DIR="$(cat ${HOME_DIR}/.context | tr -d '"' | cut -d'=' -f2)"
@@ -47,15 +47,15 @@ function main() {
    local _GRAV_LEN="${_ARGV[3]:-4096}"
    local _GRAV_SSH="${_ARGV[4]:-${KEY_DIR}/grav_${_GRAV_TYPE}}"
 
-   local _GRAV_TEXT="FAIL: Arguments are not provided!"
-   local _GRAV_ARGS="ARGS: ${CMD} user_email [key-type] [key-len] [key-file]"
-   local _GRAV_NOTE="NOTE: (*) are default values, (#) are recommended values"
-   local _GRAV_ARG1="ARG1: user-email: any|(#)       - (#=email-address)"
-   local _GRAV_ARG2="ARG2: [key-type]: rsa|dsa|ecdsa - (*=rsa)"
-   local _GRAV_ARG3="ARG3:  [key-len]: 2048-8192     - (*=4096)"
-   local _GRAV_ARG4="ARG4: [key-file]: any|(*)       - (*=${KEY_DIR}/grav_<grav-keytype>)"
-   local _GRAV_INFO="INFO: ${CMD} grav@example.com rsa 4096 ${KEY_DIR}/grav_rsa"
-   local _GRAV_HELP="HELP: ${CMD}: Create the required user SSH keys depending from some entered arguments. (See NOTE, INFO and ARGS)"
+   local _GRAV_TEXT="Error: Arguments are not provided!"
+   local _GRAV_ARGS=" Args: ${CMD} user_email [key-type] [key-len] [key-file]"
+   local _GRAV_NOTE=" Note: (*) are default values, (#) are recommended values"
+   local _GRAV_ARG1=" Arg1: user-email: any|(#)       - (#=email-address)"
+   local _GRAV_ARG2=" Arg2: [key-type]: rsa|dsa|ecdsa - (*=rsa)"
+   local _GRAV_ARG3=" Arg3:  [key-len]: 2048-8192     - (*=4096)"
+   local _GRAV_ARG4=" Arg4: [key-file]: any|(*)       - (*=${KEY_DIR}/grav_<grav-keytype>)"
+   local _GRAV_INFO=" Info: ${CMD} grav@example.com rsa 4096 ${KEY_DIR}/grav_rsa"
+   local _GRAV_HELP=" Help: ${CMD}: Create the required user SSH keys depending from some entered arguments. (See Note, Info and Args)"
 
    if [ ${_ARGC} -lt 1 ]; then 
       libgrav::usage 1 \
