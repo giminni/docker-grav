@@ -11,7 +11,7 @@ NAME=$(echo ${CMD} | cut -d'.' -f1)
 CUR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOME_DIR="${CUR_DIR%/*}"
 
-if [[ ! -e "${HOME_DIR}/.context" ]]; then echo -e "\nFAIL: Context is not initialized! Please run '<PROJECT_HOME>/bin/grav-mkinit.sh init' first... "; exit 1; fi
+if [[ ! -e "${HOME_DIR}/.context" ]]; then echo -e "\nError: Context is not initialized! Please run '<PROJECT_HOME>/bin/grav-mkinit.sh init' first... "; exit 1; fi
 
 # Remove enclosing double quotes
 CTX_DIR="$(cat ${HOME_DIR}/.context | tr -d '"' | cut -d'=' -f2)"
@@ -46,16 +46,16 @@ function main() {
    
    local _RC=0
 
-   local _GRAV_SHELL="${_ARGV[1]-""}"
-   local _GRAV_NAME="${_ARGV[2]:-"grav"}"
+   local _GRAV_NAME="${_ARGV[1]:-""}"
+   local _GRAV_SHELL="${_ARGV[2]-"${SHELL}"}"
    
-   local _GRAV_TEXT="FAIL: Arguments are not provided!"
-   local _GRAV_ARGS="ARGS: ${CMD} shell-type [img-name]"
-   local _GRAV_NOTE="NOTE: (*) are default values, (#) are recommended values"
-   local _GRAV_ARG1="ARG1: shell-type: sh|ash|bash - (#=bash)"
-   local _GRAV_ARG2="ARG2: [img-name]: any|(*)     - (*=grav)"
-   local _GRAV_INFO="INFO: ${CMD} bash grav"
-   local _GRAV_HELP="HELP: ${CMD}: Open a named shell into the running '${_GRAV_NAME}' container depending from some entered arguments. (See NOTE, INFO and ARGS)"
+   local _GRAV_TEXT="Error: Arguments are not provided!"
+   local _GRAV_ARGS=" Args: ${CMD} img-name [shell-type]"
+   local _GRAV_NOTE=" Note: (*) are default values, (#) are recommended values"
+   local _GRAV_ARG1=" Arg1: [img-name]: any|(#)         - (#=grav)"
+   local _GRAV_ARG2=" Arg2: shell-type: (*)|sh|ash|bash - (*=<current-shell>)"
+   local _GRAV_INFO=" Info: ${CMD} bash grav"
+   local _GRAV_HELP=" Help: ${CMD}: Open a named shell into the running container depending from some entered arguments. (See Note, Info and Args)"
 
    if [ ${_ARGC} -lt 1 ]; then 
       libgrav::usage 1 \
