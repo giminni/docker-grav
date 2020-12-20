@@ -27,10 +27,14 @@ libgrav_set::set_core() { # Public: set_core() function for grav-setcore.sh scri
          echo "GRAV_PROD=${_GRAV_CORE}"  > "${CFG_DIR}"/.config.prod 
       ;;
 
-      *) libgrav::error 2 "FAIL: Argument is not defined: ${_GRAV_CORE}!"
+      *) libgrav::error 2 "Error: Argument is not defined: ${_GRAV_CORE}!"
       ;;
 
    esac
+
+   ${_RC}=$?
+
+   if [ ${_RC} -eq 0 ]; then libgrav::help " Info: Download now the respective grav core package with ${BIN_DIR}/grav-getcore.sh"; fi
 
    return ${_RC}
 }
