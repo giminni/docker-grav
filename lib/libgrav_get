@@ -24,7 +24,7 @@ function libgrav_get::get_core() { # Public: get_core() function for grav-getcor
       dev)
          _GRAV_DEV=$(cat "${CFG_DIR}"/.config.dev | tr -d '"' | cut -d'=' -f2)
          _GRAV_OUTPUT="${ROOT_DIR}/tmp/grav/core/${_GRAV_NAME}-${_GRAV_DEV}?testing.zip"
-         if [[ -e "${_GRAV_OUTPUT}" ]]; then libgrav::error 2 "FAIL: File ${_GRAV_OUTPUT} exists, download not needed."; fi
+         if [[ -e "${_GRAV_OUTPUT}" ]]; then libgrav::error 2 "Error: File ${_GRAV_OUTPUT} exists, download not needed."; fi
 
          wget -O "${_GRAV_OUTPUT}" \
             ${_GRAV_URL}/${_GRAV_KIND}/${_GRAV_NAME}/${_GRAV_DEV}?testing
@@ -32,7 +32,7 @@ function libgrav_get::get_core() { # Public: get_core() function for grav-getcor
 
       [0-9]*.[0-9]*.[0-9]*-[a-z][a-z].[0-9]*)
          _GRAV_OUTPUT="${ROOT_DIR}/tmp/grav/core/${_GRAV_NAME}-${_GRAV_CORE}?testing.zip"
-         if [[ -e "${_GRAV_OUTPUT}" ]]; then libgrav::error 2 "FAIL: File ${_GRAV_OUTPUT} exists, download not needed."; fi
+         if [[ -e "${_GRAV_OUTPUT}" ]]; then libgrav::error 2 "Error: File ${_GRAV_OUTPUT} exists, download not needed."; fi
 
          wget -O "${_GRAV_OUTPUT}" \
             ${_GRAV_URL}/${_GRAV_KIND}/${_GRAV_NAME}/${_GRAV_CORE}?testing
@@ -41,7 +41,7 @@ function libgrav_get::get_core() { # Public: get_core() function for grav-getcor
       prod)
          _GRAV_PROD=$(cat "${CFG_DIR}"/.config.prod | tr -d '"' | cut -d'=' -f2)
          _GRAV_OUTPUT="${ROOT_DIR}/tmp/grav/core/${_GRAV_NAME}-${_GRAV_PROD}.zip"
-         if [[ -e "${_GRAV_OUTPUT}" ]]; then libgrav::error 2 "FAIL: File ${_GRAV_OUTPUT} exists, download not needed."; fi
+         if [[ -e "${_GRAV_OUTPUT}" ]]; then libgrav::error 2 "Error: File ${_GRAV_OUTPUT} exists, download not needed."; fi
 
          wget -O "${_GRAV_OUTPUT}" \
             ${_GRAV_URL}/${_GRAV_KIND}/${_GRAV_NAME}/${_GRAV_PROD}
@@ -49,13 +49,13 @@ function libgrav_get::get_core() { # Public: get_core() function for grav-getcor
       
       [0-9]*.[0-9]*.[0-9]*)
          _GRAV_OUTPUT="${ROOT_DIR}/tmp/grav/core/${_GRAV_NAME}-${_GRAV_CORE}.zip"
-         if [[ -e "${_GRAV_OUTPUT}" ]]; then libgrav::error 2 "FAIL: File ${_GRAV_OUTPUT} exists, download not needed."; fi
+         if [[ -e "${_GRAV_OUTPUT}" ]]; then libgrav::error 2 "Error: File ${_GRAV_OUTPUT} exists, download not needed."; fi
 
          wget -O "${_GRAV_OUTPUT}" \
             ${_GRAV_URL}/${_GRAV_KIND}/${_GRAV_NAME}/${_GRAV_CORE}
       ;;
 
-      *) libgrav::error 2 "FAIL: Argument is not defined: ${_GRAV_CORE}!"
+      *) libgrav::error 2 "Error: Argument is not defined: ${_GRAV_CORE}!"
       ;;
 
    esac

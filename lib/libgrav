@@ -9,26 +9,30 @@ libgrav::check_prereq() { # Public: check_prereq() function for checking essenti
    local _BUILDX_MIN="${2}"
    local _JQ_MIN="${3}"
    local _OPENSSL_MIN="${4}"
+   local _GIT_MIN="${5}"
 
    local _OS_NOW="$(libgrav::os_type)"
    local _ARCH_NOW="$(libgrav::machine_arch)"
    local _DOCKER_NOW="$(docker info --format '{{json .ServerVersion}}' | tr -d '"')"
    local _BUILDX_NOW="$(docker info --format '{{json .ClientInfo}}' | jq -r '.Plugins[] | select(.Name | contains("buildx")) | .Version ' | cut -d'v' -f2)"
    local _JQ_NOW="$(jq --version | cut -d'-' -f2)"
-   local _OPENSSL_NOW="$(openssl version|  awk '{print $2}' | tr -dc '0-9.')"
+   local _OPENSSL_NOW="$(openssl version |  awk '{print $2}' | tr -dc '0-9.')"
+   local _GIT_NOW="$(git --version | awk '{print $3}')"
 
    # Important for multi architecture detection
    local _DISTRO_NOW="$(cat /etc/*release 2>/dev/null | grep -w ID | cut -d'=' -f2)"
 
    # Check all required minimal versions
    if [ $(libgrav::version "${_DOCKER_NOW}") -lt $(libgrav::version ${_DOCKER_MIN}) ]; then 
-      libgrav::error 2 "FAIL: Required version of docker is not available or met.\nPlease install at least required version: ${_DOCKER_MIN}."
+      libgrav::error 2 "Error: Required version of docker is not available or met.\nPlease install at least required version: ${_DOCKER_MIN}."
    elif [ $(libgrav::version "${_BUILDX_NOW}") -lt $(libgrav::version ${_BUILDX_MIN}) ]; then 
-      libgrav::error 2 "FAIL: Required version of docker buildx plugin is not available or met.\nPlease install at least required version: (${_BUILDX_MIN}."
+      libgrav::error 2 "Error: Required version of docker buildx plugin is not available or met.\nPlease install at least required version: (${_BUILDX_MIN}."
    elif [ $(libgrav::version "${_JQ_NOW}") -lt $(libgrav::version ${_JQ_MIN}) ]; then 
-      libgrav::error 2 "FAIL: Required version of jq is not available or met.\nPlease install at least required version: ${_JQ_MIN}."
+      libgrav::error 2 "Error: Required version of jq is not available or met.\nPlease install at least required version: ${_JQ_MIN}."
    elif [ $(libgrav::version "${_OPENSSL_NOW}") -lt $(libgrav::version ${_OPENSSL_MIN}) ]; then 
-      libgrav::error 2 "FAIL: Required version of openssl is not available or met.\nPlease install at least required version: ${_OPENSSL_MIN}."
+      libgrav::error 2 "Error: Required version of openssl is not available or met.\nPlease install at least required version: ${_OPENSSL_MIN}."
+   elif [ $(libgrav::version "${_GIT_NOW}") -lt $(libgrav::version ${_GIT_MIN}) ]; then 
+      libgrav::error 2 "Error: Required version of git is not available or met.\nPlease install at least required version: ${_GIT_MIN}."
    fi
 
    # Set global directory variables
@@ -112,7 +116,7 @@ function libgrav::multi_choice() { # Public: multi_choice() user input function.
    done
    
    while true; do
-      read -p "${_TEXT} (${_INFO:0:-1})? " _ANSWER
+      read -p "${_TEXT} (${_ Info:0:-1})? " _ANSWER
       
       if [ $? -ge 128 ]; then _RC=1; break; fi
 

@@ -57,7 +57,7 @@ function libgrav_docker::build() { # Public: build() function for grav-build.sh 
       ;;
 
       *)
-         libgrav::error 2 "FAIL: Command not found: ${_GRAV_CMD}!"
+         libgrav::error 2 "Error: Command not found: ${_GRAV_CMD}!"
       ;;
    esac
            
@@ -105,7 +105,10 @@ function libgrav_docker::run() { # Public: run() function for grav-run.sh script
    local _GRAV_TAG="${3}"
    local _GRAV_DATA="${4}"
 
-   sudo docker ps -a | grep ${_GRAV_NAME} | awk '{print $1}' | xargs -r sudo docker rm -f
+   if [[ ! -z "$(docker ps -a | grep ${_GRAV_NAME})" ]]; then
+      sudo docker ps -a | grep ${_GRAV_NAME} | awk '{print $1}' | xargs -r sudo docker rm -f
+   fi
+
    sudo docker volume prune -f
 
    sudo docker run -d \
