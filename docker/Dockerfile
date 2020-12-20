@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1.2
 
 # Read the README.md file for instructions
-FROM php:7.4-apache AS build
+FROM --platform=$BUILDPLATFORM php:7.4-apache AS build
 
 LABEL MAINTAINER="Giovanni Minniti <minniti@t-online.de> (@giminni)"
 
