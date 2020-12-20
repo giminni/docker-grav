@@ -68,38 +68,23 @@ function libgrav_mk::mk_init() { # Public: mk_init() function for grav-mkinit.sh
    local _GRAV_KEY="${9}" 
    local _GRAV_LIB="${10}"
 
-   # Minimal requirements
-   local _DOCKER_MIN="20.10"
-   local _BUILDX_MIN="0.5.0"
-   local _JQ_MIN="1.5"
-   local _OPENSSL_MIN="1.1.1"
+   # Prerequisite checking
+   local _DOCKER_MIN="${1}"
+   local _BUILDX_MIN="${2}"
+   local _JQ_MIN="${3}"
+   local _OPENSSL_MIN="${4}"
 
-   local _DOCKER_NOW="$(docker info --format '{{json .ServerVersion}}' | tr -d '"')"
-   local _BUILDX_NOW="$(docker info --format '{{json .ClientInfo}}' | jq -r '.Plugins[] | select(.Name | contains("buildx")) | .Version ' | cut -d'v' -f2)"
-   local _JQ_NOW="$(jq --version | cut -d'-' -f2)"
-   local _OPENSSL_NOW="$(openssl version|  awk '{print $2}' | tr -dc '0-9.')"
-
-   # Do not check only important for multi architecture detection
-   local _DISTRO_NOW="$(cat /etc/*release 2>/dev/null | grep -w ID | cut -d'=' -f2)"
+   libgrav::check_prereq \
+      "${_DOCKER_MIN}" \
+      "${_BUILDX_MIN}" \
+      "${_JQ_MIN}" \
+      "${_OPENSSL_MIN}"
 
    case "${_GRAV_CMD}" in
       init)
-         # Check all required minimal versions
-         if [ $(libgrav::version "${_DOCKER_NOW}") -lt $(libgrav::version ${_DOCKER_MIN}) ]; then 
-            libgrav::error 2 "FAIL: Required version of docker is not available or met.\nPlease install at least required version: ${_DOCKER_MIN}."
-         elif [ $(libgrav::version "${_BUILDX_NOW}") -lt $(libgrav::version ${_BUILDX_MIN}) ]; then 
-            libgrav::error 2 "FAIL: Required version of docker buildx plugin is not available or met.\nPlease install at least required version: (${_BUILDX_MIN}."
-         elif [ $(libgrav::version "${_JQ_NOW}") -lt $(libgrav::version ${_JQ_MIN}) ]; then 
-            libgrav::error 2 "FAIL: Required version of jq is not available or met.\nPlease install at least required version: ${_JQ_MIN}."
-         elif [ $(libgrav::version "${_OPENSSL_NOW}") -lt $(libgrav::version ${_OPENSSL_MIN}) ]; then 
-            libgrav::error 2 "FAIL: Required version of openssl is not available or met.\nPlease install at least required version: ${_OPENSSL_MIN}."
-         fi
-
          # Set global directory variables
          echo "GRAV_HOME=\"${_GRAV_HOME}\"" > "${_GRAV_CFG}"/.config.home 
          echo "GRAV_ROOT=\"${_GRAV_ROOT}\"" > "${_GRAV_CFG}"/.config.root 
-         #echo "GRAV_CACHE=\"${_GRAV_CACHE}\"" > "${_GRAV_CFG}"/.config.cache
-         #echo "GRAV_DATA=\"${_GRAV_DATA}\"" > "${_GRAV_CFG}"/.config.data
          echo "GRAV_DOCK=\"${_GRAV_DOCK}\"" > "${_GRAV_CFG}"/.config.docker
          echo "GRAV_BIN=\"${_GRAV_BIN}\"" > "${_GRAV_CFG}"/.config.bin 
          echo "GRAV_CFG=\"${_GRAV_CFG}\"" > "${_GRAV_CFG}"/.config.cfg
@@ -109,9 +94,15 @@ function libgrav_mk::mk_init() { # Public: mk_init() function for grav-mkinit.sh
 
          # Replace '# docker-grav #' entries in .bashrc file
          if [[ -e "${HOME}/.bashrc" ]] && [ "${SHELL}" == "/bin/bash" ]; then 
-            sed -i "/# docker-grav #/d" ${HOME}/.bashrc
-            echo "export PATH=${PWD}/bin:\${PATH} # docker-grav #" >> ${HOME}/.bashrc
-            echo "export GRAV_HOME=${_GRAV_HOME} # docker-grav #" >>  ${HOME}/.bashrc
+            sed -i "/# docker-grav #/d" "${HOME}"/.bashrc
+            echo "export GRAV_HOME="${PWD}" # docker-grav #" >>  "${HOME}"/.bashrc
+            echo "export GRAV_ROOT="\${GRAV_HOME}/rootfs" # docker-grav #" >>  "${HOME}"/.bashrc
+            echo "export GRAV_DOCK="\${GRAV_HOME}/docker" # docker-grav #" >>  "${HOME}"/.bashrc
+            echo "export GRAV_BIN="\${GRAV_HOME}/bin" # docker-grav #" >>  "${HOME}"/.bashrc
+            echo "export GRAV_CFG="\${GRAV_HOME}/cfg" # docker-grav #" >>  "${HOME}"/.bashrc
+            echo "export GRAV_KEY="\${GRAV_HOME}/key" # docker-grav #" >>  "${HOME}"/.bashrc
+            echo "export GRAV_LIB="\${GRAV_HOME}/lib" # docker-grav #" >>  "${HOME}"/.bashrc
+            echo "export PATH=\${GRAV_HOME}/bin:\${PATH} # docker-grav #" >> "${HOME}"/.bashrc
          fi
 
          if [[ ! -e "${HOME}/.bash_aliases" ]] && [ "${SHELL}" == "/bin/bash" ]; then 
@@ -120,21 +111,18 @@ function libgrav_mk::mk_init() { # Public: mk_init() function for grav-mkinit.sh
             sed -i "/# docker-grav #/d" ${HOME}/.bash_aliases
          fi
 
-         echo 'alias "grav-build"="grav-build.sh" # docker-grav #' >> ${HOME}/.bash_aliases
-         echo 'alias "grav-getcore"="grav-getcore.sh" # docker-grav #' >> ${HOME}/.bash_aliases
-         echo 'alias "grav-mkcache"="grav-mkcache.sh" # docker-grav #' >> ${HOME}/.bash_aliases
-         echo 'alias "grav-mkdata"="grav-mkdata.sh" # docker-grav #' >> ${HOME}/.bash_aliases
-         echo 'alias "grav-mkinit"="grav-mkinit.sh" # docker-grav #' >> ${HOME}/.bash_aliases
-         echo 'alias "grav-mkpass"="grav-mkpass.sh" # docker-grav #' >> ${HOME}/.bash_aliases
-         echo 'alias "grav-mkssh"="grav-mkssh.sh" # docker-grav #' >> ${HOME}/.bash_aliases
-         echo 'alias "grav-purge"="grav-purge.sh" # docker-grav #' >> ${HOME}/.bash_aliases
-         echo 'alias "grav-run"="grav-run.sh" # docker-grav #' >> ${HOME}/.bash_aliases
-         echo 'alias "grav-setcore"="grav-setcore.sh" # docker-grav #' >> ${HOME}/.bash_aliases
-         echo 'alias "grav-shell"="grav-shell.sh" # docker-grav #' >> ${HOME}/.bash_aliases
-
-         # Set current grav core version strings
-         # "${BIN_DIR}"/grav-setcore.sh prod
-         # "${BIN_DIR}"/grav-setcore.sh dev
+         echo 'alias "grav-build"="grav-build.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
+         echo 'alias "grav-getcore"="grav-getcore.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
+         echo 'alias "grav-mkcache"="grav-mkcache.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
+         echo 'alias "grav-mkdata"="grav-mkdata.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
+         echo 'alias "grav-mkinit"="grav-mkinit.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
+         echo 'alias "grav-mkpass"="grav-mkpass.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
+         echo 'alias "grav-mkssh"="grav-mkssh.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
+         echo 'alias "grav-purge"="grav-purge.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
+         echo 'alias "grav-run"="grav-run.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
+         echo 'alias "grav-setcore"="grav-setcore.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
+         echo 'alias "grav-shell"="grav-shell.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
+         echo 'function grav-cd() { cd ${GRAV_HOME}/"${1}"; } # docker-grav #' >> "${HOME}"/.bash_aliases
       ;;
       
       

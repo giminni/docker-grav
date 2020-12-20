@@ -1,6 +1,102 @@
 #!/usr/bin/env bash
 
 #
+# Public: check_prereq() function for checking essential prerequisites
+#
+libgrav::check_prereq() { # Public: check_prereq() function for checking essential prerequisites
+   # Minimal requirements
+   local _DOCKER_MIN="${1}"
+   local _BUILDX_MIN="${2}"
+   local _JQ_MIN="${3}"
+   local _OPENSSL_MIN="${4}"
+
+   local _OS_NOW="$(libgrav::os_type)"
+   local _ARCH_NOW="$(libgrav::machine_arch)"
+   local _DOCKER_NOW="$(docker info --format '{{json .ServerVersion}}' | tr -d '"')"
+   local _BUILDX_NOW="$(docker info --format '{{json .ClientInfo}}' | jq -r '.Plugins[] | select(.Name | contains("buildx")) | .Version ' | cut -d'v' -f2)"
+   local _JQ_NOW="$(jq --version | cut -d'-' -f2)"
+   local _OPENSSL_NOW="$(openssl version|  awk '{print $2}' | tr -dc '0-9.')"
+
+   # Important for multi architecture detection
+   local _DISTRO_NOW="$(cat /etc/*release 2>/dev/null | grep -w ID | cut -d'=' -f2)"
+
+   # Check all required minimal versions
+   if [ $(libgrav::version "${_DOCKER_NOW}") -lt $(libgrav::version ${_DOCKER_MIN}) ]; then 
+      libgrav::error 2 "FAIL: Required version of docker is not available or met.\nPlease install at least required version: ${_DOCKER_MIN}."
+   elif [ $(libgrav::version "${_BUILDX_NOW}") -lt $(libgrav::version ${_BUILDX_MIN}) ]; then 
+      libgrav::error 2 "FAIL: Required version of docker buildx plugin is not available or met.\nPlease install at least required version: (${_BUILDX_MIN}."
+   elif [ $(libgrav::version "${_JQ_NOW}") -lt $(libgrav::version ${_JQ_MIN}) ]; then 
+      libgrav::error 2 "FAIL: Required version of jq is not available or met.\nPlease install at least required version: ${_JQ_MIN}."
+   elif [ $(libgrav::version "${_OPENSSL_NOW}") -lt $(libgrav::version ${_OPENSSL_MIN}) ]; then 
+      libgrav::error 2 "FAIL: Required version of openssl is not available or met.\nPlease install at least required version: ${_OPENSSL_MIN}."
+   fi
+
+   # Set global directory variables
+   echo "GRAV_OS=\"${_OS_NOW}\"" > "${_GRAV_CFG}"/.config.os
+   echo "GRAV_ARCH=\"${_ARCH_NOW}\"" > "${_GRAV_CFG}"/.config.arch
+   echo "GRAV_DISTRO=\"${_DISTRO_NOW}\"" > "${_GRAV_CFG}"/.config.distro
+}
+
+#
+# Public: init() function for setting all directory variables globally.
+#
+function libgrav::init() { # Public: init() function for setting all directory variables globally.
+#
+   # Remove enclosing double quotes
+   if [[ -e "${CTX_DIR}/.config.root" ]]; then ROOT_DIR="$(cat ${CTX_DIR}/.config.root | tr -d '"' | cut -d'=' -f2)"; fi
+   if [[ -e "${CTX_DIR}/.config.cache" ]]; then CACHE_DIR="$(cat ${CTX_DIR}/.config.cache | tr -d '"' | cut -d'=' -f2)"; fi
+   if [[ -e "${CTX_DIR}/.config.data" ]]; then DATA_DIR="$(cat ${CTX_DIR}/.config.data | tr -d '"' | cut -d'=' -f2)"; fi
+   if [[ -e "${CTX_DIR}/.config.docker" ]]; then DOCK_DIR="$(cat ${CTX_DIR}/.config.docker | tr -d '"' | cut -d'=' -f2)"; fi
+   if [[ -e "${CTX_DIR}/.config.bin" ]]; then BIN_DIR="$(cat ${CTX_DIR}/.config.bin | tr -d '"' | cut -d'=' -f2)"; fi
+   if [[ -e "${CTX_DIR}/.config.cfg" ]]; then CFG_DIR="$(cat ${CTX_DIR}/.config.cfg | tr -d '"' | cut -d'=' -f2)"; fi
+   if [[ -e "${CTX_DIR}/.config.key" ]]; then KEY_DIR="$(cat ${CTX_DIR}/.config.key | tr -d '"' | cut -d'=' -f2)"; fi
+}
+
+#
+# Public: error() function for all shell scripts.
+#
+function libgrav::error() { # Public: error() function for all shell scripts.
+   local _RC=${1}
+   local _TEXT="${2}"
+
+   case ${_RC}  in
+      *)
+         echo ""
+         echo -e ${_TEXT}
+      ;;
+   
+   esac
+   
+   exit ${_RC}
+}
+
+#
+# Public: help() function for all shell scripts.
+#
+function libgrav::help() { # Public: help() function for all shell scripts.
+   local _HELP="${1}"
+   
+   echo ""
+   echo -e "${_HELP}"
+   echo ""
+}
+
+#
+# Public: machine_arch() return the new machine architecture string
+#
+libgrav::machine_arch() {
+   local _ARCH=""
+
+   case "$(uname -m)" in
+       "x86_64") _ARCH="amd64"; ;;
+      "aarch64") _ARCH="arm64"; ;;
+              *) _ARCH="unknown"; ;;
+   esac
+
+   echo ${_ARCH} | tr '[:upper:]' '[:lower:]'
+}
+
+#
 # Public: multi_choice() user input function.
 #
 function libgrav::multi_choice() { # Public: multi_choice() user input function.
@@ -28,32 +124,6 @@ function libgrav::multi_choice() { # Public: multi_choice() user input function.
    done
 
    echo ${_RC}
-}
-
-#
-# Public: init() function for setting all directory variables globally.
-#
-function libgrav::init() { # Public: init() function for setting all directory variables globally.
-#
-   # Remove enclosing double quotes
-   if [[ -e "${CTX_DIR}/.config.root" ]]; then ROOT_DIR="$(cat ${CTX_DIR}/.config.root | tr -d '"' | cut -d'=' -f2)"; fi
-   if [[ -e "${CTX_DIR}/.config.cache" ]]; then CACHE_DIR="$(cat ${CTX_DIR}/.config.cache | tr -d '"' | cut -d'=' -f2)"; fi
-   if [[ -e "${CTX_DIR}/.config.data" ]]; then DATA_DIR="$(cat ${CTX_DIR}/.config.data | tr -d '"' | cut -d'=' -f2)"; fi
-   if [[ -e "${CTX_DIR}/.config.docker" ]]; then DOCK_DIR="$(cat ${CTX_DIR}/.config.docker | tr -d '"' | cut -d'=' -f2)"; fi
-   if [[ -e "${CTX_DIR}/.config.bin" ]]; then BIN_DIR="$(cat ${CTX_DIR}/.config.bin | tr -d '"' | cut -d'=' -f2)"; fi
-   if [[ -e "${CTX_DIR}/.config.cfg" ]]; then CFG_DIR="$(cat ${CTX_DIR}/.config.cfg | tr -d '"' | cut -d'=' -f2)"; fi
-   if [[ -e "${CTX_DIR}/.config.key" ]]; then KEY_DIR="$(cat ${CTX_DIR}/.config.key | tr -d '"' | cut -d'=' -f2)"; fi
-}
-
-#
-# Public: help() function for all shell scripts.
-#
-function libgrav::help() { # Public: help() function for all shell scripts.
-   local _HELP="${1}"
-   
-   echo ""
-   echo -e "${_HELP}"
-   echo ""
 }
 
 #
@@ -104,45 +174,15 @@ function libgrav::usage() { # Public: usage() function for all shell scripts.
 }
 
 #
-# Public: error() function for all shell scripts.
-#
-function libgrav::error() { # Public: error() function for all shell scripts.
-   local _RC=${1}
-   local _TEXT="${2}"
-
-   case ${_RC}  in
-      *)
-         echo ""
-         echo -e ${_TEXT}
-      ;;
-   
-   esac
-   
-   exit ${_RC}
-}
-
-#
-# Public: machine_arch() return the new machine architecture string
-#
-libgrav::machine_arch() {
-   local _ARCH=""
-
-   case "$(uname -m)" in
-      "x86_64") _ARCH="amd64"; ;;
-      "aarch64") _ARCH="arm64"; ;;
-   esac
-
-   echo ${_ARCH}
-}
-
-#
 # Public: os_type() return the current operating system string
 #
 libgrav::os_type() { # Public: os_type(): return the current operating system
    local _OSTYPE=""
 
-   case "$(echo uname -o | tr [::upper::] [::lower::])" in
+   case "$(uname -o)" in
       "GNU/Linux") _OSTYPE="linux"; ;;
+         "Darwin") _OSTYPE="darwin"; ;;
+                *) _OSTYPE="unknown"; ;;
    esac
 
    echo ${_OSTYPE}
