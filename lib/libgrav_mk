@@ -19,7 +19,7 @@ function libgrav_mk::mk_cache() { # Public: mk_cache() function for grav-mkcache
    echo "GRAV_CACHE=${_GRAV_CACHE}" > ${CFG_DIR}/.config.cache
    
 
-   libgrav::help "INFO: Created cached directory '${_GRAV_NAME}' in ${_GRAV_CACHE}."
+   libgrav::help " Info: Created cached directory '${_GRAV_NAME}' in ${_GRAV_CACHE}."
 
    _RC=$?
 
@@ -45,7 +45,7 @@ function libgrav_mk::mk_data() { # Public: mk_data() function for grav-mkdata.sh
 
    echo "GRAV_DATA=${_GRAV_DATA}" > ${CFG_DIR}/.config.data
    
-   libgrav::help "INFO: Created data directory '${_GRAV_NAME}' in ${_GRAV_DATA}."
+   libgrav::help " Info: Created data directory '${_GRAV_NAME}' in ${_GRAV_DATA}."
 
    _RC=$?
 
@@ -69,16 +69,18 @@ function libgrav_mk::mk_init() { # Public: mk_init() function for grav-mkinit.sh
    local _GRAV_LIB="${10}"
 
    # Prerequisite checking
-   local _DOCKER_MIN="${1}"
-   local _BUILDX_MIN="${2}"
-   local _JQ_MIN="${3}"
-   local _OPENSSL_MIN="${4}"
+   local _DOCKER_MIN="20.10"
+   local _BUILDX_MIN="0.5.0"
+   local _JQ_MIN="1.5"
+   local _OPENSSL_MIN="1.1.1"
+   local _GIT_MIN="2.17"
 
    libgrav::check_prereq \
       "${_DOCKER_MIN}" \
       "${_BUILDX_MIN}" \
       "${_JQ_MIN}" \
-      "${_OPENSSL_MIN}"
+      "${_OPENSSL_MIN}" \
+      "${_GIT_MIN}"
 
    case "${_GRAV_CMD}" in
       init)
@@ -126,7 +128,7 @@ function libgrav_mk::mk_init() { # Public: mk_init() function for grav-mkinit.sh
       ;;
       
       
-      *) libgrav::error 2 "FAIL: Argument is not defined: ${_GRAV_CMD}!"
+      *) libgrav::error 2 "Error: Argument is not defined: ${_GRAV_CMD}!"
       ;;
 
    esac
@@ -158,7 +160,7 @@ function libgrav_mk::mk_pass() { # Public: mk_pass() function for grav-mkpass.sh
    echo "GRAV_USER=${_GRAV_USER}" > "${CFG_DIR}"/.config.user
    echo "GRAV_PASS=${_GRAV_PASS}" > "${CFG_DIR}"/.config.pass
    
-   libgrav::help "INFO: Created encrypted password for user '${_GRAV_USER}' in ${KEY_DIR} directory."
+   libgrav::help " Info: Created encrypted password for user '${_GRAV_USER}' in ${KEY_DIR} directory."
 
    return ${_RC}
 }
@@ -217,7 +219,7 @@ function libgrav_mk::mk_ssh() { # Public: mk_ssh() function for grav-mkssh.sh sc
 
    echo "GRAV_SSH=${_GRAV_SSH}" > ${CFG_DIR}/.config.ssh
 
-   libgrav::help "INFO: ${_GRAV_VERB} SSH keys in ${KEY_DIR} directory."
+   libgrav::help " Info: ${_GRAV_VERB} SSH keys in ${KEY_DIR} directory."
 
    _RC=$?
 
