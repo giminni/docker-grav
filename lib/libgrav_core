@@ -1,13 +1,51 @@
 #!/usr/bin/env bash
 
 #
-# Public: get_core() function for grav-getcore.sh script.
+# Public: set_core() function for grav-core.sh set script.
 #
-function libgrav_get::get_core() { # Public: get_core() function for grav-getcore.sh script.
+libgrav_core::set_core() { # Public: set_core() function for grav-core.sh set script.
+   local _RC=0
+   local _GRAV_CORE="${1}"
+
+   case "${_GRAV_CORE}" in
+      all)
+         ${0} dev
+         ${0} prod
+      ;;
+
+      dev) echo "GRAV_DEV=$(wget -O - -o /dev/null https://getgrav.org | grep 'Release Candidate Version' | sed -e 's/<[^>]*>//g' | awk '{print $4}')" > "${CFG_DIR}"/.config.dev 
+      ;;
+          
+      [0-9]*.[0-9]*.[0-9]*-[a-z][a-z].[0-9]*\?testing)
+         echo "GRAV_DEV=${_GRAV_CORE}"  > "${CFG_DIR}"/.config.dev 
+      ;;
+
+      prod) echo "GRAV_PROD=$(wget -O - -o /dev/null https://getgrav.org | grep 'Stable Version' | sed -e 's/<[^>]*>//g' | awk '{print $3}')"  > "${CFG_DIR}"/.config.prod 
+      ;;
+      
+      [0-9]*.[0-9]*.[0-9]*)
+         echo "GRAV_PROD=${_GRAV_CORE}"  > "${CFG_DIR}"/.config.prod 
+      ;;
+
+      *) libgrav::error 2 "Error: Argument is not defined: ${_GRAV_CORE}!"
+      ;;
+
+   esac
+
+   _RC=$?
+
+   if [ ${_RC} -eq 0 ]; then libgrav::help " Info: Download now the respective grav core package with ${BIN_DIR}/grav-core.sh get"; fi
+
+   return ${_RC}
+}
+
+#
+# Public: get_core() function for grav-core.sh get script.
+#
+function libgrav_core::get_core() { # Public: get_core() function for grav-core.sh get script.
    local _RC=0
    local _GRAV_CORE="${1}"
    local _GRAV_NAME="${2}"
-   local _GRAV_KIND="${3}"
 
    local _GRAV_URL=""
    local _GRAV_DEV=""
@@ -27,7 +65,7 @@ function libgrav_get::get_core() { # Public: get_core() function for grav-getcor
          if [[ -e "${_GRAV_OUTPUT}" ]]; then libgrav::error 2 "Error: File ${_GRAV_OUTPUT} exists, download not needed."; fi
 
          wget -O "${_GRAV_OUTPUT}" \
-            ${_GRAV_URL}/${_GRAV_KIND}/${_GRAV_NAME}/${_GRAV_DEV}?testing
+            ${_GRAV_URL}/core/${_GRAV_NAME}/${_GRAV_DEV}?testing
       ;;
 
       [0-9]*.[0-9]*.[0-9]*-[a-z][a-z].[0-9]*)
@@ -35,7 +73,7 @@ function libgrav_get::get_core() { # Public: get_core() function for grav-getcor
          if [[ -e "${_GRAV_OUTPUT}" ]]; then libgrav::error 2 "Error: File ${_GRAV_OUTPUT} exists, download not needed."; fi
 
          wget -O "${_GRAV_OUTPUT}" \
-            ${_GRAV_URL}/${_GRAV_KIND}/${_GRAV_NAME}/${_GRAV_CORE}?testing
+            ${_GRAV_URL}/core/${_GRAV_NAME}/${_GRAV_CORE}?testing
       ;;
 
       prod)
@@ -44,7 +82,7 @@ function libgrav_get::get_core() { # Public: get_core() function for grav-getcor
          if [[ -e "${_GRAV_OUTPUT}" ]]; then libgrav::error 2 "Error: File ${_GRAV_OUTPUT} exists, download not needed."; fi
 
          wget -O "${_GRAV_OUTPUT}" \
-            ${_GRAV_URL}/${_GRAV_KIND}/${_GRAV_NAME}/${_GRAV_PROD}
+            ${_GRAV_URL}/core/${_GRAV_NAME}/${_GRAV_PROD}
       ;;
       
       [0-9]*.[0-9]*.[0-9]*)
@@ -52,7 +90,7 @@ function libgrav_get::get_core() { # Public: get_core() function for grav-getcor
          if [[ -e "${_GRAV_OUTPUT}" ]]; then libgrav::error 2 "Error: File ${_GRAV_OUTPUT} exists, download not needed."; fi
 
          wget -O "${_GRAV_OUTPUT}" \
-            ${_GRAV_URL}/${_GRAV_KIND}/${_GRAV_NAME}/${_GRAV_CORE}
+            ${_GRAV_URL}/core/${_GRAV_NAME}/${_GRAV_CORE}
       ;;
 
       *) libgrav::error 2 "Error: Argument is not defined: ${_GRAV_CORE}!"

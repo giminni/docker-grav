@@ -114,7 +114,7 @@ function libgrav_mk::mk_init() { # Public: mk_init() function for grav-mkinit.sh
          fi
 
          echo 'alias "grav-build"="grav-build.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
-         echo 'alias "grav-getcore"="grav-getcore.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
+         echo 'alias "grav-core"="grav-core.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
          echo 'alias "grav-mkcache"="grav-mkcache.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
          echo 'alias "grav-mkdata"="grav-mkdata.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
          echo 'alias "grav-mkinit"="grav-mkinit.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
@@ -122,7 +122,6 @@ function libgrav_mk::mk_init() { # Public: mk_init() function for grav-mkinit.sh
          echo 'alias "grav-mkssh"="grav-mkssh.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
          echo 'alias "grav-purge"="grav-purge.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
          echo 'alias "grav-run"="grav-run.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
-         echo 'alias "grav-setcore"="grav-setcore.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
          echo 'alias "grav-shell"="grav-shell.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
          echo 'function grav-cd() { cd ${GRAV_HOME}/"${1}"; } # docker-grav #' >> "${HOME}"/.bash_aliases
       ;;

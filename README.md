@@ -110,8 +110,8 @@ This project includes the following features:
 * Change into the current project directory with `cd docker-grav`
 * Initialize the project with `${PWD}/bin/grav-mkinit.sh init`
 * Reload bash shell with `source ${HOME}/.bashrc`
-* Set the current grav core production and development package version with `grav-setcore.sh all`, older grav core packages version can be set manually, for example with `grav-setcore.sh 1.6.0` for production package version or `grav-setcore.sh 1.7.0-rc.19` for development package version.
-* Download the grav core production packages with `grav_getcore all grav` or the core development packages with `grav_getcore all grav-admin`, older grav core packages can be set manually, for example with `grav-getcore.sh 1.6.0 grav` for production package version or `grav-getcore.sh 1.7.0-rc.19 grav-admin` for development package version.
+* Set the current grav core production and development package version with `grav-core.sh set all`, older grav core packages version can be set manually, for example with `grav-core.sh set 1.6.0` for production package version or `grav-core.sh set 1.7.0-rc.19` for development package version.
+* Download the grav core production packages with `grav_getcore all grav` or the core development packages with `grav_getcore all grav-admin`, older grav core packages can be set manually, for example with `grav-core.sh get 1.6.0 grav` for production package version or `grav-core.sh get 1.7.0-rc.19 grav-admin` for development package version.
 * Create the encrypted password for user `grav` with `grav-mkpass.sh <user-password> grav`, the password must contain at least 11 characters
 * Create new or use your own SSH private and public key with `grav-mkssh.sh <email-address>` by answering with `1` for create new SSH key or `2` for use own SSH key. The latter case will copy the key from your `${HOME}/.ssh` directory.
 * Create the cache directory with `grav-mkcache.sh cache`
@@ -218,7 +218,7 @@ The following data is needed to be able to build or run a container:
 This information is stored into local project connfig files that begins with `${GRAV_HOME}/cfg/.*`. To insert this data locally some local bash scripts are used `grav-mk*`. Every file is filled with a default value, however feel free to change it to suite your needs.
 
 * `${GRAV_HOME}/bin/grav-build.sh` = Build the grav docker image from the specified values
-* `${GRAV_HOME}/bin/grav-getcore.sh`= Download the corresponding production/development core file into `${GRAV_HOME}/rootfs` directory
+* `${GRAV_HOME}/bin/grav-core.sh get`= Download the corresponding production/development core file into `${GRAV_HOME}/rootfs` directory
 * `${GRAV_HOME}/bin/grav-mkcache.sh` = Configures the local cache volume path `${GRAV_HOME}/cache/*`
 * `${GRAV_HOME}/bin/grav-mkdata.sh` = Configures the local data volume path `${GRAV_HOME}/data`
 * `${GRAV_HOME}/bin/grav-mkinit.sh` = Initialize project, must run first. (See [Installation procecure](#-installation-procedure))
@@ -226,7 +226,7 @@ This information is stored into local project connfig files that begins with `${
 * `${GRAV_HOME}/bin/grav-mkssh.sh` = Configures the SSH private and public files for rsync, git, ...
 * `${GRAV_HOME}/bin/grav-purge.sh` = Remove all grav artefacts, build cache, container and images
 * `${GRAV_HOME}/bin/grav-run.sh` = Run the grav docker container from the specified values
-* `${GRAV_HOME}/bin/grav-setcore.sh` = Configures the grav production/development core version string
+* `${GRAV_HOME}/bin/grav-core.sh set` = Configures the grav production/development core version string
 * `${GRAV_HOME}/bin/grav-shell.sh` = Access the container locally by opening a shell
 
 >  Note: Please consult the usage information of each local bash script by executing the command without arguments.
@@ -235,12 +235,12 @@ This information is stored into local project connfig files that begins with `${
 
 To be able to create the project in offline situation or minimize the download time from the internet, two tasks must be executed:
 
-* Define wich grav version is needed to be installed from the grav download site using a local script `${GRAV_HOME}/bin/grav-setcore.sh`.  Insert as first argument `prod` or `dev`. To download a specific version use `<PROJECT_HOME/bin/grav-getcore.sh`. Use the same arguments like `${GRAV_HOME}/bin/grav-setcore.sh`
+* Define wich grav version is needed to be installed from the grav download site using a local script `${GRAV_HOME}/bin/grav-core.sh set`.  Insert as first argument `prod` or `dev`. To download a specific version use `<PROJECT_HOME/bin/grav-core.sh get`. Use the same arguments like `${GRAV_HOME}/bin/grav-core.sh set`
 
 E.g. to download a specific version of grav-admin core `1.6.0` enter:
 
 ```bash
-${GRAV_HOME}/bin/grav-getcore.sh 1.6.0 grav-admin
+${GRAV_HOME}/bin/grav-core.sh get 1.6.0 grav-admin
 ```
 
 >  Note: The files are stored into the `${GRAV_HOME}/grav_rootfs/tmp`. To reduce the container size, remove all superfluous artefacts before starting the build.
