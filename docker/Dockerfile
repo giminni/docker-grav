@@ -10,11 +10,12 @@ ARG PATH \
     LC_ALL \
     TZ \
     TERM \
+    CACHE_USER \
+    CACHE_HOST \
     CCACHE_DIR \
     PHPCACHE_DIR \
     CACHE_DIR \
-    CACHE_USER \
-    CACHE_HOST \
+    DEHYDRATED_VER \
     GRAV_NAME \
     GRAV_TAG \
     GRAV_USER \
@@ -37,6 +38,7 @@ ENV PATH="${PATH:-"/var/www/html/bin:$PATH"}" \
     CCACHE_DIR="${CCACHE_DIR:-"/tmp/cache/.ccache"}" \
     PHPCACHE_DIR="${PHPCACHE_DIR:-"/tmp/cache/.phpcache"}" \
     CACHE_DIR="${CACHE_DIR:-"/home/${CACHE_USER}/Workspace/docker-grav/cache"}" \
+    DEHYDRATED_VER="${DEHYDRATED_VER:-"0.7.0"}" \
     GRAV_NAME="${GRAV_NAME:-"grav-admin"}" \
     GRAV_TAG=="${GRAV_TAG:-"latest"}" \
     GRAV_USER="${GRAV_USER:-"grav"}" \
@@ -51,13 +53,6 @@ ENV PATH="${PATH:-"/var/www/html/bin:$PATH"}" \
 
 COPY rootfs/tmp/ /tmp
 # COPY docker-entrypoint.sh /entrypoint.sh
-
-RUN set -eux; \    
-    echo "[STAGE] Apache configuration..."; \
-    echo "Setting apache modules and rewrites..."; \
-    a2enmod rewrite expires; \
-    sed -i 's/ServerTokens OS/ServerTokens ProductOnly/g' \
-    /etc/apache2/conf-available/security.conf;
 
 RUN rm -f /etc/apt/apt.conf.d/docker-clean; \
     echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
@@ -172,7 +167,6 @@ RUN set -eux; \
     rsync -avz -e "ssh -i /home/${GRAV_USER}/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" \
        ${PHPCACHE_DIR} ${CACHE_USER}@${CACHE_HOST}:${CACHE_DIR};
 
-
 RUN set -eux; \
     echo "[STAGE] PHP configuration..."; \
     echo "Setting recommended PHP.ini values..."; \
@@ -226,6 +220,20 @@ RUN set -eux; \
     echo "Uploading compiled files to global cache repository"; \
     rsync -avz -e "ssh -i /home/${GRAV_USER}/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" \
        ${CCACHE_DIR} ${CACHE_USER}@${CACHE_HOST}:${CACHE_DIR};
+
+RUN set -eux; \
+    echo "[STAGE] SSL installation..."; \
+    wget --progress=bar:force \
+        -O /tmp/dehydrated.tgz \
+        https://github.com/dehydrated-io/dehydrated/releases/download/v${DEHYDRATED_VER}/dehydrated-${DEHYDRATED_VER}.tar.gz; \
+        tar -xvzf /tmp/dehydrated.tgz -C /tmp;
+
+RUN set -eux; \
+    echo "[STAGE] Apache configuration..."; \
+    echo "Setting apache modules and rewrites..."; \
+    a2enmod rewrite expires; \
+    sed -i 's/ServerTokens OS/ServerTokens ProductOnly/g' \
+        /etc/apache2/conf-available/security.conf;
 
 RUN set -eux; \
     echo "[STAGE] Cleanup installation..."; \
