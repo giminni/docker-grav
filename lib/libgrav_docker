@@ -26,8 +26,8 @@ function libgrav_docker::build() { # Public: build() function for grav-build.sh 
    case "${_GRAV_CMD}" in
       "build")
          sudo docker buildx create \
-            --name grav_builder \
-            --node grav_builder0 \
+            --name ${_GRAV_NAME} \
+            --node ${_GRAV_NAME}0 \
             --platform linux/amd64 \
             --use
             
@@ -74,23 +74,26 @@ function libgrav_docker::purge() { # Public: purge() function for grav_prune.sh 
    local _RC=0
    local _GRAV_NAME="${1}"
 
-   sudo rm -rf ${CACHE_DIR}/.ccache/*
+   # Don't exit if nothing found
+   set +e
+
+   if [[ -d "${CACHE_DIR}/.ccache" ]]; then sudo rm -rf ${CACHE_DIR}/.ccache/*; fi
    RC=$?
-   sudo rm -rf ${CACHE_DIR}/.dcache/*
+   if [[ -d "${CACHE_DIR}/.dcache" ]]; then sudo rm -rf ${CACHE_DIR}/.dcache/*; fi
    RC=$?
-   sudo rm -rf ${CACHE_DIR}/.phpcache/*
+   if [[ -d "${CACHE_DIR}/.phpcache" ]]; then sudo rm -rf ${CACHE_DIR}/.phpcache/*; fi
    RC=$?
-   sudo docker rm -f buildx_buildkit_${_GRAV_NAME}_builder0
+   sudo docker buildx prune -f
    RC=$?
-   sudo docker ps -a | grep ${_GRAV_NAME} | awk '{print $1":"$2}' | xargs -r sudo docker rm -f
+   sudo docker ps -a --format '{{json .Names}}' | grep ${_GRAV_NAME} | xargs -r sudo docker rm -f
    RC=$?
    sudo docker images | grep ${_GRAV_NAME} | awk '{print $1":"$2}' | xargs -r sudo docker rmi -f
+   RC=$?
+   sudo docker images | grep buildkit | awk '{print $1":"$2}' | xargs -r sudo docker rmi -f
    RC=$?
    sudo docker volume prune -f
    RC=$?
    sudo docker system prune -f
-   RC=$?
-   sudo docker buildx prune -f
    RC=$?
 
    return ${_RC}
