@@ -45,7 +45,7 @@ function main() {
    local _GRAV_USER="${_ARGV[1]-""}"
    local _GRAV_NAME="${_ARGV[2]:-"grav-admin"}"
    local _GRAV_TAG="${_ARGV[3]:-"latest"}"
-   local _GRAV_DATA="${_ARGV[4]:-"data"}"
+   local _GRAV_DATA="${_ARGV[4]:-"grav_data"}"
    
    local _GRAV_TEXT="Error: Arguments are not provided!"
    local _GRAV_ARGS=" Args: ${CMD} user-name [img-name] [tag-name] [vol-data]"
@@ -53,8 +53,8 @@ function main() {
    local _GRAV_ARG1=" Arg1:  user-name: any|(#) - (#=grav)"
    local _GRAV_ARG2=" Arg2: [img-name]: any|(*) - (*=grav-admin)"
    local _GRAV_ARG3=" Arg3: [tag-name]: any|(*) - (*=latest)"
-   local _GRAV_ARG4=" Arg4: [vol-data]: any|(*) - (*=data)"
-   local _GRAV_INFO=" Info: ${CMD} grav grav-admin latest data"
+   local _GRAV_ARG4=" Arg4: [vol-data]: any|(*) - (*=grav_data)"
+   local _GRAV_INFO=" Info: ${CMD} grav grav-admin latest grav_data"
    local _GRAV_HELP=" Help: ${CMD}: Instantiate a docker container depending from some entered arguments. (See Note, Info and Args)"
 
    if [ ${_ARGC} -lt 1 ]; then 
