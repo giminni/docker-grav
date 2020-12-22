@@ -14,16 +14,22 @@ function libgrav_mk::mk_cache() { # Public: mk_cache() function for grav-mkcache
    local _GRAV_VERB1="Created"
    local _GRAV_VERB2="Used own"
 
-   if [[ -d "${_GRAV_DATA}" ]]; then 
+   if [[ -d "${_GRAV_CACHE}" ]]; then 
       _GRAV_CHOICE=2
       _GRAV_ANSWER=$(libgrav::multi_choice ${_GRAV_CHOICE} "Cache directory '${_GRAV_NAME}' in ${_GRAV_CACHE} already exists.\nOverwrite (1), Retain (2) ")
+   else
+      # if does not exists, create an initial cache directory 
+      _GRAV_ANSWER=1
    fi
 
    while true; do
       case "${_GRAV_ANSWER}" in
          1) 
-            if [[ ! -f "${_GRAV_CACHE}"/.ccache ]]; then mkdir -p "${_GRAV_CACHE}"/.ccache; fi
-            if [[ ! -f "${_GRAV_CACHE}"/.phpcache ]]; then mkdir -p "${_GRAV_CACHE}"/.phpcache; fi
+            if [[ -d "${_GRAV_CACHE}"/.ccache ]]; then sudo rm -rf "${_GRAV_CACHE}"/.ccache; fi
+            if [[ -d "${_GRAV_CACHE}"/.phpcache ]]; then sudo rm -rf "${_GRAV_CACHE}"/.phpcache; fi
+
+            mkdir -p "${_GRAV_CACHE}"/.ccache;
+            mkdir -p "${_GRAV_CACHE}"/.phpcache;
 
             sudo docker volume create \
                --driver local \
@@ -68,12 +74,17 @@ function libgrav_mk::mk_data() { # Public: mk_data() function for grav-mkdata.sh
    if [[ -d "${_GRAV_DATA}" ]]; then 
       _GRAV_CHOICE=2
       _GRAV_ANSWER=$(libgrav::multi_choice ${_GRAV_CHOICE} "Data directory '${_GRAV_NAME}' in ${_GRAV_DATA} already exists.\nOverwrite (1), Retain (2) ")
+   else
+      # if does not exists, create an initial cache directory 
+      _GRAV_ANSWER=1
    fi
+
    while true; do
       case "${_GRAV_ANSWER}" in
          1) 
             if [[ -d "${_GRAV_DATA}" ]]; then sudo rm -rf "${_GRAV_DATA}"; fi
-            if [[ ! -d "${_GRAV_DATA}" ]]; then mkdir -p ${_GRAV_DATA}; fi
+
+            mkdir -p ${_GRAV_DATA}
 
             sudo docker volume create \
                --driver local \
@@ -117,6 +128,11 @@ function libgrav_mk::mk_init() { # Public: mk_init() function for grav-mkinit.sh
    local _GRAV_KEY="${9}" 
    local _GRAV_LIB="${10}"
 
+   # Initialize directories
+   if [[ ! -d "${_GRAV_CFG}" ]]; then mkdir -p "${_GRAV_CFG}"; fi
+   if [[ ! -d "${_GRAV_KEY}" ]]; then mkdir -p "${_GRAV_KEY}"; fi
+   if [[ ! -d "${_GRAV_ROOT}" ]]; then mkdir -p "${_GRAV_ROOT}"; fi
+         
    # Prerequisite checking
    local _DOCKER_MIN="20.10"
    local _BUILDX_MIN="0.5.0"
