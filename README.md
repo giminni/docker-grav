@@ -65,7 +65,7 @@ ${GRAV_HOME}
 |-- [ ]  docker         |-- (Directory for docker files)
 |-- [*]  key            |-- (Directory for SSH & user keys)
 |-- [ ]  lib            |-- (Library for shell scripts)
-|-- [ ]  rootfs         |-- (Repository for packages and files)
+|-- [*]  rootfs         |-- (Repository for packages and files)
 |-- [ ]  .dockerignore
 |-- [ ]  .gitignore
 |-- [ ]  Dockerfile -> ./docker/Dockerfile
@@ -74,7 +74,7 @@ ${GRAV_HOME}
 
 >  Note: The files in directories marked with `[*]` are not uploaded to Git. They must be build with the appropriate `<PROJECT_ROOT>/bin/grav-mk*` script.
 
->  Note: To initialize the project, execute `./bin/grav-mkinit.sh init` first from the `${GRAV_HOME}` directory.
+>  Note: To initialize the project, execute `./bin/grav-mkinit.sh init` first from the `${GRAV_HOME}` directory, then activate it with `source ${HOME}/.bashrc`. From this moment you can also use the short form without appending `.sh`, e.g. `grav-mkinit`.
 
 ## Project features
 
@@ -88,10 +88,11 @@ This project includes the following features:
 * Ability to create a named user `grav` with SSH keys for vscode development over remote SSH over port 2222
 * Ability to create a user password for SSH login securely
 * Ability to create and add the SSH keys for automatic logins and cache retrieval from local or remote host securely
-* Use external cache volume with ccache, rsync for faster php compilation `${GRAV_HOME}/cache/.ccache`
-* Mount a docker named volume `data` to a specific host directory `${GRAV_HOME}/data`
-* Create a repository `${GRAV_HOME}/rootfs` for caching grav packages (packages, themes, skeletons, plugins)
-* Use local bash shared library `libgrav*` for all local bash scripts
+* Use external cache volume for faster C/C++ compilation `${GRAV_HOME}/cache/.ccache`
+* Use external cache volume for faster PHP compilation `${GRAV_HOME}/cache/.phpcache`
+* Mount a docker named volume `grav_data` to a specific host directory `${GRAV_HOME}/data`
+* Create a repository `${GRAV_HOME}/rootfs/tmp/grav/core` for caching grav core packages
+* Use a bunch of local bash shared library `libgrav*` for all local bash scripts
 
 ## Work in progress
 
@@ -111,13 +112,13 @@ This project includes the following features:
 * Initialize the project with `${PWD}/bin/grav-mkinit.sh init`
 * Reload bash shell with `source ${HOME}/.bashrc`
 * Set the current grav core production and development package version with `grav-core.sh set all`, older grav core packages version can be set manually, for example with `grav-core.sh set 1.6.0` for production package version or `grav-core.sh set 1.7.0-rc.19` for development package version.
-* Download the grav core production packages with `grav_getcore all grav` or the core development packages with `grav_getcore all grav-admin`, older grav core packages can be set manually, for example with `grav-core.sh get 1.6.0 grav` for production package version or `grav-core.sh get 1.7.0-rc.19 grav-admin` for development package version.
+* Download the grav core production packages with `grav-core.sh get all grav` or the core development packages with `grav-core.sh get all grav-admin`, older grav core packages can be set manually, for example with `grav-core.sh get 1.6.0 grav` for production package version or `grav-core.sh get 1.7.0-rc.19 grav-admin` for development package version.
 * Create the encrypted password for user `grav` with `grav-mkpass.sh <user-password> grav`, the password must contain at least 11 characters
 * Create new or use your own SSH private and public key with `grav-mkssh.sh <email-address>` by answering with `1` for create new SSH key or `2` for use own SSH key. The latter case will copy the key from your `${HOME}/.ssh` directory.
 * Create the cache directory with `grav-mkcache.sh cache`
-* Build the docker image with `grav_build grav grav-admin testing` for the development version or `grav-build.sh grav` for the production version.
+* Build the docker image with `grav-build.sh grav grav-admin testing` for the development version or `grav-build.sh grav` for the production version.
 * Create the data directory with `grav-mkdata.sh data`
-* Run the docker image with `grav_run grav grav-admin testing` for the development version or `grab_run.sh grav` for the production version.
+* Run the docker image with `grav-run.sh grav grav-admin testing` for the development version or `grab_run.sh grav` for the production version.
 * Enter the command line of the running grav image, with `grav-shell.sh grav-admin` for the development version or `grav-shell.sh grav` for the production version.
 
 ## Installation checklist
@@ -127,7 +128,7 @@ This project includes the following features:
 * Check if the configuration directory `cfg` is populated with `.config.*` files with `ls -las ${PWD}/cfg`
 * Check `grav_pass.key` file under the key directory `key` with `cat ${PWD}/key/grav_pass.key`
 * Check if the SSH keys exists with `ls -las ${PWD}/key/grav_rsa*` if you are using the `rsa` algorithm. Other algorithm that can be used are `dsa` and `ecdsa`.
-* Check if the grav core file was downloaded correctly into the `grav_rootfs` directory, with `ls -las ${PWD}/rootfs/tmp/grav/core`.
+* Check if the grav core file was downloaded correctly into the `rootfs` directory, with `ls -las ${PWD}/rootfs/tmp/grav/core`.
 * Check if the cache directories exists with `ls -las ${PWD}/cache`. A subdirectory `.ccache` and `.phpcache` must exists, otherwise the `grav-build.sh` script does not start.
 * Check if the docker grav image exists, with `sudo docker images`
 * Check if the docker grav image is running, with `sudo docker ps -a`
@@ -148,7 +149,7 @@ E.g. `.config.bin` file in `${GRAV_HOME}/cfg` directory:
 GRAV_BIN="${GRAV_HOME}/bin"
 ```
 
->  Note: Every configuration files can be changed manually by expert user or use the handy local bash scripts that starts with `${GRAV_HOME}/bin/grav_mk*.sh` for novice user.
+>  Note: Every configuration files can be changed manually by expert user or use the handy local bash scripts that starts with `${GRAV_HOME}/bin/grav-mk*.sh` for novice user.
 
 ## Using docker multiarch environment
 
@@ -156,7 +157,7 @@ Using the extended docker build features of `buildx` this project is prepared fo
 
 ## Using local docker cache repository
 
-In addition to the build and compile cache environment, there is another local directory `./${GRAV_HOME}/grav_rootfs/*` that holds cached artefacts. This directory can be used to store for example the grav core zip files to reduce bandwith and avoid a lengthy download time from the internet.
+In addition to the build and compile cache environment, there is another local directory `./${GRAV_HOME}/rootfs/*` that holds cached artefacts. This directory can be used to store for example the grav core zip files to reduce bandwith and avoid a lengthy download time from the internet.
 
 In this case store the `grav-admin.zip` file under `${GRAV_HOME}/rootfs/tmp`. If the name is correct the file will be inserted into the docker buildtime context and used instead of downloading the file from the internet.
 
@@ -192,9 +193,10 @@ Point your vscode remote-SSH plugin to the localhost host or to the designated I
 There are a couple of local bash scripts to create, run and delete a container:
 
 * `grav-build.sh` is used for building a container
+* `grav-core.sh` is used to set and get the grav core packages locally
 * `grav-run.sh` is used for running a container
 * `grav-shell.sh` is used for accessing the command line inside a container
-* `grav-purge.sh` is used for deleting all cached data, container and image artefacts.
+* `grav-purge.sh` is used for deleting all docker cached data, container and image artefacts.
 
 ## Configuring a container from the command line
 
@@ -243,7 +245,7 @@ E.g. to download a specific version of grav-admin core `1.6.0` enter:
 ${GRAV_HOME}/bin/grav-core.sh get 1.6.0 grav-admin
 ```
 
->  Note: The files are stored into the `${GRAV_HOME}/grav_rootfs/tmp`. To reduce the container size, remove all superfluous artefacts before starting the build.
+>  Note: The files are stored into the `${GRAV_HOME}/rootfs/tmp`. To reduce the container size, remove all superfluous artefacts before starting the build.
 
 ## Persisting data into an external storage
 
