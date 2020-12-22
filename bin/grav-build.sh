@@ -93,19 +93,16 @@ function main() {
       elif [[ ! -f "${CFG_DIR}"/.config.cache ]] || [[ ! -d $(cat "${CFG_DIR}"/.config.cache | tr -d '"' | cut -d'=' -f2) ]]; then libgrav::error 2 "Error: Cache directory not provided. Please run ${BIN_DIR}/grav-mkcache.sh first...";
    fi
 
-   # Define core or skeleton package for download
-   if [ "${_GRAV_NAME:0:13}" == "grav-skeleton" ]; then _GRAV_KIND="skeletons"; fi
-
    # Define URLs using the predefined version string from above
    # Check if version string is set for development
    if [ "${_GRAV_TAG}" == "testing" ]; then
-      if [[ ! -z "$(cat ${CFG_DIR}/.config.dev)" ]]; then ${_GRAV_DEV}="$(cat ${CFG_DIR}/.config.dev | tr -d '"' | cut -d'=' -f2)"; fi
+      if [[ ! -z "$(cat ${CFG_DIR}/.config.dev)" ]]; then _GRAV_DEV="$(cat ${CFG_DIR}/.config.dev | tr -d '"' | cut -d'=' -f2)"; fi
       if [[ ! -f "${CFG_DIR}"/.config.dev ]] || [[ ! -n $(cat "${CFG_DIR}"/.config.dev | tr -d '"' | cut -d'=' -f2) ]]; then libgrav::error 2 "Error: Grav dev version not provided! Please run ${BIN_DIR}/grav-core.sh set first..."; fi
 
       _GRAV_URLFILE="${_GRAV_NAME}-${_GRAV_DEV}?${_GRAV_TAG}.zip"
       _GRAV_URL="${_GRAV_URL}"/"${_GRAV_DEV}"?"${_GRAV_TAG}"
    elif [ "${_GRAV_TAG}" == "latest" ]; then
-      if [[ ! -z "$(cat ${CFG_DIR}/.config.prod)" ]]; then ${_GRAV_PROD}="$(cat ${CFG_DIR}/.config.prod | tr -d '"' | cut -d'=' -f2)"; fi
+      if [[ ! -z "$(cat ${CFG_DIR}/.config.prod)" ]]; then _GRAV_PROD="$(cat ${CFG_DIR}/.config.prod | tr -d '"' | cut -d'=' -f2)"; fi
       if [[ ! -f "${CFG_DIR}"/.config.prod ]] || [[ ! -n $(cat "${CFG_DIR}"/.config.prod | tr -d '"' | cut -d'=' -f2) ]]; then libgrav::error 2 "Error: Grav prod version not provided! Please run ${BIN_DIR}/grav-core.sh set first..."; fi
 
       _GRAV_URLFILE="${_GRAV_NAME}-${_GRAV_PROD}.zip"
