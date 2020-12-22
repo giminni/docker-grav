@@ -16,7 +16,8 @@ function libgrav_mk::mk_cache() { # Public: mk_cache() function for grav-mkcache
 
    if [[ -d "${_GRAV_CACHE}" ]]; then 
       _GRAV_CHOICE=2
-      _GRAV_ANSWER=$(libgrav::multi_choice ${_GRAV_CHOICE} "Cache directory '${_GRAV_NAME}' in ${_GRAV_CACHE} already exists.\nOverwrite (1), Retain (2) ")
+      _GRAV_ANSWER=$(libgrav::multi_choice ${_GRAV_CHOICE} "Cache directory '${_GRAV_NAME}' in ${_GRAV_CACHE} already exists.
+Overwrite (1), Retain (2) ")
    else
       # if does not exists, create an initial cache directory 
       _GRAV_ANSWER=1
@@ -73,7 +74,8 @@ function libgrav_mk::mk_data() { # Public: mk_data() function for grav-mkdata.sh
 
    if [[ -d "${_GRAV_DATA}" ]]; then 
       _GRAV_CHOICE=2
-      _GRAV_ANSWER=$(libgrav::multi_choice ${_GRAV_CHOICE} "Data directory '${_GRAV_NAME}' in ${_GRAV_DATA} already exists.\nOverwrite (1), Retain (2) ")
+      _GRAV_ANSWER=$(libgrav::multi_choice ${_GRAV_CHOICE} "Data directory '${_GRAV_NAME}' in ${_GRAV_DATA} already exists.
+Overwrite (1), Retain (2) ")
    else
       # if does not exists, create an initial cache directory 
       _GRAV_ANSWER=1
