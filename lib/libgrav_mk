@@ -8,18 +8,43 @@ function libgrav_mk::mk_cache() { # Public: mk_cache() function for grav-mkcache
    local _GRAV_NAME="${1}"
    local _GRAV_CACHE="${2}"
  
-   sudo docker volume create \
-      --driver local \
-      --opt type=none \
-      --opt device="${_GRAV_CACHE}" \
-      --opt o=bind "${_GRAV_NAME}" 1>/dev/stderr 1>/dev/null 2>&1
-   
-   mkdir -p "${_GRAV_CACHE}"/.ccache
-   mkdir -p "${_GRAV_CACHE}"/.phpcache
-   echo "GRAV_CACHE=${_GRAV_CACHE}" > ${CFG_DIR}/.config.cache
-   
+    local _GRAV_CHOICE=""
+   local _GRAV_ANSWER=""
+   local _GRAV_VERB=""
+   local _GRAV_VERB1="Created"
+   local _GRAV_VERB2="Used own"
 
-   libgrav::help " Info: Created cached directory '${_GRAV_NAME}' in ${_GRAV_CACHE}."
+   if [[ -d "${_GRAV_DATA}" ]]; then 
+      _GRAV_CHOICE=2
+      _GRAV_ANSWER=$(libgrav::multi_choice ${_GRAV_CHOICE} "Cache directory '${_GRAV_NAME}' in ${_GRAV_CACHE} already exists.\nOverwrite (1), Retain (2) ")
+   fi
+
+   while true; do
+      case "${_GRAV_ANSWER}" in
+         1) 
+            if [[ ! -f "${_GRAV_CACHE}"/.ccache ]]; then mkdir -p "${_GRAV_CACHE}"/.ccache; fi
+            if [[ ! -f "${_GRAV_CACHE}"/.phpcache ]]; then mkdir -p "${_GRAV_CACHE}"/.phpcache; fi
+
+            sudo docker volume create \
+               --driver local \
+               --opt type=none \
+               --opt device="${_GRAV_CACHE}" \
+               --opt o=bind "grav_${_GRAV_NAME}" 1>/dev/stderr 1>/dev/null 2>&1
+
+            echo "GRAV_CACHE=${_GRAV_CACHE}" > ${CFG_DIR}/.config.cache
+   
+            _GRAV_VERB="${_GRAV_VERB1}"
+            break;
+         ;;
+
+         2) 
+            _GRAV_VERB="${_GRAV_VERB2}"
+            break;
+         ;;
+      esac
+   done
+
+   libgrav::help " Info: ${_GRAV_VERB} cached directory '${_GRAV_NAME}' in ${_GRAV_CACHE}."
 
    _RC=$?
 
@@ -34,18 +59,42 @@ function libgrav_mk::mk_data() { # Public: mk_data() function for grav-mkdata.sh
    local _GRAV_NAME="${1}"
    local _GRAV_DATA="${2}"
  
-   sudo docker volume create \
-      --driver local \
-      --opt type=none \
-      --opt device="${_GRAV_DATA}" \
-      --opt o=bind "${_GRAV_NAME}" 1>/dev/null 2>&1
-   
-   if [[ -e "${_GRAV_DATA}/.gitkeep" ]]; then rm -f "${_GRAV_DATA}/.gitkeep"; fi
-   if [[ ! -e "${_GRAV_DATA}" ]]; then mkdir -p ${_GRAV_DATA}; fi
+   local _GRAV_CHOICE=""
+   local _GRAV_ANSWER=""
+   local _GRAV_VERB=""
+   local _GRAV_VERB1="Created"
+   local _GRAV_VERB2="Used own"
 
-   echo "GRAV_DATA=${_GRAV_DATA}" > ${CFG_DIR}/.config.data
+   if [[ -d "${_GRAV_DATA}" ]]; then 
+      _GRAV_CHOICE=2
+      _GRAV_ANSWER=$(libgrav::multi_choice ${_GRAV_CHOICE} "Data directory '${_GRAV_NAME}' in ${_GRAV_DATA} already exists.\nOverwrite (1), Retain (2) ")
+   fi
+   while true; do
+      case "${_GRAV_ANSWER}" in
+         1) 
+            if [[ -d "${_GRAV_DATA}" ]]; then sudo rm -rf "${_GRAV_DATA}"; fi
+            if [[ ! -d "${_GRAV_DATA}" ]]; then mkdir -p ${_GRAV_DATA}; fi
+
+            sudo docker volume create \
+               --driver local \
+               --opt type=none \
+               --opt device="${_GRAV_DATA}" \
+               --opt o=bind "grav_${_GRAV_NAME}" 1>/dev/null 2>&1
+
+            echo "GRAV_DATA=${_GRAV_DATA}" > ${CFG_DIR}/.config.data
+
+            _GRAV_VERB="${_GRAV_VERB1}"
+            break;
+         ;;
+
+         2) 
+            _GRAV_VERB="${_GRAV_VERB2}"
+            break;
+         ;;
+      esac
+   done
    
-   libgrav::help " Info: Created data directory '${_GRAV_NAME}' in ${_GRAV_DATA}."
+   libgrav::help " Info: ${_GRAV_VERB} data directory '${_GRAV_NAME}' in ${_GRAV_DATA}."
 
    _RC=$?
 
