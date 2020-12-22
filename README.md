@@ -72,7 +72,7 @@ ${GRAV_HOME}
 `-- [ ]  README.md
 ```
 
->  Note: The files or directory content marked with `[*]` are not uploaded to Git. They must be build with the appropriate `<PROJECT_ROOT>/bin/grav-mk*` script.
+>  Note: The files in directories marked with `[*]` are not uploaded to Git. They must be build with the appropriate `<PROJECT_ROOT>/bin/grav-mk*` script.
 
 >  Note: To initialize the project, execute `./bin/grav-mkinit.sh init` first from the `${GRAV_HOME}` directory.
 
