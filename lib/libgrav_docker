@@ -112,6 +112,10 @@ function libgrav_docker::run() { # Public: run() function for grav-run.sh script
       sudo docker ps -a | grep ${_GRAV_NAME} | awk '{print $1}' | xargs -r sudo docker rm -f
    fi
 
+   if [[ ! -z "$(docker images | grep "<none>")" ]]; then
+      docker images | grep "<none>" | awk '{print $3}' | xargs -r sudo docker rmi -f
+   fi
+
    sudo docker volume prune -f
 
    sudo docker run -d \

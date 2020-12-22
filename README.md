@@ -80,6 +80,7 @@ ${GRAV_HOME}
 
 This project includes the following features:
 
+* Use docker runlets for easier dockerfile development
 * Use local context key/value files for project configuration settings `${GRAV_HOME}/.context.*`
 * Use local cache directory for injecting files at buildtime `${GRAV_HOME}/rootfs/*`
 * Use some sophisticated bash shell scripts for build, runtime and configuration `${GRAV_HOME}/bin/grav-*.sh`

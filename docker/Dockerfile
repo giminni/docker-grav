@@ -34,7 +34,8 @@ ARG \
     GRAV_GID \
     GRAV_SHELL
 
-# If available, override enviroment variables from docker build arguments
+# If available, override enviroment variables from docker build arguments, or
+# pass it using runtime -env arguments.
 ENV PATH="${PATH:-"/var/www/html/bin:$PATH"}" \
     LANG="${LANG:-"C.UTF-8"}" \
     LC_ALL="${LC_ALL:-"C.UTF-8"}" \
@@ -65,13 +66,17 @@ COPY docker/runlet-head.sh docker/runlet-tail.sh /usr/local/bin/
 RUN --mount=type=cache,id=apt,target=/var/cache/apt \
     --mount=type=cache,id=apt,target=/var/lib/apt;
 
-# Execute OS installation runlet
-COPY docker/runlet-os-installation.sh /usr/local/bin/
-RUN /usr/local/bin/runlet-os-installation.sh exec;
+# 010: Execute OS installation runlet
+COPY docker/010-runlet-os-installation.sh /usr/local/bin/
+RUN /usr/local/bin/010-runlet-os-installation.sh exec;
 
-# Execute Linux user installation runlet
-COPY docker/runlet-user-installation.sh /usr/local/bin/
-RUN /usr/local/bin/runlet-user-installation.sh exec;
+# 020: Execute OS configuration runlet
+COPY docker/020-runlet-os-configuration.sh /usr/local/bin/
+RUN /usr/local/bin/020-runlet-os-configuration.sh exec;
+
+# 030: Execute Linux user installation runlet
+COPY docker/030-runlet-user-installation.sh /usr/local/bin/
+RUN /usr/local/bin/030-runlet-user-installation.sh exec;
 
 # Install user secret file into the docker image
 RUN --mount=type=secret,id=grav_pwd.key,mode=400,required=true \
@@ -83,44 +88,55 @@ RUN --mount=type=secret,id=grav_rsa,mode=400 \
 RUN --mount=type=secret,id=grav_rsa.pub,mode=600 \
     cat /run/secrets/grav_rsa.pub > /home/${GRAV_USER}/.ssh/id_rsa.pub;
 
-# Execute user configuration runlet
-COPY docker/runlet-user-configuration.sh /usr/local/bin/
-RUN /usr/local/bin/runlet-user-configuration.sh exec;
+# 040: Execute user configuration runlet
+COPY docker/040-runlet-user-configuration.sh /usr/local/bin/
+RUN /usr/local/bin/040-runlet-user-configuration.sh exec;
 
-# Execute OS configuration runlet
-COPY docker/runlet-os-configuration.sh /usr/local/bin/
-RUN /usr/local/bin/runlet-os-configuration.sh exec;
+# 050: Execute cache download runlet
+COPY docker/050-runlet-cache-download.sh /usr/local/bin/
+RUN /usr/local/bin/050-runlet-cache-download.sh exec;
 
-# Execute PHP installation runlet
-COPY docker/runlet-php-installation.sh /usr/local/bin/
-RUN /usr/local/bin/runlet-php-installation.sh exec;
+# 060: Execute PHP installation runlet
+COPY docker/060-runlet-php-installation.sh /usr/local/bin/
+RUN /usr/local/bin/060-runlet-php-installation.sh exec;
 
-# Execute PHP configuration runlet
-COPY docker/runlet-php-configuration.sh /usr/local/bin/
-RUN /usr/local/bin/runlet-php-configuration.sh exec;
+# 070: Execute PHP configuration runlet
+COPY docker/070-runlet-php-configuration.sh /usr/local/bin/
+RUN /usr/local/bin/070-runlet-php-configuration.sh exec;
 
 # Copy local grav core, skeletons, plugins into docker image
 COPY rootfs/tmp/ /tmp/
 
-# Execute Grav installation runlet
-COPY docker/runlet-grav-installation.sh /usr/local/bin/
-RUN /usr/local/bin/runlet-grav-installation.sh exec;
+# 080: Execute Grav installation runlet
+COPY docker/080-runlet-grav-installation.sh /usr/local/bin/
+RUN /usr/local/bin/080-runlet-grav-installation.sh exec;
 
-# Execute OS post installation runlet
-COPY docker/runlet-post-configuration.sh /usr/local/bin/
-RUN /usr/local/bin/runlet-post-configuration.sh exec;
+# 090: Execute OS post installation runlet
+COPY docker/090-runlet-post-configuration.sh /usr/local/bin/
+RUN /usr/local/bin/090-runlet-post-configuration.sh exec;
 
-# Execute SSL installation runlet
-COPY docker/runlet-ssl-installation.sh /usr/local/bin/
-RUN /usr/local/bin/runlet-ssl-installation.sh exec;
+# 100: Execute SSL installation runlet
+COPY docker/100-runlet-ssl-installation.sh /usr/local/bin/
+RUN /usr/local/bin/100-runlet-ssl-installation.sh exec;
 
-# Execute Apache configuration runlet
-COPY docker/runlet-apache-configuration.sh /usr/local/bin/
-RUN /usr/local/bin/runlet-apache-configuration.sh exec; 
+# 110: Execute Apache configuration runlet
+COPY docker/110-runlet-apache-configuration.sh /usr/local/bin/
+RUN /usr/local/bin/110-runlet-apache-configuration.sh exec; 
 
-# Execute Cleanup installation runlet
-COPY docker/runlet-cleanup-installation.sh /usr/local/bin/
-RUN /usr/local/bin/runlet-cleanup-installation.sh noexec;
+# 120: Execute cache upload runlet
+COPY docker/120-runlet-cache-upload.sh /usr/local/bin/
+RUN /usr/local/bin/120-runlet-cache-upload.sh exec;
+
+# 130: Execute Cleanup installation runlet
+COPY docker/130-runlet-cleanup-installation.sh /usr/local/bin/
+RUN /usr/local/bin/130-runlet-cleanup-installation.sh exec;
+
+# Remove development artefacts
+RUN \
+    set -eux; \
+    echo "Remove runlets, symlinks, but phar..."; \
+    find /usr/local/bin -maxdepth 1 -type l | grep -vE "phar" | xargs -r rm -f; \
+    rm -f /usr/local/bin/*-runlet*;
 
 # Copy docker entrypoint before execution
 # COPY docker-entrypoint.sh /usr/local/bin/
