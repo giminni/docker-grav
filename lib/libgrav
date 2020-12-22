@@ -104,8 +104,8 @@ libgrav::machine_arch() {
 # Public: multi_choice() user input function.
 #
 function libgrav::multi_choice() { # Public: multi_choice() user input function.
-   local _TYPE=${1:-2}
-   local _TEXT="${2}"
+   local _TYPE=${1:-2} # Default two choices
+   local _TEXT="${2:-""}"
 
    local _RC=1
    local _INFO=""
@@ -116,14 +116,14 @@ function libgrav::multi_choice() { # Public: multi_choice() user input function.
    done
    
    while true; do
-      read -p "${_TEXT} (${_ Info:0:-1})? " _ANSWER
+      read -p "${_TEXT} (${_INFO:0:-1})? " _ANSWER
       
       if [ $? -ge 128 ]; then _RC=1; break; fi
 
-      if [ "${_ANSWER}" -eq 1 ] && [ "${_OK1}" == "ok" ]; then _RC=1; break;
-      elif [ "${_ANSWER}" -eq 2 ] && [ "${_OK2}" == "ok" ]; then _RC=2; break;
-      elif [ "${_ANSWER}" -eq 3 ] && [ "${_OK3}" == "ok" ]; then _RC=3; break;
-      elif [ "${_ANSWER}" -eq 4 ] && [ "${_OK4}" == "ok" ]; then _RC=4; break;
+      if ([ "${_ANSWER}" -eq 1 ] || [ "${_ANSWER}" == "y" ]) && [ "${_OK1:-""}" == "ok" ]; then _RC=1; break;
+      elif ([ "${_ANSWER}" -eq 2 ] || [ "${_ANSWER}" == "n" ]) && [ "${_OK2:-""}" == "ok" ]; then _RC=2; break;
+      elif [ "${_ANSWER}" -eq 3 ] && [ "${_OK3:-""}" == "ok" ]; then _RC=3; break;
+      elif [ "${_ANSWER}" -eq 4 ] && [ "${_OK4:-""}" == "ok" ]; then _RC=4; break;
       fi
    done
 
