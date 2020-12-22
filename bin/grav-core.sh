@@ -70,6 +70,7 @@ function main() {
    case "${_GRAV_CMD}" in
       "set")
          libgrav_core::set_core \
+            "${_GRAV_CMD}" \
             "${_GRAV_CORE}" \
             "${_GRAV_NAME}"
       ;;
@@ -89,6 +90,7 @@ function main() {
             fi
          fi
          libgrav_core::get_core \
+            "${_GRAV_CMD}" \
             "${_GRAV_CORE}" \
             "${_GRAV_NAME}"
       ;;
