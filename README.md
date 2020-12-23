@@ -37,7 +37,7 @@ In addition other packages are included:
 
 ## Prerequisites
 
-This project needs the following prerequisites:
+This project needs the following prerequisites on the host machine:
 
 * Install at least jq >= 1.5
 * Install at least openssl >= 1.1.1

@@ -150,7 +150,7 @@ VOLUME ["/var/www/html"]
 # Expose network service ports
 EXPOSE 22 80 443
 
-# Define entrypoint foil
+# Define entrypoint for container
 # ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
 # Define extra command line arguments
