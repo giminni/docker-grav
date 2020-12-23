@@ -280,35 +280,35 @@ Here the complete usage string of `${GRAV_HOME}/bin/grav-build.sh` script:
 
 ```bash
 ${GRAV_HOME} $ ./bin/grav-build.sh 
-Error: Arguments are not provided!
+grav-build: Error: Arguments are not provided!
 
- Args: grav-build.sh grav_user [grav_imgname] [grav_tagname] [grav_passfile] [grav_privfile] [grav_pubfile]
- Note: (*) are default values, (#) are recommended values
+grav-build:  Args: grav-build.sh grav_user [grav_imgname] [grav_tagname] [grav_passfile] [grav_privfile] [grav_pubfile]
+grav-build:  Note: (*) are default values, (#) are recommended values
 
- Arg1:       grav_user: any|(#)         - (#=grav)
- Arg2:  [grav_imgname]: grav-admin|grav - (*=grav-admin)
- Arg3:  [grav_tagname]: latest|testing  - (*=latest)
- Arg4: [grav_passfile]: any|(*)         - (*=${GRAV_HOME}/key/grav_pass.key)
- Arg5: [grav_privfile]: any|(*)         - (*=${GRAV_HOME}/key/grav_rsa)
- Arg6:  [grav_pubfile]: any|(*)         - (*=${GRAV_HOME}/key/grav_rsa.pub)
+grav-build: Arg1:   user-name: any|(#)         - (#=grav)"
+grav-build: Arg2:  [img-name]: grav|grav-admin - (*=grav)"
+grav-build: Arg3:  [tag-name]: latest|testing  - (*=latest)"
+grav-build: Arg4: [pass-file]: any|(*)         - (*=<PROJECT_HOME>/key/grav_pass.key)"
+grav-build: Arg5: [priv-file]: any|(*)         - (*=<PROJECT_HOME>/key/grav_rsa)"
+grav-build: Arg6:  [pub-file]: any|(*)         - (*=<PROJECT_HOME>/key/grav_rsa.pub)"
 
- Info: grav-build.sh grav grav-admin latest /home/rpiadmin/Workspace/docker-grav/key/grav_pass.key /home/rpiadmin/Workspace/docker-grav/key/grav_rsa /home/rpiadmin/Workspace/docker-grav/key/grav_rsa.pub
+grav-build: Info: grav-build.sh grav grav-admin latest /home/rpiadmin/Workspace/docker-grav/key/grav_pass.key /home/rpiadmin/Workspace/docker-grav/key/grav_rsa /home/rpiadmin/Workspace/docker-grav/key/grav_rsa.pub
 
- Help: grav-build.sh: Builds the docker file from some entered arguments. (See Note, Info and Args)
+grav-build: Help: grav-build.sh: Builds the docker file from some entered arguments. (See Note, Info and Args)
 ```
 
 ## Running the image from Dockerfile
 
 To run the image from the command line a local bash script `${GRAV_HOME}/bin/grav-run.sh` is needed.
-This script as a lot of presetted arguments. The first argument is mandatory if not set the script emits a usage string.
+This script as a lot of presetted arguments. The first argument is mandatory if not set the script emits a usage string. The default run mode is `n`ormal if there is a need to start only a bash command line and test something inside, run with the `d`ebug flag set.
 
-Here an example how to run as user `grav` and use the latest `grav-admin` development package.
+Here an example how to run as user `grav` and use the latest `grav-admin` development package in debug mode.
 
 ```bash
-${GRAV_HOME}/bin/grav-run.sh grav grav-admin testing
+${GRAV_HOME}/bin/grav-run.sh grav grav-admin testing d
 ```
 
-Here an example how to run as user `grav` and use the **latest** `grav-admin` production package. Observe that the last two arguments are omitted while presetted.
+Here an example how to run as user `grav` and use the **latest** `grav-admin` production package. Observe that the last two arguments are omitted while presetted with `n`ormal and `data`.
 
 ```bash
 ${GRAV_HOME}/bin/grav-run.sh grav grav-admin latest
@@ -318,19 +318,20 @@ Here the complete usage string of `${GRAV_HOME}/bin/grav-run.sh` script:
 
 ```bash
 ${GRAV_HOME} $ ./grab_bin/grav-run.sh
-Error: Arguments are not provided!
+grav-run: Error: Arguments are not provided!
 
- Args: grav-run.sh grav_user [grav_imgname=grav] [grav_imgtag=latest] [grav_voldata=data]
- Note: (*) are default values, (#) are recommended values
+grav-run:  Args: grav-run.sh grav_user [grav_imgname=grav] [grav_imgtag=latest] [grav_voldata=data]
+grav-run:  Note: (*) are default values, (#) are recommended values
 
- Arg1:      grav_user: any|(#) - (#=grav)
- Arg2: [grav_imgname|: any|(*) - (*=grav-admin)
- Arg3:  [grav_imgtag|: any|(*) - (*=latest)
- Arg4: [grav_voldata]: any|(*) - (*=data)
+grav-run:  Arg1:  user-name: any|(#) - (#=grav)
+grav-run:  Arg2: [img-name|: any|(*) - (*=grav-admin)
+grav-run:  Arg3: [tag-name|: any|(*) - (*=latest)
+grav-run:  Arg4: [run-mode]: n|d|(*) - (*=(n)ormal|(d)ebug)
+grav-run:  Arg5: [vol-data]: any|(*) - (*=data)
 
- Info: grav-run.sh grav grav-admin latest data
+grav-run:  Info: grav-run.sh grav grav-admin latest n data
 
- Help: grav-run.sh: Instantiate a docker container depending from some entered arguments. (See Note, Info and Args)
+grav-run:  Help: grav-run.sh: Instantiate a docker container depending from some entered arguments. (See Note, Info and Args)
 ```
 
 IF you installed the `grav-admin` package the point the browser to `http://localhost:8000/admin` and create a user account, otherwise point the browser to `http://localhost:8000/` directly.
