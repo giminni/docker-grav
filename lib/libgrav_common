@@ -89,13 +89,15 @@ function libgrav_common::init() { #-# Public: init() function for setting all di
 function libgrav_common::help() { #-# Public: help() function for all shell scripts.
    local _HELP="${1}"
    local _NAME="${2:-""}"
+   local _NL="${3:-"no"}"
    
-   local _TEXT="${_NAME}:${_HELP}"
+   local _TEXT="${_NAME}: ${_HELP}"
 
    if [[ -z "${_NAME}" ]]; then _TEXT="${_HELP}"; fi
-   echo ""
+
+   if [ "${_NL}" == "yes" ]; then echo ""; fi
    echo -e "${_TEXT}"
-   echo ""
+   if [ "${_NL}" == "yes" ]; then echo ""; fi
 }
 
 #
@@ -163,21 +165,21 @@ function libgrav_common::usage() { #-# Public: usage() function for all shell sc
 
    case ${_RC}  in
       1)
-         echo "${_TEXT}"
+         libgrav_common::help "${_TEXT}" "${NAME}"
          echo ""
-         echo "${_ARGS}"
-         echo "${_NOTE}"
+         libgrav_common::help "${_ARGS}" "${NAME}"
+         libgrav_common::help "${_NOTE}" "${NAME}"
          echo ""
-         test ! -z "${_ARG1}" && echo "${_ARG1}"
-         test ! -z "${_ARG2}" && echo "${_ARG2}"
-         test ! -z "${_ARG3}" && echo "${_ARG3}"
-         test ! -z "${_ARG4}" && echo "${_ARG4}"
-         test ! -z "${_ARG5}" && echo "${_ARG5}"
-         test ! -z "${_ARG6}" && echo "${_ARG6}"
-         test ! -z "${_ARG7}" && echo "${_ARG7}"
+         test ! -z "${_ARG1}" && libgrav_common::help "${_ARG1}" "${NAME}"
+         test ! -z "${_ARG2}" && libgrav_common::help "${_ARG2}" "${NAME}"
+         test ! -z "${_ARG3}" && libgrav_common::help "${_ARG3}" "${NAME}"
+         test ! -z "${_ARG4}" && libgrav_common::help "${_ARG4}" "${NAME}"
+         test ! -z "${_ARG5}" && libgrav_common::help "${_ARG5}" "${NAME}"
+         test ! -z "${_ARG6}" && libgrav_common::help "${_ARG6}" "${NAME}"
+         test ! -z "${_ARG7}" && libgrav_common::help "${_ARG7}" "${NAME}"
          echo ""
-         echo "${_INFO}"
-         libgrav_common::help "${_HELP}"
+         libgrav_common::help "${_INFO}" "${NAME}"
+         libgrav_common::help "${_HELP}" "${NAME}"
       ;;
 
       *)
