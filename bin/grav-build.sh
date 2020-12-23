@@ -64,12 +64,12 @@ function main() {
    local _GRAV_ARGS=" Args: ${CMD} user-name [img-name] [tag-name] [pass-file] [priv-file] [pub-file]"
    local _GRAV_NOTE=" Note: (*) are default values, (#) are recommended values"
    local _GRAV_ARG1=" Arg1:   user-name: any|(#)         - (#=grav)"
-   local _GRAV_ARG2=" Arg2:  [img-name]: grav-admin|grav - (*=grav-admin)"
+   local _GRAV_ARG2=" Arg2:  [img-name]: grav|grav-admin - (*=grav)"
    local _GRAV_ARG3=" Arg3:  [tag-name]: latest|testing  - (*=latest)"
    local _GRAV_ARG4=" Arg4: [pass-file]: any|(*)         - (*=<PROJECT_HOME>/key/grav_pass.key)"
    local _GRAV_ARG5=" Arg5: [priv-file]: any|(*)         - (*=<PROJECT_HOME>/key/grav_rsa)"
    local _GRAV_ARG6=" Arg6:  [pub-file]: any|(*)         - (*=<PROJECT_HOME>/key/grav_rsa.pub)"
-   local _GRAV_INFO=" Info: ${CMD} grav grav-admin latest ${KEY_DIR}/grav_pass.key ${KEY_DIR}/grav_rsa ${KEY_DIR}/grav_rsa.pub"
+   local _GRAV_INFO=" Info: ${CMD} grav grav latest ${KEY_DIR}/grav_pass.key ${KEY_DIR}/grav_rsa ${KEY_DIR}/grav_rsa.pub"
    local _GRAV_HELP=" Help: ${CMD}: Builds the docker file from some entered arguments. (See Note, Info and Args)"
 
    if [ ${_ARGC} -lt 1 ]; then 
