@@ -112,7 +112,7 @@ This project includes the following features:
 * Install the prerequisite software (See [Prerequisites](#-prerequisites)
 * Download the project with git `git clone https://github.com/giminni/docker-grav`
 * Change into the current project directory with `cd docker-grav`
-* Initialize the project with `${PWD}/bin/grav-mkinit.sh init`
+* Initialize the project with `<PROJECT_HOME>/bin/grav-mkinit.sh init`
 * Reload bash shell with `source ${HOME}/.bashrc`
 * Set the current grav core production and development package version with `grav-core.sh set all`, older grav core packages version can be set manually, for example with `grav-core.sh set 1.6.0` for production package version or `grav-core.sh set 1.7.0-rc.19` for development package version.
 * Download the grav core production packages with `grav-core.sh get all grav` or the core development packages with `grav-core.sh get all grav-admin`, older grav core packages can be set manually, for example with `grav-core.sh get 1.6.0 grav` for production package version or `grav-core.sh get 1.7.0-rc.19 grav-admin` for development package version.
@@ -127,12 +127,12 @@ This project includes the following features:
 ## Installation checklist
 
 * Check if scripts are available by entering `grav-` and pressing the TAB-key
-* Check if the `.context` file is created in the project directory with `cat ${PWD}/.context`
-* Check if the configuration directory `cfg` is populated with `.config.*` files with `ls -las ${PWD}/cfg`
-* Check `grav_pass.key` file under the key directory `key` with `cat ${PWD}/key/grav_pass.key`
-* Check if the SSH keys exists with `ls -las ${PWD}/key/grav_rsa*` if you are using the `rsa` algorithm. Other algorithm that can be used are `dsa` and `ecdsa`.
-* Check if the grav core file was downloaded correctly into the `rootfs` directory, with `ls -las ${PWD}/rootfs/tmp/grav/core`.
-* Check if the cache directories exists with `ls -las ${PWD}/cache`. A subdirectory `.ccache` and `.phpcache` must exists, otherwise the `grav-build.sh` script does not start.
+* Check if the `.context` file is created in the project directory with `cat ${GRAV_HOME}/.context`
+* Check if the configuration directory `cfg` is populated with `.config.*` files with `ls -las ${GRAV_HOME}/cfg`
+* Check `grav_pass.key` file under the key directory `key` with `cat ${GRAV_HOME}/key/grav_pass.key`
+* Check if the SSH keys exists with `ls -las ${GRAV_HOME}/key/grav_rsa*` if you are using the `rsa` algorithm. Other algorithm that can be used are `dsa` and `ecdsa`.
+* Check if the grav core file was downloaded correctly into the `rootfs` directory, with `ls -las ${GRAV_HOME}/rootfs/tmp/grav/core`.
+* Check if the cache directories exists with `ls -las ${GRAV_HOME}/cache`. A subdirectory `.ccache` and `.phpcache` must exists, otherwise the `grav-build.sh` script does not start.
 * Check if the docker grav image exists, with `sudo docker images`
 * Check if the docker grav image is running, with `sudo docker ps -a`
 
