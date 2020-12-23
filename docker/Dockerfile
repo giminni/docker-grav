@@ -136,7 +136,7 @@ RUN \
     set -eux; \
     echo "Remove runlets, symlinks, but phar..."; \
     find /usr/local/bin -maxdepth 1 -type l | grep -vE "phar" | xargs -r rm -f; \
-    rm -f /usr/local/bin/*-runlet*;
+    rm -f /usr/local/bin/*runlet*;
 
 # Copy docker entrypoint before execution
 # COPY docker-entrypoint.sh /usr/local/bin/
