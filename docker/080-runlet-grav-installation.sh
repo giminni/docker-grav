@@ -5,7 +5,7 @@ source "${STAGE_DIR}/runlet-head.sh"
 # DO NOT REMOVE ANYTHING BEFORE THIS LINE!
 
 echo "Installing ${GRAV_URLFILE}...";
-test -f "/tmp/grav/${GRAV_KIND}/${GRAV_URLFILE}" || wget --progress=bar:force \
+test -f "/tmp/grav/${GRAV_KIND}/${GRAV_URLFILE}" || wget -q --show-progress \
     -O "/tmp/grav/${GRAV_KIND}/${GRAV_URLFILE}" \
     ${GRAV_URL}
 cd /var/www

@@ -11,7 +11,7 @@ ln -s /var/www/html/bin/composer-phar /var/www/html/bin/composer
 echo "Creating run directory for SSH daemon..."
 mkdir -vp /run/sshd
 echo "Downloading su-exec..."
-test -f /tmp/${GRAV_SUEXEC_FILE} || wget --progress=bar:force \
+test -f /tmp/${GRAV_SUEXEC_FILE} || wget -q --show-progress \
     -O /tmp/${GRAV_SUEXEC_FILE} \
 ${GRAV_SUEXEC_URL}/${GRAV_SUEXEC_FILE}
 echo "Compiling su-exec..."
