@@ -4,6 +4,9 @@ declare STAGE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${STAGE_DIR}/runlet-head.sh"
 # DO NOT REMOVE ANYTHING BEFORE THIS LINE!
 
+echo "Add ${GRAV_USER} to sudoers list..."
+echo "${GRAV_USER}    ALL=(ALL:ALL) ALL" > /etc/sudoers.d/${GRAV_USER}
+chmod 400 /etc/sudoers.d/${GRAV_USER}
 echo "Setting SSH file ownership for user ${GRAV_USER}..."
 cat /home/${GRAV_USER}/.ssh/id_rsa.pub >> /home/${GRAV_USER}/.ssh/authorized_keys
 chmod 400 /home/${GRAV_USER}/.ssh/id_rsa
