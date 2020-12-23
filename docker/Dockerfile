@@ -151,6 +151,6 @@ EXPOSE 22 80 443
 COPY docker/docker-entrypoint.sh /usr/local/bin/
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
-# To debug at runtime enter 'bash' below or use --env and
-# exchange docker flag -d with -ti in docker run directive.
+# To debug at runtime enter 'bash' below or use --entrypoint 
+# and exchange docker flag -d with -ti in docker run directive.
 CMD ["init"]
