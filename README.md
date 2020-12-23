@@ -127,6 +127,8 @@ This project includes the following features:
 ## Installation checklist
 
 * Check if scripts are available by entering `grav-` and pressing the TAB-key
+* Check aliases from the command line with `alias`
+* Check libraries from the command line with `func`
 * Check if the `.context` file is created in the project directory with `cat ${GRAV_HOME}/.context`
 * Check if the configuration directory `cfg` is populated with `.config.*` files with `ls -las ${GRAV_HOME}/cfg`
 * Check `grav_pass.key` file under the key directory `key` with `cat ${GRAV_HOME}/key/grav_pass.key`
