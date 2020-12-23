@@ -27,7 +27,7 @@ RC=0
 # #### #
 # LIBS #
 # #### #
-source "${LIB_DIR}"/libgrav
+source "${LIB_DIR}"/libgrav_common
 source "${LIB_DIR}"/libgrav_mk
 
 # ##### #
@@ -35,7 +35,7 @@ source "${LIB_DIR}"/libgrav_mk
 # ##### #
 function main() {
    # Initialize context
-   libgrav::init
+   libgrav_common::init
 
    local _ARGC=${1}
    local _ARGV=("${@}")
@@ -54,7 +54,7 @@ function main() {
    local _GRAV_HELP=" Help: ${CMD}: Create the required named data volume depending from some entered arguments. (See Note, Info and Args)"
 
    if [ ${_ARGC} -lt 1 ]; then 
-       libgrav::usage 1 \
+       libgrav_common::usage 1 \
          "${_GRAV_TEXT}" \
          "${_GRAV_ARGS}" \
          "${_GRAV_NOTE}" \

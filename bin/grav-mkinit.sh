@@ -31,8 +31,8 @@ LIB_DIR="${HOME_DIR}/lib"
 # #### #
 # LIBS #
 # #### #
-source "${LIB_DIR}"/libgrav
-source "${LIB_DIR}"/libgrav_mk
+source "${LIB_DIR}"/libgrav_common
+source "${LIB_DIR}"/libgrav_init
 
 # ##### #
 # FUNCS #
@@ -52,8 +52,16 @@ function main() {
    local _GRAV_INFO=" Info: ${CMD} init"
    local _GRAV_HELP=" Help: ${CMD}: Use the 'init' command to initialize the project environment with context files under the ${CFG_DIR} directory. (See Note, Info and Args)"
 
+   # Prerequisite checking
+   local _UUID_MIN="-v4"
+   local _DOCKER_MIN="20.10"
+   local _BUILDX_MIN="0.5.0"
+   local _JQ_MIN="1.5"
+   local _OPENSSL_MIN="1.1.1"
+   local _GIT_MIN="2.17"
+
    if [ ${_ARGC} -lt 1 ]; then 
-      libgrav::usage 1 \
+      libgrav_common::usage 1 \
          "${_GRAV_TEXT}" \
          "${_GRAV_ARGS}" \
          "${_GRAV_NOTE}" \
@@ -62,21 +70,18 @@ function main() {
          "${_GRAV_ARG1}"
    fi
    
-   libgrav_mk::mk_init \
+   libgrav_init::mk_init \
       "${_GRAV_CMD}" \
-      "${HOME_DIR}" \
-      "${ROOT_DIR}" \
-      "${CACHE_DIR}" \
-      "${DATA_DIR}" \
-      "${DOCK_DIR}" \
-      "${BIN_DIR}" \
-      "${CFG_DIR}" \
-      "${KEY_DIR}" \
-      "${LIB_DIR}"
+      "${_UUID_MIN}" \
+      "${_DOCKER_MIN}" \
+      "${_BUILDX_MIN}" \
+      "${_JQ_MIN}" \
+      "${_OPENSSL_MIN}" \
+      "${_GIT_MIN}"
 
    _RC=$?
    
-   if [ ${_RC} -eq 0 ]; then libgrav::help " Info: Reload bash from the command line with 'source \${HOME}/.bashrc'"; fi
+   if [ ${_RC} -eq 0 ]; then libgrav_common::help " Info: Reload bash from the command line with 'source \${HOME}/.bashrc'" "${NAME}"; fi
 
    return ${_RC}
 }

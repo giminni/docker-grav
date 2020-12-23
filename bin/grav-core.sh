@@ -27,7 +27,7 @@ RC=0
 # #### #
 # LIBS #
 # #### #
-source "${LIB_DIR}"/libgrav
+source "${LIB_DIR}"/libgrav_common
 source "${LIB_DIR}"/libgrav_core
 
 # ##### #
@@ -35,7 +35,7 @@ source "${LIB_DIR}"/libgrav_core
 # ##### #
 function main() {
    # Initialize context
-   libgrav::init
+   libgrav_common::init
 
    local _ARGC=${1}
    local _ARGV=("${@}")
@@ -56,7 +56,7 @@ function main() {
    local _GRAV_HELP=" Help: ${CMD}: Set or download grav core packages depending from some entered arguments. (See Note, Info and Args)"
 
    if [ ${_ARGC} -lt 1 ]; then 
-      libgrav::usage 1 \
+      libgrav_common::usage 1 \
          "${_GRAV_TEXT}" \
          "${_GRAV_ARGS}" \
          "${_GRAV_NOTE}" \
@@ -79,14 +79,14 @@ function main() {
          if  [ "${_GRAV_CORE}" == "dev" ]; then
             # Check if essential configuration settings are done
             if [[ ! -f "${CFG_DIR}"/.config.dev ]] || [[ ! -n $(cat "${CFG_DIR}"/.config.dev | tr -d '"' | cut -d'=' -f2) ]]; then 
-               libgrav::error 2 "Error: Core development package not provided. Please run ${BIN_DIR}/grav-core.sh set first...";
+               libgrav_common::error 2 "Error: Core development package not provided. Please run ${BIN_DIR}/grav-core.sh set first..." "${NAME}";
             fi
          fi
          
          if  [ "${_GRAV_CORE}" == "prod" ]; then
             # Check if essential configuration settings are done
             if [[ ! -f "${CFG_DIR}"/.config.prod ]] || [[ ! -n $(cat "${CFG_DIR}"/.config.prod | tr -d '"' | cut -d'=' -f2) ]]; then 
-               libgrav::error 2 "Error: Core production package not provided. Please run ${BIN_DIR}/grav-core.sh set first..."; 
+               libgrav_common::error 2 "Error: Core production package not provided. Please run ${BIN_DIR}/grav-core.sh set first..." "${NAME}"; 
             fi
          fi
          libgrav_core::get_core \

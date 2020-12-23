@@ -27,7 +27,7 @@ RC=0
 # #### #
 # LIBS #
 # #### #
-source "${LIB_DIR}"/libgrav
+source "${LIB_DIR}"/libgrav_common
 source "${LIB_DIR}"/libgrav_docker
 
 # ##### #
@@ -35,7 +35,7 @@ source "${LIB_DIR}"/libgrav_docker
 # ##### #
 function main() {
    # Initialize context
-   libgrav::init
+   libgrav_common::init
 
    local _ARGC=${1}
    local _ARGV=("${@}")
@@ -73,7 +73,7 @@ function main() {
    local _GRAV_HELP=" Help: ${CMD}: Builds the docker file from some entered arguments. (See Note, Info and Args)"
 
    if [ ${_ARGC} -lt 1 ]; then 
-      libgrav::usage 1 \
+      libgrav_common::usage 1 \
          "${_GRAV_TEXT}" \
          "${_GRAV_ARGS}" \
          "${_GRAV_NOTE}" \
@@ -88,22 +88,22 @@ function main() {
    fi
 
    # Check if essential configuration settings are done
-   if [[ ! -f "${CFG_DIR}"/.config.pass ]] || [[ ! -f $(cat "${CFG_DIR}"/.config.pass | tr -d '"' | cut -d'=' -f2) ]]; then libgrav::error 2 "Error: User and password not provided. Please run ${BIN_DIR}/grav-mkpass.sh first...";
-      elif [[ ! -f "${CFG_DIR}"/.config.ssh ]] || [[ ! -f $(cat "${CFG_DIR}"/.config.ssh | tr -d '"' | cut -d'=' -f2) ]]; then libgrav::error 2 "Error: SSH files not provided. Please run ${BIN_DIR}/grav-mkssh.sh first...";
-      elif [[ ! -f "${CFG_DIR}"/.config.cache ]] || [[ ! -d $(cat "${CFG_DIR}"/.config.cache | tr -d '"' | cut -d'=' -f2) ]]; then libgrav::error 2 "Error: Cache directory not provided. Please run ${BIN_DIR}/grav-mkcache.sh first...";
+   if [[ ! -f "${CFG_DIR}"/.config.pass ]] || [[ ! -f $(cat "${CFG_DIR}"/.config.pass | tr -d '"' | cut -d'=' -f2) ]]; then libgrav_common::error 2 "Error: User and password not provided. Please run ${BIN_DIR}/grav-mkpass.sh first..." "${NAME}";
+      elif [[ ! -f "${CFG_DIR}"/.config.ssh ]] || [[ ! -f $(cat "${CFG_DIR}"/.config.ssh | tr -d '"' | cut -d'=' -f2) ]]; then libgrav_common::error 2 "Error: SSH files not provided. Please run ${BIN_DIR}/grav-mkssh.sh first..." "${NAME}";
+      elif [[ ! -f "${CFG_DIR}"/.config.cache ]] || [[ ! -d $(cat "${CFG_DIR}"/.config.cache | tr -d '"' | cut -d'=' -f2) ]]; then libgrav_common::error 2 "Error: Cache directory not provided. Please run ${BIN_DIR}/grav-mkcache.sh first..." "${NAME}";
    fi
 
    # Define URLs using the predefined version string from above
    # Check if version string is set for development
    if [ "${_GRAV_TAG}" == "testing" ]; then
       if [[ ! -z "$(cat ${CFG_DIR}/.config.dev)" ]]; then _GRAV_DEV="$(cat ${CFG_DIR}/.config.dev | tr -d '"' | cut -d'=' -f2)"; fi
-      if [[ ! -f "${CFG_DIR}"/.config.dev ]] || [[ ! -n $(cat "${CFG_DIR}"/.config.dev | tr -d '"' | cut -d'=' -f2) ]]; then libgrav::error 2 "Error: Grav dev version not provided! Please run ${BIN_DIR}/grav-core.sh set first..."; fi
+      if [[ ! -f "${CFG_DIR}"/.config.dev ]] || [[ ! -n $(cat "${CFG_DIR}"/.config.dev | tr -d '"' | cut -d'=' -f2) ]]; then libgrav_common::error 2 "Error: Grav dev version not provided! Please run ${BIN_DIR}/grav-core.sh set first..." "${NAME}"; fi
 
       _GRAV_URLFILE="${_GRAV_NAME}-${_GRAV_DEV}?${_GRAV_TAG}.zip"
       _GRAV_URL="${_GRAV_URL}"/"${_GRAV_DEV}"?"${_GRAV_TAG}"
    elif [ "${_GRAV_TAG}" == "latest" ]; then
       if [[ ! -z "$(cat ${CFG_DIR}/.config.prod)" ]]; then _GRAV_PROD="$(cat ${CFG_DIR}/.config.prod | tr -d '"' | cut -d'=' -f2)"; fi
-      if [[ ! -f "${CFG_DIR}"/.config.prod ]] || [[ ! -n $(cat "${CFG_DIR}"/.config.prod | tr -d '"' | cut -d'=' -f2) ]]; then libgrav::error 2 "Error: Grav prod version not provided! Please run ${BIN_DIR}/grav-core.sh set first..."; fi
+      if [[ ! -f "${CFG_DIR}"/.config.prod ]] || [[ ! -n $(cat "${CFG_DIR}"/.config.prod | tr -d '"' | cut -d'=' -f2) ]]; then libgrav_common::error 2 "Error: Grav prod version not provided! Please run ${BIN_DIR}/grav-core.sh set first..." "${NAME}"; fi
 
       _GRAV_URLFILE="${_GRAV_NAME}-${_GRAV_PROD}.zip"
       _GRAV_URL="${_GRAV_URL}"/"${_GRAV_PROD}"

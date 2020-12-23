@@ -3,16 +3,18 @@
 #
 # Public: check_prereq() function for checking essential prerequisites
 #
-libgrav::check_prereq() { # Public: check_prereq() function for checking essential prerequisites
+function libgrav_common::check_prereq() { #-# Public: check_prereq() function for checking essential prerequisites
    # Minimal requirements
-   local _DOCKER_MIN="${1}"
-   local _BUILDX_MIN="${2}"
-   local _JQ_MIN="${3}"
-   local _OPENSSL_MIN="${4}"
-   local _GIT_MIN="${5}"
+   local _UUID_MIN="${1}"
+   local _DOCKER_MIN="${2}"
+   local _BUILDX_MIN="${3}"
+   local _JQ_MIN="${4}"
+   local _OPENSSL_MIN="${5}"
+   local _GIT_MIN="${6}"
 
-   local _OS_NOW="$(libgrav::os_type)"
-   local _ARCH_NOW="$(libgrav::machine_arch)"
+   local _UUID_NOW="$(uuid ${_UUID_MIN} >/dev/null && echo "-v4")"
+   local _OS_NOW="$(libgrav_common::os_type)"
+   local _ARCH_NOW="$(libgrav_common::machine_arch)"
    local _DOCKER_NOW="$(docker info --format '{{json .ServerVersion}}' | tr -d '"')"
    local _BUILDX_NOW="$(docker info --format '{{json .ClientInfo}}' | jq -r '.Plugins[] | select(.Name | contains("buildx")) | .Version ' | cut -d'v' -f2)"
    local _JQ_NOW="$(jq --version | cut -d'-' -f2)"
@@ -23,28 +25,30 @@ libgrav::check_prereq() { # Public: check_prereq() function for checking essenti
    local _DISTRO_NOW="$(cat /etc/*release 2>/dev/null | grep -w ID | cut -d'=' -f2)"
 
    # Check all required minimal versions
-   if [ $(libgrav::version "${_DOCKER_NOW}") -lt $(libgrav::version ${_DOCKER_MIN}) ]; then 
-      libgrav::error 2 "Error: Required version of docker is not available or met.\nPlease install at least required version: ${_DOCKER_MIN}."
-   elif [ $(libgrav::version "${_BUILDX_NOW}") -lt $(libgrav::version ${_BUILDX_MIN}) ]; then 
-      libgrav::error 2 "Error: Required version of docker buildx plugin is not available or met.\nPlease install at least required version: (${_BUILDX_MIN}."
-   elif [ $(libgrav::version "${_JQ_NOW}") -lt $(libgrav::version ${_JQ_MIN}) ]; then 
-      libgrav::error 2 "Error: Required version of jq is not available or met.\nPlease install at least required version: ${_JQ_MIN}."
-   elif [ $(libgrav::version "${_OPENSSL_NOW}") -lt $(libgrav::version ${_OPENSSL_MIN}) ]; then 
-      libgrav::error 2 "Error: Required version of openssl is not available or met.\nPlease install at least required version: ${_OPENSSL_MIN}."
-   elif [ $(libgrav::version "${_GIT_NOW}") -lt $(libgrav::version ${_GIT_MIN}) ]; then 
-      libgrav::error 2 "Error: Required version of git is not available or met.\nPlease install at least required version: ${_GIT_MIN}."
+   if [ "${_UUID_MIN}" != "${_UUID_NOW}" ]; then
+      libgrav_common::error 2 "Error: Required version of uuid is not available or met.\nPlease install at least required version: ${_UUID_MIN}." "${NAME}"
+   elif [ $(libgrav_common::version "${_DOCKER_NOW}") -lt $(libgrav_common::version ${_DOCKER_MIN}) ]; then 
+      libgrav_common::error 2 "Error: Required version of docker is not available or met.\nPlease install at least required version: ${_DOCKER_MIN}." "${NAME}"
+   elif [ $(libgrav_common::version "${_BUILDX_NOW}") -lt $(libgrav_common::version ${_BUILDX_MIN}) ]; then 
+      libgrav_common::error 2 "Error: Required version of docker buildx plugin is not available or met.\nPlease install at least required version: (${_BUILDX_MIN}." "${NAME}"
+   elif [ $(libgrav_common::version "${_JQ_NOW}") -lt $(libgrav_common::version ${_JQ_MIN}) ]; then 
+      libgrav_common::error 2 "Error: Required version of jq is not available or met.\nPlease install at least required version: ${_JQ_MIN}." "${NAME}"
+   elif [ $(libgrav_common::version "${_OPENSSL_NOW}") -lt $(libgrav_common::version ${_OPENSSL_MIN}) ]; then 
+      libgrav_common::error 2 "Error: Required version of openssl is not available or met.\nPlease install at least required version: ${_OPENSSL_MIN}." "${NAME}"
+   elif [ $(libgrav_common::version "${_GIT_NOW}") -lt $(libgrav_common::version ${_GIT_MIN}) ]; then 
+      libgrav_common::error 2 "Error: Required version of git is not available or met.\nPlease install at least required version: ${_GIT_MIN}." "${NAME}"
    fi
 
    # Set global directory variables
-   echo "GRAV_OS=\"${_OS_NOW}\"" > "${_GRAV_CFG}"/.config.os
-   echo "GRAV_ARCH=\"${_ARCH_NOW}\"" > "${_GRAV_CFG}"/.config.arch
-   echo "GRAV_DISTRO=\"${_DISTRO_NOW}\"" > "${_GRAV_CFG}"/.config.distro
+   echo "GRAV_OS=\"${_OS_NOW}\"" > "${CFG_DIR}"/.config.os
+   echo "GRAV_ARCH=\"${_ARCH_NOW}\"" > "${CFG_DIR}"/.config.arch
+   echo "GRAV_DISTRO=\"${_DISTRO_NOW}\"" > "${CFG_DIR}"/.config.distro
 }
 
 #
 # Public: init() function for setting all directory variables globally.
 #
-function libgrav::init() { # Public: init() function for setting all directory variables globally.
+function libgrav_common::init() { #-# Public: init() function for setting all directory variables globally.
 #
    # Remove enclosing double quotes
    if [[ -e "${CTX_DIR}/.config.root" ]]; then ROOT_DIR="$(cat ${CTX_DIR}/.config.root | tr -d '"' | cut -d'=' -f2)"; fi
@@ -59,9 +63,14 @@ function libgrav::init() { # Public: init() function for setting all directory v
 #
 # Public: error() function for all shell scripts.
 #
-function libgrav::error() { # Public: error() function for all shell scripts.
+function libgrav_common::error() { #-# Public: error() function for all shell scripts.
    local _RC=${1}
-   local _TEXT="${2}"
+   local _MESG="${2}"
+   local _NAME="${3:-""}"
+
+   local _TEXT="${_NAME}:${_MESG}"
+
+   if [[ -z "${_NAME}" ]]; then _TEXT="${_MESG}"; fi   
 
    case ${_RC}  in
       *)
@@ -77,18 +86,22 @@ function libgrav::error() { # Public: error() function for all shell scripts.
 #
 # Public: help() function for all shell scripts.
 #
-function libgrav::help() { # Public: help() function for all shell scripts.
+function libgrav_common::help() { #-# Public: help() function for all shell scripts.
    local _HELP="${1}"
+   local _NAME="${2:-""}"
    
+   local _TEXT="${_NAME}:${_HELP}"
+
+   if [[ -z "${_NAME}" ]]; then _TEXT="${_HELP}"; fi
    echo ""
-   echo -e "${_HELP}"
+   echo -e "${_TEXT}"
    echo ""
 }
 
 #
 # Public: machine_arch() return the new machine architecture string
 #
-libgrav::machine_arch() {
+libgrav_common::machine_arch() {
    local _ARCH=""
 
    case "$(uname -m)" in
@@ -103,7 +116,7 @@ libgrav::machine_arch() {
 #
 # Public: multi_choice() user input function.
 #
-function libgrav::multi_choice() { # Public: multi_choice() user input function.
+function libgrav_common::multi_choice() { #-# Public: multi_choice() user input function.
    local _TYPE=${1:-2} # Default two choices
    local _TEXT="${2:-""}"
 
@@ -133,7 +146,7 @@ function libgrav::multi_choice() { # Public: multi_choice() user input function.
 #
 # Public: usage() function for all shell scripts.
 #
-function libgrav::usage() { # Public: usage() function for all shell scripts.
+function libgrav_common::usage() { #-# Public: usage() function for all shell scripts.
    local _RC=${1}
    local _TEXT="${2}"
    local _ARGS="${3:-""}"
@@ -164,7 +177,7 @@ function libgrav::usage() { # Public: usage() function for all shell scripts.
          test ! -z "${_ARG7}" && echo "${_ARG7}"
          echo ""
          echo "${_INFO}"
-         libgrav::help "${_HELP}"
+         libgrav_common::help "${_HELP}"
       ;;
 
       *)
@@ -180,7 +193,7 @@ function libgrav::usage() { # Public: usage() function for all shell scripts.
 #
 # Public: os_type() return the current operating system string
 #
-libgrav::os_type() { # Public: os_type(): return the current operating system
+function libgrav_common::os_type() { #-# Public: os_type(): return the current operating system
    local _OSTYPE=""
 
    case "$(uname -o)" in
@@ -195,7 +208,7 @@ libgrav::os_type() { # Public: os_type(): return the current operating system
 #
 # Public: version(): Build version of a three digit string (X.Y.Z) to be compared arithmetically
 #
-libgrav::version() { # Public: version() Build version of a three digit string (X.Y.Z) to be compared arithmetically
+function libgrav_common::version() { #-# Public: version() Build version of a three digit string (X.Y.Z) to be compared arithmetically
    local _VERSION="${@}"
 
    echo "${_VERSION}" | awk -F. '{ printf("%d%04d%04d\n", $1,$2,$3); }'

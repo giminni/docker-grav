@@ -3,7 +3,7 @@
 #
 # Public: build() function for grav-build.sh script.
 #
-function libgrav_docker::build() { # Public: build() function for grav-build.sh script.
+function libgrav_docker::build() { #-# Public: build() function for grav-build.sh script.
    local _RC=0
    local _GRAV_USER="${1}"
    local _GRAV_NAME="${2}"
@@ -57,7 +57,7 @@ function libgrav_docker::build() { # Public: build() function for grav-build.sh 
       ;;
 
       *)
-         libgrav::error 2 "Error: Command not found: ${_GRAV_CMD}!"
+         libgrav::common error 2 "Error: Command not found: ${_GRAV_CMD}!" "${NAME}"
       ;;
    esac
            
@@ -70,7 +70,7 @@ function libgrav_docker::build() { # Public: build() function for grav-build.sh 
 #
 # Public: purge() function for grav_prune.sh script.
 #
-function libgrav_docker::purge() { # Public: purge() function for grav_prune.sh script.
+function libgrav_docker::purge() { #-# Public: purge() function for grav_prune.sh script.
    local _RC=0
    local _GRAV_NAME="${1}"
 
@@ -102,7 +102,7 @@ function libgrav_docker::purge() { # Public: purge() function for grav_prune.sh 
 #
 # Public: run() function for grav-run.sh script.
 #
-function libgrav_docker::run() { # Public: run() function for grav-run.sh script.
+function libgrav_docker::run() { #-# Public: run() function for grav-run.sh script.
    local _GRAV_USER="${1}"
    local _GRAV_NAME="${2}"
    local _GRAV_TAG="${3}"
@@ -136,7 +136,7 @@ function libgrav_docker::run() { # Public: run() function for grav-run.sh script
 #
 # Public: shell() function for grav-shell.sh script.
 #
-function libgrav_docker::shell() { # Public: shell() function for grav-shell.sh script.
+function libgrav_docker::shell() { #-# Public: shell() function for grav-shell.sh script.
    local _RC=0
    local _GRAV_NAME="${1}"
    local _GRAV_SHELL="${2}"
