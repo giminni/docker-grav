@@ -6,8 +6,8 @@ FROM --platform=${BUILDPLATFORM} php:7.4-apache AS build
 # If needed, add here labels
 LABEL MAINTAINER="Giovanni Minniti <minniti@t-online.de> (@giminni)"
 
-# If needed, pass docker arguments to builder instance.
-# The first two arguments are reserved.
+# Allow docker buildx build arguments to be overridden at buildtime.
+# The first two arguments are reserved for docker buildx builder.
 ARG \
     BUILDPLATFORM \
     TARGETPLATFORM \
@@ -35,7 +35,7 @@ ARG \
     GRAV_SHELL
 
 # If available, override enviroment variables from docker build arguments, or
-# pass it using runtime -env arguments.
+# pass it using runtime -env arguments, otherwise the default value are used.
 ENV PATH="${PATH:-"/var/www/html/bin:$PATH"}" \
     LANG="${LANG:-"C.UTF-8"}" \
     LC_ALL="${LC_ALL:-"C.UTF-8"}" \
@@ -138,9 +138,6 @@ RUN \
     find /usr/local/bin -maxdepth 1 -type l | grep -vE "phar" | xargs -r rm -f; \
     rm -f /usr/local/bin/*runlet*;
 
-# Copy docker entrypoint before execution
-# COPY docker-entrypoint.sh /usr/local/bin/
-
 # Set work directory
 WORKDIR /var/www/html
 
@@ -151,10 +148,9 @@ VOLUME ["/var/www/html"]
 EXPOSE 22 80 443
 
 # Define entrypoint for container
-# ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+COPY docker/docker-entrypoint.sh /usr/local/bin/
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
-# Define extra command line arguments
-CMD ["sh", "-c", "/usr/sbin/sshd && cron && apache2-foreground"]
-
-# Enable line below for debugging instead the above one
-# CMD ["bash"]
+# To debug at runtime enter 'bash' below or use --env and
+# exchange docker flag -d with -ti in docker run directive.
+CMD ["init"]
