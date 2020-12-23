@@ -103,7 +103,11 @@ function libgrav_docker::run() { #-# Public: run() function for grav-run.sh scri
    local _GRAV_USER="${1}"
    local _GRAV_NAME="${2}"
    local _GRAV_TAG="${3}"
-   local _GRAV_DATA="${4}"
+   local _GRAV_MODE="${4}"
+   local _GRAV_DATA="${5}"
+
+   local _GRAV_OPER=""
+   local _GRAV_RUN=""
 
    if [[ ! -z "$(docker ps -a | grep ${_GRAV_NAME})" ]]; then
       sudo docker ps -a | grep ${_GRAV_NAME} | awk '{print $1}' | xargs -r sudo docker rm -f
@@ -115,7 +119,16 @@ function libgrav_docker::run() { #-# Public: run() function for grav-run.sh scri
 
    sudo docker volume prune -f
 
-   sudo docker run -d \
+   # Run container in normal or debug mode
+   if [ "${_GRAV_MODE}" == "n" ]; then
+      _GRAV_OPER="-d"
+      _GRAV_RUN="init"
+   else
+      _GRAV_OPER="-ti"
+      _GRAV_RUN="bash"
+   fi
+
+   sudo docker run ${_GRAV_OPER} \
       --name ${_GRAV_NAME} \
       --hostname ${_GRAV_NAME}p01 \
       --restart always \
@@ -123,7 +136,7 @@ function libgrav_docker::run() { #-# Public: run() function for grav-run.sh scri
       --publish 0.0.0.0:8443:443/tcp \
       --publish 0.0.0.0:2222:22/tcp \
       --mount type=volume,src=${_GRAV_DATA},dst=/var/www/html \
-      ${_GRAV_USER}/${_GRAV_NAME}:${_GRAV_TAG}
+      ${_GRAV_USER}/${_GRAV_NAME}:${_GRAV_TAG} "${_GRAV_RUN}"
 
       _RC=$?
 

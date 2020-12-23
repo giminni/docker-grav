@@ -45,16 +45,18 @@ function main() {
    local _GRAV_USER="${_ARGV[1]-""}"
    local _GRAV_NAME="${_ARGV[2]:-"grav-admin"}"
    local _GRAV_TAG="${_ARGV[3]:-"latest"}"
-   local _GRAV_DATA="${_ARGV[4]:-"grav_data"}"
+   local _GRAV_MODE="${_ARGV[4]:-"n"}"
+   local _GRAV_DATA="${_ARGV[5]:-"grav_data"}"
    
    local _GRAV_TEXT="Error: Arguments are not provided!"
-   local _GRAV_ARGS=" Args: ${CMD} user-name [img-name] [tag-name] [vol-data]"
+   local _GRAV_ARGS=" Args: ${CMD} user-name [img-name] [tag-name] [run-mode] [vol-data]"
    local _GRAV_NOTE=" Note: (*) are default values, (#) are recommended values"
    local _GRAV_ARG1=" Arg1:  user-name: any|(#) - (#=grav)"
    local _GRAV_ARG2=" Arg2: [img-name]: any|(*) - (*=grav-admin)"
    local _GRAV_ARG3=" Arg3: [tag-name]: any|(*) - (*=latest)"
-   local _GRAV_ARG4=" Arg4: [vol-data]: any|(*) - (*=grav_data)"
-   local _GRAV_INFO=" Info: ${CMD} grav grav-admin latest grav_data"
+   local _GRAV_ARG4=" Arg4: [run-mode]: n|d|(*) - (*=(n)ormal,(d)debug)"
+   local _GRAV_ARG5=" Arg5: [vol-data]: any|(*) - (*=data)"
+   local _GRAV_INFO=" Info: ${CMD} grav grav-admin latest n data"
    local _GRAV_HELP=" Help: ${CMD}: Instantiate a docker container depending from some entered arguments. (See Note, Info and Args)"
 
    if [ ${_ARGC} -lt 1 ]; then 
@@ -67,7 +69,8 @@ function main() {
          "${_GRAV_ARG1}" \
          "${_GRAV_ARG2}" \
          "${_GRAV_ARG3}" \
-         "${_GRAV_ARG4}"
+         "${_GRAV_ARG4}" \
+         "${_GRAV_ARG5}"
    fi
 
    # Check if essential configuration files exists
@@ -80,6 +83,7 @@ function main() {
       "${_GRAV_USER}" \
       "${_GRAV_NAME}" \
       "${_GRAV_TAG}" \
+      "${_GRAV_MODE}" \
       "${_GRAV_DATA}"
 
    _RC=$?
