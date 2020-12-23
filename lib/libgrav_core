@@ -84,14 +84,14 @@ function libgrav_core::set_core() { #-# Public: set_core() function for grav-cor
          ${0} "${_GRAV_CMD}" prod "${_GRAV_NAME}"
       ;;
 
-      dev) echo "GRAV_DEV=$(wget -q --show-progress -O - -o /dev/null https://getgrav.org | grep 'Release Candidate Version' | sed -e 's/<[^>]*>//g' | awk '{print $4}')" > "${CFG_DIR}"/.config.dev 
+      dev) echo "GRAV_DEV=$(wget -q -O - -o /dev/null https://getgrav.org | grep 'Release Candidate Version' | sed -e 's/<[^>]*>//g' | awk '{print $4}')" > "${CFG_DIR}"/.config.dev 
       ;;
           
       [0-9]*.[0-9]*.[0-9]*-[a-z][a-z].[0-9]*\?testing)
          echo "GRAV_DEV=${_GRAV_CORE}"  > "${CFG_DIR}"/.config.dev 
       ;;
 
-      prod) echo "GRAV_PROD=$(wget -q --show-progress -O - -o /dev/null https://getgrav.org | grep 'Stable Version' | sed -e 's/<[^>]*>//g' | awk '{print $3}')"  > "${CFG_DIR}"/.config.prod 
+      prod) echo "GRAV_PROD=$(wget -q -O - -o /dev/null https://getgrav.org | grep 'Stable Version' | sed -e 's/<[^>]*>//g' | awk '{print $3}')"  > "${CFG_DIR}"/.config.prod 
       ;;
       
       [0-9]*.[0-9]*.[0-9]*)
