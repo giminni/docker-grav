@@ -3,7 +3,7 @@
 #
 # Public: mk_cache() function for grav-mkcache.sh script.
 #
-function libgrav_mk::mk_cache() { # Public: mk_cache() function for grav-mkcache.sh script.
+function libgrav_mk::mk_cache() { #-# Public: mk_cache() function for grav-mkcache.sh script.
    local _RC=0
    local _GRAV_NAME="${1}"
    local _GRAV_CACHE="${2}"
@@ -16,7 +16,7 @@ function libgrav_mk::mk_cache() { # Public: mk_cache() function for grav-mkcache
 
    if [[ -d "${_GRAV_CACHE}" ]]; then 
       _GRAV_CHOICE=2
-      _GRAV_ANSWER=$(libgrav::multi_choice ${_GRAV_CHOICE} "Cache directory '${_GRAV_NAME}' in ${_GRAV_CACHE} already exists.
+      _GRAV_ANSWER=$(libgrav::common multi_choice ${_GRAV_CHOICE} "Cache directory '${_GRAV_NAME}' in ${_GRAV_CACHE} already exists.
 Overwrite (1), Retain (2) ")
    else
       # if does not exists, create an initial cache directory 
@@ -51,9 +51,9 @@ Overwrite (1), Retain (2) ")
       esac
    done
 
-   libgrav::help " Info: ${_GRAV_VERB} cached directory '${_GRAV_NAME}' in ${_GRAV_CACHE}."
-
    _RC=$?
+
+   if [ ${_RC} -eq 0 ]; then libgrav::common help " Info: ${_GRAV_VERB} cached directory '${_GRAV_NAME}' in ${_GRAV_CACHE}." "${NAME}"; fi
 
    return ${_RC}
 }
@@ -61,7 +61,7 @@ Overwrite (1), Retain (2) ")
 #
 # Public: mk_data() function for grav-mkdata.sh script.
 #
-function libgrav_mk::mk_data() { # Public: mk_data() function for grav-mkdata.sh script.
+function libgrav_mk::mk_data() { #-# Public: mk_data() function for grav-mkdata.sh script.
    local _RC=0
    local _GRAV_NAME="${1}"
    local _GRAV_DATA="${2}"
@@ -74,7 +74,7 @@ function libgrav_mk::mk_data() { # Public: mk_data() function for grav-mkdata.sh
 
    if [[ -d "${_GRAV_DATA}" ]]; then 
       _GRAV_CHOICE=2
-      _GRAV_ANSWER=$(libgrav::multi_choice ${_GRAV_CHOICE} "Data directory '${_GRAV_NAME}' in ${_GRAV_DATA} already exists.
+      _GRAV_ANSWER=$(libgrav::common multi_choice ${_GRAV_CHOICE} "Data directory '${_GRAV_NAME}' in ${_GRAV_DATA} already exists.
 Overwrite (1), Retain (2) ")
    else
       # if does not exists, create an initial cache directory 
@@ -107,97 +107,9 @@ Overwrite (1), Retain (2) ")
       esac
    done
    
-   libgrav::help " Info: ${_GRAV_VERB} data directory '${_GRAV_NAME}' in ${_GRAV_DATA}."
-
    _RC=$?
 
-   return ${_RC}
-}
-
-#
-# Public: mk_init() function for grav-mkinit.sh script.
-#
-function libgrav_mk::mk_init() { # Public: mk_init() function for grav-mkinit.sh script.
-   local _RC=0
-   local _GRAV_CMD="${1}"
-   local _GRAV_HOME="${2}" 
-   local _GRAV_ROOT="${3}" 
-   local _GRAV_CACHE="${4}" 
-   local _GRAV_DATA="${5}" 
-   local _GRAV_DOCK="${6}" 
-   local _GRAV_BIN="${7}" 
-   local _GRAV_CFG="${8}" 
-   local _GRAV_KEY="${9}" 
-   local _GRAV_LIB="${10}"
-
-   # Initialize directories
-   if [[ ! -d "${_GRAV_CFG}" ]]; then mkdir -p "${_GRAV_CFG}"; fi
-   if [[ ! -d "${_GRAV_KEY}" ]]; then mkdir -p "${_GRAV_KEY}"; fi
-   if [[ ! -d "${_GRAV_ROOT}" ]]; then mkdir -p "${_GRAV_ROOT}"; fi
-         
-   # Prerequisite checking
-   local _DOCKER_MIN="20.10"
-   local _BUILDX_MIN="0.5.0"
-   local _JQ_MIN="1.5"
-   local _OPENSSL_MIN="1.1.1"
-   local _GIT_MIN="2.17"
-
-   libgrav::check_prereq \
-      "${_DOCKER_MIN}" \
-      "${_BUILDX_MIN}" \
-      "${_JQ_MIN}" \
-      "${_OPENSSL_MIN}" \
-      "${_GIT_MIN}"
-
-   case "${_GRAV_CMD}" in
-      init)
-         # Set global directory variables
-         echo "GRAV_HOME=\"${_GRAV_HOME}\"" > "${_GRAV_CFG}"/.config.home 
-         echo "GRAV_ROOT=\"${_GRAV_ROOT}\"" > "${_GRAV_CFG}"/.config.root 
-         echo "GRAV_DOCK=\"${_GRAV_DOCK}\"" > "${_GRAV_CFG}"/.config.docker
-         echo "GRAV_BIN=\"${_GRAV_BIN}\"" > "${_GRAV_CFG}"/.config.bin 
-         echo "GRAV_CFG=\"${_GRAV_CFG}\"" > "${_GRAV_CFG}"/.config.cfg
-         echo "GRAV_KEY=\"${_GRAV_KEY}\"" > "${_GRAV_CFG}"/.config.key
-         echo "GRAV_LIB=\"${_GRAV_LIB}\"" > "${_GRAV_CFG}"/.config.lib 
-         echo "GRAV_CTX=\"${_GRAV_CFG}\"" > "${_GRAV_HOME}"/.context
-
-         # Replace '# docker-grav #' entries in .bashrc file
-         if [[ -e "${HOME}/.bashrc" ]] && [ "${SHELL}" == "/bin/bash" ]; then 
-            sed -i "/# docker-grav #/d" "${HOME}"/.bashrc
-            echo "export GRAV_HOME="${PWD}" # docker-grav #" >>  "${HOME}"/.bashrc
-            echo "export GRAV_ROOT="\${GRAV_HOME}/rootfs" # docker-grav #" >>  "${HOME}"/.bashrc
-            echo "export GRAV_DOCK="\${GRAV_HOME}/docker" # docker-grav #" >>  "${HOME}"/.bashrc
-            echo "export GRAV_BIN="\${GRAV_HOME}/bin" # docker-grav #" >>  "${HOME}"/.bashrc
-            echo "export GRAV_CFG="\${GRAV_HOME}/cfg" # docker-grav #" >>  "${HOME}"/.bashrc
-            echo "export GRAV_KEY="\${GRAV_HOME}/key" # docker-grav #" >>  "${HOME}"/.bashrc
-            echo "export GRAV_LIB="\${GRAV_HOME}/lib" # docker-grav #" >>  "${HOME}"/.bashrc
-            echo "export PATH=\${GRAV_HOME}/bin:\${PATH} # docker-grav #" >> "${HOME}"/.bashrc
-         fi
-
-         if [[ ! -e "${HOME}/.bash_aliases" ]] && [ "${SHELL}" == "/bin/bash" ]; then 
-            touch ${HOME}/.bash_aliases
-         else
-            sed -i "/# docker-grav #/d" ${HOME}/.bash_aliases
-         fi
-
-         echo 'alias "grav-build"="grav-build.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
-         echo 'alias "grav-core"="grav-core.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
-         echo 'alias "grav-mkcache"="grav-mkcache.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
-         echo 'alias "grav-mkdata"="grav-mkdata.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
-         echo 'alias "grav-mkinit"="grav-mkinit.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
-         echo 'alias "grav-mkpass"="grav-mkpass.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
-         echo 'alias "grav-mkssh"="grav-mkssh.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
-         echo 'alias "grav-purge"="grav-purge.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
-         echo 'alias "grav-run"="grav-run.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
-         echo 'alias "grav-shell"="grav-shell.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
-         echo 'function grav-cd() { cd ${GRAV_HOME}/"${1}"; } # docker-grav #' >> "${HOME}"/.bash_aliases
-      ;;
-      
-      
-      *) libgrav::error 2 "Error: Argument is not defined: ${_GRAV_CMD}!"
-      ;;
-
-   esac
+   if [ ${_RC} -eq 0 ]; then libgrav::common help " Info: ${_GRAV_VERB} data directory '${_GRAV_NAME}' in ${_GRAV_DATA}." "${NAME}"; fi
 
    return ${_RC}
 }
@@ -205,15 +117,16 @@ function libgrav_mk::mk_init() { # Public: mk_init() function for grav-mkinit.sh
 #
 # Public: mk_pass() function for grav-mkpass.sh script.
 #
-function libgrav_mk::mk_pass() { # Public: mk_pass() function for grav-mkpass.sh script.
+function libgrav_mk::mk_pass() { #-# Public: mk_pass() function for grav-mkpass.sh script.
    local _RC=0
    local _GRAV_SECS="${1}"
    local _GRAV_USER="${2}"
    local _GRAV_PASS="${3}"
    local _GRAV_PW=""
 
-   _GRAV_PW="$(openssl passwd -6 -salt $(openssl rand -base64 32) ${_GRAV_SECS})"
-   
+#  _GRAV_PW="$(openssl passwd -6 -salt $(openssl rand -base64 32) ${_GRAV_SECS})"
+   _GRAV_PW="$(openssl passwd -6 -salt $(uuid -v4 -n32 | tail -n1) ${_GRAV_SECS})"
+  
    _RC=$?
 
    if [[ -f "${_GRAV_PASS}" ]]; then chmod 600 "${_GRAV_PASS}"; fi
@@ -225,8 +138,10 @@ function libgrav_mk::mk_pass() { # Public: mk_pass() function for grav-mkpass.sh
 
    echo "GRAV_USER=${_GRAV_USER}" > "${CFG_DIR}"/.config.user
    echo "GRAV_PASS=${_GRAV_PASS}" > "${CFG_DIR}"/.config.pass
-   
-   libgrav::help " Info: Created encrypted password for user '${_GRAV_USER}' in ${KEY_DIR} directory."
+
+   _RC=$?
+
+   if [ ${_RC} -eq 0 ]; then libgrav::common help " Info: Created encrypted password for user '${_GRAV_USER}' in ${KEY_DIR} directory." "${NAME}"; fi
 
    return ${_RC}
 }
@@ -234,7 +149,7 @@ function libgrav_mk::mk_pass() { # Public: mk_pass() function for grav-mkpass.sh
 #
 # Public: mk_ssh() function for grav-mkssh.sh script.
 #
-function libgrav_mk::mk_ssh() { # Public: mk_ssh() function for grav-mkssh.sh script.
+function libgrav_mk::mk_ssh() { #-# Public: mk_ssh() function for grav-mkssh.sh script.
    local _RC=0
    local _GRAV_EMAIL="${1}"
    local _GRAV_TYPE="${2}"
@@ -250,11 +165,11 @@ function libgrav_mk::mk_ssh() { # Public: mk_ssh() function for grav-mkssh.sh sc
 
    if [[ -e "${_GRAV_SSH}" ]] && [[ -e "${_GRAV_SSH}.pub" ]]; then
       _GRAV_CHOICE=3
-      _GRAV_ANSWER=$(libgrav::multi_choice ${_GRAV_CHOICE} "${_GRAV_SSH} already exists.
+      _GRAV_ANSWER=$(libgrav::common multi_choice ${_GRAV_CHOICE} "${_GRAV_SSH} already exists.
 (1) Overwrite, (2) Use own, (3) Reuse it ")
    else
       _GRAV_CHOICE=2
-      _GRAV_ANSWER=$(libgrav::multi_choice ${_GRAV_CHOICE} "${_GRAV_SSH} already exists.
+      _GRAV_ANSWER=$(libgrav::common multi_choice ${_GRAV_CHOICE} "${_GRAV_SSH} already exists.
 (1) Create, (2) Use own ")
    fi
    while true; do
@@ -285,9 +200,9 @@ function libgrav_mk::mk_ssh() { # Public: mk_ssh() function for grav-mkssh.sh sc
 
    echo "GRAV_SSH=${_GRAV_SSH}" > ${CFG_DIR}/.config.ssh
 
-   libgrav::help " Info: ${_GRAV_VERB} SSH keys in ${KEY_DIR} directory."
-
    _RC=$?
+
+   if [ ${_RC} -eq 0 ]; then libgrav::common help " Info: ${_GRAV_VERB} SSH keys in ${KEY_DIR} directory." "${NAME}"; fi
 
    return ${_RC}
 }
