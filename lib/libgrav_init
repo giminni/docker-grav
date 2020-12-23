@@ -16,9 +16,9 @@ function libgrav_init::mk_init() { #-# Public: mk_init() function for grav-mkini
    local _GIT_MIN="${7}"
 
    # Initialize directories
-   if [[ ! -d "${CFG_DIR}" ]]; then mkdir -p "${_GRAV_CFG}"; fi
-   if [[ ! -d "${KEY_DIR}" ]]; then mkdir -p "${_GRAV_KEY}"; fi
-   if [[ ! -d "${ROOT_DIR}" ]]; then mkdir -p "${_GRAV_ROOT}"; fi
+   if [[ ! -d "${CFG_DIR}" ]]; then mkdir -p "${CFG_DIR}"; fi
+   if [[ ! -d "${KEY_DIR}" ]]; then mkdir -p "${KEY_DIR}"; fi
+   if [[ ! -d "${ROOT_DIR}" ]]; then mkdir -p "${ROOT_DIR}"; fi
          
    libgrav_common::check_prereq \
       "${_UUID_MIN}" \
@@ -72,7 +72,7 @@ function libgrav_init::mk_init() { #-# Public: mk_init() function for grav-mkini
          echo 'alias "grav-run"="grav-run.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
          echo 'alias "grav-shell"="grav-shell.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
          echo 'function grav-cd() { cd ${GRAV_HOME}/"${1}"; } #-# # docker-grav #' >> "${HOME}"/.bash_aliases
-         echo 'function grav-lib() { cd ${GRAV_LIB}; ls -c ${1:-"."} | xargs -r cat | grep "#-#"; } #-# # docker-grav #' >> "${HOME}"/.bash_aliases
+         echo 'function func() { cd ${GRAV_LIB}; ls -c ${1:-"."} | xargs -r cat | grep "#-#"; } #-# # docker-grav #' >> "${HOME}"/.bash_aliases
       ;;
       
       

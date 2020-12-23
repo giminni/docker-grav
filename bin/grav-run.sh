@@ -11,7 +11,7 @@ NAME=$(echo ${CMD} | cut -d'.' -f1)
 CUR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOME_DIR="${CUR_DIR%/*}"
 
-if [[ ! -e "${HOME_DIR}/.context" ]]; then echo -e "\nError: Context is not initialized! Please run '<PROJECT_HOME>/bin/grav-mkinit.sh init' first... "; exit 1; fi
+if [[ ! -e "${HOME_DIR}/.context" ]]; then echo -e "\nError: Context is not initialized!\nPlease run '<PROJECT_HOME>/bin/grav-mkinit.sh init' first... "; exit 1; fi
 
 # Remove enclosing double quotes
 CTX_DIR="$(cat ${HOME_DIR}/.context | tr -d '"' | cut -d'=' -f2)"
@@ -71,9 +71,9 @@ function main() {
    fi
 
    # Check if essential configuration files exists
-   if [[ ! -f "${CFG_DIR}"/.config.pass ]] || [[ ! -f $(cat "${CFG_DIR}"/.config.pass | tr -d '"' | cut -d'=' -f2) ]]; then libgrav_common::error 2 "Error: User and password not provided. Please run '${BIN_DIR}'/grav-mkpass.sh first..." "${NAME}";
-      elif [[ ! -f "${CFG_DIR}"/.config.ssh ]] || [[ ! -f $(cat "${CFG_DIR}"/.config.ssh | tr -d '"' | cut -d'=' -f2) ]]; then libgrav_common::error 2 "Error: SSH files not provided. Please run '${BIN_DIR}'/grav-mkssh.sh first..." "${NAME}";
-      elif [[ ! -f "${CFG_DIR}"/.config.data ]] || [[ ! -d $(cat "${CFG_DIR}"/.config.data | tr -d '"' | cut -d'=' -f2) ]]; then libgrav_common::error 2 "Error: Data volume not provided. Please run '${BIN_DIR}'/grav-mkdata.sh first..." "${NAME}";
+   if [[ ! -f "${CFG_DIR}"/.config.pass ]] || [[ ! -f $(cat "${CFG_DIR}"/.config.pass | tr -d '"' | cut -d'=' -f2) ]]; then libgrav_common::error 2 "Error: User and password not provided.\nPlease run '${BIN_DIR}'/grav-mkpass.sh first..." "${NAME}";
+      elif [[ ! -f "${CFG_DIR}"/.config.ssh ]] || [[ ! -f $(cat "${CFG_DIR}"/.config.ssh | tr -d '"' | cut -d'=' -f2) ]]; then libgrav_common::error 2 "Error: SSH files not provided.\nPlease run '${BIN_DIR}'/grav-mkssh.sh first..." "${NAME}";
+      elif [[ ! -f "${CFG_DIR}"/.config.data ]] || [[ ! -d $(cat "${CFG_DIR}"/.config.data | tr -d '"' | cut -d'=' -f2) ]]; then libgrav_common::error 2 "Error: Data volume not provided.\nPlease run '${BIN_DIR}'/grav-mkdata.sh first..." "${NAME}";
    fi
 
    libgrav_docker::run \

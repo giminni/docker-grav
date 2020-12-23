@@ -16,7 +16,7 @@ function libgrav_mk::mk_cache() { #-# Public: mk_cache() function for grav-mkcac
 
    if [[ -d "${_GRAV_CACHE}" ]]; then 
       _GRAV_CHOICE=2
-      _GRAV_ANSWER=$(libgrav::common multi_choice ${_GRAV_CHOICE} "Cache directory '${_GRAV_NAME}' in ${_GRAV_CACHE} already exists.
+      _GRAV_ANSWER=$(libgrav_common::multi_choice ${_GRAV_CHOICE} "Cache directory '${_GRAV_NAME}' in ${_GRAV_CACHE} already exists.
 Overwrite (1), Retain (2) ")
    else
       # if does not exists, create an initial cache directory 
@@ -53,7 +53,7 @@ Overwrite (1), Retain (2) ")
 
    _RC=$?
 
-   if [ ${_RC} -eq 0 ]; then libgrav::common help " Info: ${_GRAV_VERB} cached directory '${_GRAV_NAME}' in ${_GRAV_CACHE}." "${NAME}"; fi
+   if [ ${_RC} -eq 0 ]; then libgrav_common::help " Info: ${_GRAV_VERB} cached directory '${_GRAV_NAME}' in ${_GRAV_CACHE}." "${NAME}"; fi
 
    return ${_RC}
 }
@@ -74,7 +74,7 @@ function libgrav_mk::mk_data() { #-# Public: mk_data() function for grav-mkdata.
 
    if [[ -d "${_GRAV_DATA}" ]]; then 
       _GRAV_CHOICE=2
-      _GRAV_ANSWER=$(libgrav::common multi_choice ${_GRAV_CHOICE} "Data directory '${_GRAV_NAME}' in ${_GRAV_DATA} already exists.
+      _GRAV_ANSWER=$(libgrav_common::multi_choice ${_GRAV_CHOICE} "Data directory '${_GRAV_NAME}' in ${_GRAV_DATA} already exists.
 Overwrite (1), Retain (2) ")
    else
       # if does not exists, create an initial cache directory 
@@ -109,7 +109,7 @@ Overwrite (1), Retain (2) ")
    
    _RC=$?
 
-   if [ ${_RC} -eq 0 ]; then libgrav::common help " Info: ${_GRAV_VERB} data directory '${_GRAV_NAME}' in ${_GRAV_DATA}." "${NAME}"; fi
+   if [ ${_RC} -eq 0 ]; then libgrav_common::help " Info: ${_GRAV_VERB} data directory '${_GRAV_NAME}' in ${_GRAV_DATA}." "${NAME}"; fi
 
    return ${_RC}
 }
@@ -141,7 +141,7 @@ function libgrav_mk::mk_pass() { #-# Public: mk_pass() function for grav-mkpass.
 
    _RC=$?
 
-   if [ ${_RC} -eq 0 ]; then libgrav::common help " Info: Created encrypted password for user '${_GRAV_USER}' in ${KEY_DIR} directory." "${NAME}"; fi
+   if [ ${_RC} -eq 0 ]; then libgrav_common::help " Info: Created encrypted password for user '${_GRAV_USER}' in ${KEY_DIR} directory." "${NAME}"; fi
 
    return ${_RC}
 }
@@ -165,11 +165,11 @@ function libgrav_mk::mk_ssh() { #-# Public: mk_ssh() function for grav-mkssh.sh 
 
    if [[ -e "${_GRAV_SSH}" ]] && [[ -e "${_GRAV_SSH}.pub" ]]; then
       _GRAV_CHOICE=3
-      _GRAV_ANSWER=$(libgrav::common multi_choice ${_GRAV_CHOICE} "${_GRAV_SSH} already exists.
+      _GRAV_ANSWER=$(libgrav_common::multi_choice ${_GRAV_CHOICE} "${_GRAV_SSH} already exists.
 (1) Overwrite, (2) Use own, (3) Reuse it ")
    else
       _GRAV_CHOICE=2
-      _GRAV_ANSWER=$(libgrav::common multi_choice ${_GRAV_CHOICE} "${_GRAV_SSH} already exists.
+      _GRAV_ANSWER=$(libgrav_common::multi_choice ${_GRAV_CHOICE} "${_GRAV_SSH} already exists.
 (1) Create, (2) Use own ")
    fi
    while true; do
@@ -202,7 +202,7 @@ function libgrav_mk::mk_ssh() { #-# Public: mk_ssh() function for grav-mkssh.sh 
 
    _RC=$?
 
-   if [ ${_RC} -eq 0 ]; then libgrav::common help " Info: ${_GRAV_VERB} SSH keys in ${KEY_DIR} directory." "${NAME}"; fi
+   if [ ${_RC} -eq 0 ]; then libgrav_common::help " Info: ${_GRAV_VERB} SSH keys in ${KEY_DIR} directory." "${NAME}"; fi
 
    return ${_RC}
 }

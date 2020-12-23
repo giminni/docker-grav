@@ -11,7 +11,7 @@ NAME=$(echo ${CMD} | cut -d'.' -f1)
 CUR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOME_DIR="${CUR_DIR%/*}"
 
-if [[ ! -e "${HOME_DIR}/.context" ]]; then echo -e "\nError: Context is not initialized! Please run '<PROJECT_HOME>/bin/grav-mkinit.sh init' first... "; exit 1; fi
+if [[ ! -e "${HOME_DIR}/.context" ]]; then echo -e "\nError: Context is not initialized!\nPlease run '<PROJECT_HOME>/bin/grav-mkinit.sh init' first... "; exit 1; fi
 
 # Remove enclosing double quotes
 CTX_DIR="$(cat ${HOME_DIR}/.context | tr -d '"' | cut -d'=' -f2)"
@@ -79,14 +79,14 @@ function main() {
          if  [ "${_GRAV_CORE}" == "dev" ]; then
             # Check if essential configuration settings are done
             if [[ ! -f "${CFG_DIR}"/.config.dev ]] || [[ ! -n $(cat "${CFG_DIR}"/.config.dev | tr -d '"' | cut -d'=' -f2) ]]; then 
-               libgrav_common::error 2 "Error: Core development package not provided. Please run ${BIN_DIR}/grav-core.sh set first..." "${NAME}";
+               libgrav_common::error 2 "Error: Core development package not provided.\nPlease run ${BIN_DIR}/grav-core.sh set first..." "${NAME}";
             fi
          fi
          
          if  [ "${_GRAV_CORE}" == "prod" ]; then
             # Check if essential configuration settings are done
             if [[ ! -f "${CFG_DIR}"/.config.prod ]] || [[ ! -n $(cat "${CFG_DIR}"/.config.prod | tr -d '"' | cut -d'=' -f2) ]]; then 
-               libgrav_common::error 2 "Error: Core production package not provided. Please run ${BIN_DIR}/grav-core.sh set first..." "${NAME}"; 
+               libgrav_common::error 2 "Error: Core production package not provided.\nPlease run ${BIN_DIR}/grav-core.sh set first..." "${NAME}"; 
             fi
          fi
          libgrav_core::get_core \

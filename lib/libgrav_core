@@ -26,45 +26,45 @@ function libgrav_core::get_core() { #-# Public: get_core() function for grav-cor
       dev)
          _GRAV_DEV=$(cat "${CFG_DIR}"/.config.dev | tr -d '"' | cut -d'=' -f2)
          _GRAV_OUTPUT="${ROOT_DIR}/tmp/grav/core/${_GRAV_NAME}-${_GRAV_DEV}?testing.zip"
-         if [[ -e "${_GRAV_OUTPUT}" ]]; then libgrav::common error 2 "Error: File ${_GRAV_OUTPUT} exists, download not needed." "${NAME}"; fi
+         if [[ -e "${_GRAV_OUTPUT}" ]]; then libgrav_common::error 2 "Error: File ${_GRAV_OUTPUT} exists,\ndownload not needed." "${NAME}"; fi
 
-         wget -O "${_GRAV_OUTPUT}" \
+         wget -q --show-progress -O "${_GRAV_OUTPUT}" \
             ${_GRAV_URL}/core/${_GRAV_NAME}/${_GRAV_DEV}?testing
       ;;
 
       [0-9]*.[0-9]*.[0-9]*-[a-z][a-z].[0-9]*)
          _GRAV_OUTPUT="${ROOT_DIR}/tmp/grav/core/${_GRAV_NAME}-${_GRAV_CORE}?testing.zip"
-         if [[ -e "${_GRAV_OUTPUT}" ]]; then libgrav::common error 2 "Error: File ${_GRAV_OUTPUT} exists, download not needed." "${NAME}"; fi
+         if [[ -e "${_GRAV_OUTPUT}" ]]; then libgrav_common::error 2 "Error: File ${_GRAV_OUTPUT} exists,\ndownload not needed." "${NAME}"; fi
 
-         wget -O "${_GRAV_OUTPUT}" \
+         wget -q --show-progress -O "${_GRAV_OUTPUT}" \
             ${_GRAV_URL}/core/${_GRAV_NAME}/${_GRAV_CORE}?testing
       ;;
 
       prod)
          _GRAV_PROD=$(cat "${CFG_DIR}"/.config.prod | tr -d '"' | cut -d'=' -f2)
          _GRAV_OUTPUT="${ROOT_DIR}/tmp/grav/core/${_GRAV_NAME}-${_GRAV_PROD}.zip"
-         if [[ -e "${_GRAV_OUTPUT}" ]]; then libgrav::common error 2 "Error: File ${_GRAV_OUTPUT} exists, download not needed." "${NAME}"; fi
+         if [[ -e "${_GRAV_OUTPUT}" ]]; then libgrav_common::error 2 "Error: File ${_GRAV_OUTPUT} exists,\ndownload not needed." "${NAME}"; fi
 
-         wget -O "${_GRAV_OUTPUT}" \
+         wget -q --show-progress -O "${_GRAV_OUTPUT}" \
             ${_GRAV_URL}/core/${_GRAV_NAME}/${_GRAV_PROD}
       ;;
       
       [0-9]*.[0-9]*.[0-9]*)
          _GRAV_OUTPUT="${ROOT_DIR}/tmp/grav/core/${_GRAV_NAME}-${_GRAV_CORE}.zip"
-         if [[ -e "${_GRAV_OUTPUT}" ]]; then libgrav::common error 2 "Error: File ${_GRAV_OUTPUT} exists, download not needed." "${NAME}"; fi
+         if [[ -e "${_GRAV_OUTPUT}" ]]; then libgrav_common::error 2 "Error: File ${_GRAV_OUTPUT} exists,\ndownload not needed." "${NAME}"; fi
 
-         wget -O "${_GRAV_OUTPUT}" \
+         wget -q --show-progress -O "${_GRAV_OUTPUT}" \
             ${_GRAV_URL}/core/${_GRAV_NAME}/${_GRAV_CORE}
       ;;
 
-      *) libgrav::common error 2 "Error: Argument is not defined: ${_GRAV_CORE}!" "${NAME}"
+      *) libgrav_common::error 2 "Error: Argument is not defined: ${_GRAV_CORE}!" "${NAME}"
       ;;
 
    esac
 
    _RC=$?
 
-   if [ ${_RC} -eq 0 ]; then libgrav::common help " Info: Download of ${_GRAV_NAME}-${_GRAV_CORE}.zip in ${ROOT_DIR} was successful." "${NAME}"; fi
+   if [ ${_RC} -eq 0 ]; then libgrav_common::help " Info: Download of ${_GRAV_NAME}-${_GRAV_CORE}.zip in ${ROOT_DIR} was successful." "${NAME}"; fi
 
    return ${_RC}
 }
@@ -84,28 +84,28 @@ function libgrav_core::set_core() { #-# Public: set_core() function for grav-cor
          ${0} "${_GRAV_CMD}" prod "${_GRAV_NAME}"
       ;;
 
-      dev) echo "GRAV_DEV=$(wget -O - -o /dev/null https://getgrav.org | grep 'Release Candidate Version' | sed -e 's/<[^>]*>//g' | awk '{print $4}')" > "${CFG_DIR}"/.config.dev 
+      dev) echo "GRAV_DEV=$(wget -q --show-progress -O - -o /dev/null https://getgrav.org | grep 'Release Candidate Version' | sed -e 's/<[^>]*>//g' | awk '{print $4}')" > "${CFG_DIR}"/.config.dev 
       ;;
           
       [0-9]*.[0-9]*.[0-9]*-[a-z][a-z].[0-9]*\?testing)
          echo "GRAV_DEV=${_GRAV_CORE}"  > "${CFG_DIR}"/.config.dev 
       ;;
 
-      prod) echo "GRAV_PROD=$(wget -O - -o /dev/null https://getgrav.org | grep 'Stable Version' | sed -e 's/<[^>]*>//g' | awk '{print $3}')"  > "${CFG_DIR}"/.config.prod 
+      prod) echo "GRAV_PROD=$(wget -q --show-progress -O - -o /dev/null https://getgrav.org | grep 'Stable Version' | sed -e 's/<[^>]*>//g' | awk '{print $3}')"  > "${CFG_DIR}"/.config.prod 
       ;;
       
       [0-9]*.[0-9]*.[0-9]*)
          echo "GRAV_PROD=${_GRAV_CORE}"  > "${CFG_DIR}"/.config.prod 
       ;;
 
-      *) libgrav::common error 2 "Error: Argument is not defined: ${_GRAV_CORE}!" "${NAME}"
+      *) libgrav_common::error 2 "Error: Argument is not defined: ${_GRAV_CORE}!" "${NAME}"
       ;;
 
    esac
 
    _RC=$?
 
-   if [ ${_RC} -eq 0 ]; then libgrav::common help " Info: Download now the respective grav core package with ${BIN_DIR}/grav-core.sh get" "${NAME}"; fi
+   if [ ${_RC} -eq 0 ]; then libgrav_common::help " Info: Download now the respective grav core package with ${BIN_DIR}/grav-core.sh get" "${NAME}"; fi
 
    return ${_RC}
 }

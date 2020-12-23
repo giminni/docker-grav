@@ -11,7 +11,7 @@ function libgrav_docker::build() { #-# Public: build() function for grav-build.s
    local _GRAV_PASS="${4}"
    local _GRAV_PRIV="${5}"
    local _GRAV_PUB="${6}"
-   local _GRAV_DIST="${7}"
+   local _GRAV_OS="${7}"
    local _GRAV_ARCH="${8}"
    local _GRAV_FILE="${9}"
    local _GRAV_KIND="${10}"
@@ -20,19 +20,16 @@ function libgrav_docker::build() { #-# Public: build() function for grav-build.s
 
    local _GRAV_CMD="${FUNCNAME[0]#*::}"
 
-   # sudo docker ps | grep "${_GRAV_NAME}" | awk '{print $1}' | xargs -r sudo docker rm -f
-   # _RC=$?
-
    case "${_GRAV_CMD}" in
       "build")
          sudo docker buildx create \
             --name ${_GRAV_NAME} \
             --node ${_GRAV_NAME}0 \
-            --platform linux/amd64 \
+            --platform ${_GRAV_OS}/${_GRAV_ARCH} \
             --use
             
          sudo docker buildx "${_GRAV_CMD}" \
-            --platform linux/amd64 \
+            --platform ${_GRAV_OS}/${_GRAV_ARCH} \
             --progress=text \
             --load \
             --cache-from type=local,id=${_GRAV_NAME},src="${CACHE_DIR}"/.dcache \
@@ -57,7 +54,7 @@ function libgrav_docker::build() { #-# Public: build() function for grav-build.s
       ;;
 
       *)
-         libgrav::common error 2 "Error: Command not found: ${_GRAV_CMD}!" "${NAME}"
+         libgrav_common::error 2 "Error: Command not found: ${_GRAV_CMD}!" "${NAME}"
       ;;
    esac
            

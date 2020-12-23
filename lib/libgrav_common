@@ -46,21 +46,6 @@ function libgrav_common::check_prereq() { #-# Public: check_prereq() function fo
 }
 
 #
-# Public: init() function for setting all directory variables globally.
-#
-function libgrav_common::init() { #-# Public: init() function for setting all directory variables globally.
-#
-   # Remove enclosing double quotes
-   if [[ -e "${CTX_DIR}/.config.root" ]]; then ROOT_DIR="$(cat ${CTX_DIR}/.config.root | tr -d '"' | cut -d'=' -f2)"; fi
-   if [[ -e "${CTX_DIR}/.config.cache" ]]; then CACHE_DIR="$(cat ${CTX_DIR}/.config.cache | tr -d '"' | cut -d'=' -f2)"; fi
-   if [[ -e "${CTX_DIR}/.config.data" ]]; then DATA_DIR="$(cat ${CTX_DIR}/.config.data | tr -d '"' | cut -d'=' -f2)"; fi
-   if [[ -e "${CTX_DIR}/.config.docker" ]]; then DOCK_DIR="$(cat ${CTX_DIR}/.config.docker | tr -d '"' | cut -d'=' -f2)"; fi
-   if [[ -e "${CTX_DIR}/.config.bin" ]]; then BIN_DIR="$(cat ${CTX_DIR}/.config.bin | tr -d '"' | cut -d'=' -f2)"; fi
-   if [[ -e "${CTX_DIR}/.config.cfg" ]]; then CFG_DIR="$(cat ${CTX_DIR}/.config.cfg | tr -d '"' | cut -d'=' -f2)"; fi
-   if [[ -e "${CTX_DIR}/.config.key" ]]; then KEY_DIR="$(cat ${CTX_DIR}/.config.key | tr -d '"' | cut -d'=' -f2)"; fi
-}
-
-#
 # Public: error() function for all shell scripts.
 #
 function libgrav_common::error() { #-# Public: error() function for all shell scripts.
@@ -68,7 +53,7 @@ function libgrav_common::error() { #-# Public: error() function for all shell sc
    local _MESG="${2}"
    local _NAME="${3:-""}"
 
-   local _TEXT="${_NAME}:${_MESG}"
+   local _TEXT="${_NAME}: ${_MESG}"
 
    if [[ -z "${_NAME}" ]]; then _TEXT="${_MESG}"; fi   
 
@@ -81,6 +66,21 @@ function libgrav_common::error() { #-# Public: error() function for all shell sc
    esac
    
    exit ${_RC}
+}
+
+#
+# Public: init() function for setting all directory variables globally.
+#
+function libgrav_common::init() { #-# Public: init() function for setting all directory variables globally.
+#
+   # Remove enclosing double quotes
+   if [[ -e "${CTX_DIR}/.config.root" ]]; then ROOT_DIR="$(cat ${CTX_DIR}/.config.root | tr -d '"' | cut -d'=' -f2)"; fi
+   if [[ -e "${CTX_DIR}/.config.cache" ]]; then CACHE_DIR="$(cat ${CTX_DIR}/.config.cache | tr -d '"' | cut -d'=' -f2)"; fi
+   if [[ -e "${CTX_DIR}/.config.data" ]]; then DATA_DIR="$(cat ${CTX_DIR}/.config.data | tr -d '"' | cut -d'=' -f2)"; fi
+   if [[ -e "${CTX_DIR}/.config.docker" ]]; then DOCK_DIR="$(cat ${CTX_DIR}/.config.docker | tr -d '"' | cut -d'=' -f2)"; fi
+   if [[ -e "${CTX_DIR}/.config.bin" ]]; then BIN_DIR="$(cat ${CTX_DIR}/.config.bin | tr -d '"' | cut -d'=' -f2)"; fi
+   if [[ -e "${CTX_DIR}/.config.cfg" ]]; then CFG_DIR="$(cat ${CTX_DIR}/.config.cfg | tr -d '"' | cut -d'=' -f2)"; fi
+   if [[ -e "${CTX_DIR}/.config.key" ]]; then KEY_DIR="$(cat ${CTX_DIR}/.config.key | tr -d '"' | cut -d'=' -f2)"; fi
 }
 
 #
@@ -101,7 +101,7 @@ function libgrav_common::help() { #-# Public: help() function for all shell scri
 #
 # Public: machine_arch() return the new machine architecture string
 #
-libgrav_common::machine_arch() {
+function libgrav_common::machine_arch() { #-# Public: machine_arch() return the new machine architecture string
    local _ARCH=""
 
    case "$(uname -m)" in
