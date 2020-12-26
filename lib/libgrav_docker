@@ -82,16 +82,18 @@ function libgrav_docker::purge() { #-# Public: purge() function for grav_prune.s
    RC=$?
    sudo docker buildx prune -f
    RC=$?
-   sudo docker ps -a --format '{{json .Names}}' | grep ${_GRAV_NAME} | xargs -r sudo docker rm -f
+   sudo docker ps -a --format '{{json .Names}}' | grep ${_GRAV_NAME} | xargs -r sudo docker rm -fv
    RC=$?
    sudo docker images | grep ${_GRAV_NAME} | awk '{print $1":"$2}' | xargs -r sudo docker rmi -f
    RC=$?
    sudo docker images | grep buildkit | awk '{print $1":"$2}' | xargs -r sudo docker rmi -f
    RC=$?
-   sudo docker volume prune -f
+   sudo docker volume ls | grep grav_ | awk '{print $2}' | xargs -r sudo docker volume rm -f
    RC=$?
-   sudo docker system prune -f
-   RC=$?
+   #sudo docker volume prune -f
+   #RC=$?
+   #sudo docker system prune -f
+   #RC=$?
 
    return ${_RC}
 }
@@ -129,6 +131,7 @@ function libgrav_docker::run() { #-# Public: run() function for grav-run.sh scri
    fi
 
    sudo docker run ${_GRAV_OPER} \
+      --init \
       --name ${_GRAV_NAME} \
       --hostname ${_GRAV_NAME}p01 \
       --restart always \
