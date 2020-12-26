@@ -29,7 +29,8 @@ In addition other packages are included:
 * jq
 * uuid
 * net-tools
-* openssh-server
+* dropbear
+* openssh-client
 * openssl
 * rsync
 * sudo
@@ -82,6 +83,7 @@ ${GRAV_HOME}
 
 This project includes the following features:
 
+* Use docker init as signal forwarder and process reaper
 * Use docker runlets for easier dockerfile development
 * Use local context key/value files for project configuration settings `${GRAV_HOME}/.context.*`
 * Use local cache directory for injecting files at buildtime `${GRAV_HOME}/rootfs/*`
@@ -100,10 +102,11 @@ This project includes the following features:
 ## Work in progress
 
 * (WIP) Install PHP xdebug for vscode debugging over remote xdebug port
-* (WIP) Run docker container services as non root user `www-data`
+* (WIP) Support letsencrypt with dehydrated bash script
 * (TBD) Create a multistage dockerfile with base, compile and release stage
 * (TBD) Implement multiarch images wit QEMU static support
 * (TBD) Create an alpine container for smaller footprint
+* (TBD) Use NGINX instead of Apache web server
 * (TBD) Use buildx with docker composer file
 * (TBD) Ability to install grav skeletons and plugins
 
@@ -180,7 +183,7 @@ The extended docker build features of `buildx` allows to store the docker buildt
 
 ## Running services as non-root user
 
-To increase the overall security the required services (SSH, Cron and Apache) are running under a non root user (www-data) context.
+To increase the overall security the privilege for required services (SSH, Cron and Apache) are deescalated to a non root user (grav). This is realized with `su-exec` `dropbear` and `go-cron`.
 
 ## Persisting build cache using ccache and rsync
 
@@ -350,4 +353,5 @@ E.g. `grav/grav:latest` for production images or `grav/grav-admin:testing` for d
 
 ## References
 
-* (Working with buildx)[https://docs.docker.com/buildx/working-with-buildx/]
+* (Docker multiple architectures)[https://github.com/docker-library/official-images#multiple-architectures]
+* (Working with buildx)[https://docs.docker.com/buildx/working-with-buildx]
