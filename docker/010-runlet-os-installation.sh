@@ -12,7 +12,8 @@ apt upgrade -y
 apt install -y --no-install-recommends \
     ca-certificates \
     openssl \
-    openssh-server \
+    dropbear \
+    openssh-client \
     iputils-ping \
     jq \
     net-tools \
