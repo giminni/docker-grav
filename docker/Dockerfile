@@ -11,6 +11,7 @@ LABEL MAINTAINER="Giovanni Minniti <minniti@t-online.de> (@giminni)"
 ARG \
     BUILDPLATFORM \
     TARGETPLATFORM \
+    DEBIAN_FRONTEND \
     PATH \
     LANG \
     LC_ALL \
@@ -21,22 +22,31 @@ ARG \
     CCACHE_DIR \
     PHPCACHE_DIR \
     CACHE_DIR \
-    DEHYDRATED_VER \
     GRAV_NAME \
     GRAV_TAG \
     GRAV_USER \
     GRAV_KIND \
     GRAV_URLFILE \
     GRAV_URL \
-    GRAV_SUEXEC_URL \
-    GRAV_SUEXEC_FILE \
     GRAV_UID \
     GRAV_GID \
-    GRAV_SHELL
+    GRAV_SHELL \
+    DEHYDRATED_VER \
+    DEHYDRATED_FILE \
+    DEHYDRATED_URL \
+    GOCROND_VER \
+    GOCROND_FILE \
+    GOCROND_URL \
+    SUEXEC_URL \
+    SUEXEC_FILE \
+    APACHE_RUN_USER \
+    APACHE_RUN_GROUP \
+    APACHE_LOG_DIR
 
 # If available, override enviroment variables from docker build arguments, or
 # pass it using runtime -env arguments, otherwise the default value are used.
-ENV PATH="${PATH:-"/var/www/html/bin:$PATH"}" \
+ENV DEBIAN_FRONTEND="${DEBIAN_FRONTEND:-"noninteractive"}" \ 
+    PATH="${PATH:-"/var/www/html/bin:$PATH"}" \
     LANG="${LANG:-"C.UTF-8"}" \
     LC_ALL="${LC_ALL:-"C.UTF-8"}" \
     TZ="${TZ:-"Europe/Berlin"}" \
@@ -46,18 +56,26 @@ ENV PATH="${PATH:-"/var/www/html/bin:$PATH"}" \
     CCACHE_DIR="${CCACHE_DIR:-"/tmp/cache/.ccache"}" \
     PHPCACHE_DIR="${PHPCACHE_DIR:-"/tmp/cache/.phpcache"}" \
     CACHE_DIR="${CACHE_DIR:-"/home/${CACHE_USER}/Workspace/docker-grav/cache"}" \
-    DEHYDRATED_VER="${DEHYDRATED_VER:-"0.7.0"}" \
     GRAV_NAME="${GRAV_NAME:-"grav-admin"}" \
     GRAV_TAG=="${GRAV_TAG:-"latest"}" \
     GRAV_USER="${GRAV_USER:-"grav"}" \
     GRAV_KIND="${GRAV_KIND:-"core"}" \
     GRAV_URLFILE="${GRAV_URLFILE:-"${GRAV_NAME}-${GRAV_TAG}.zip"}" \
     GRAV_URL="${GRAV_URL:-"https://getgrav.org/download/${GRAV_KIND}/${GRAV_NAME}/${GRAV_TAG}"}" \
-    GRAV_SUEXEC_URL="${GRAV_SUEXEC_URL:-"https://raw.githubusercontent.com/ncopa/su-exec/master"}" \
-    GRAV_SUEXEC_FILE="${GRAV_SUEXEC_FILE:-"su-exec.c"}" \
     GRAV_UID=${GRAV_UID:-1000} \
     GRAV_GID=${GRAV_GID:-1000} \
-    GRAV_SHELL="${GRAV_SHELL:-"/bin/bash"}"
+    GRAV_SHELL="${GRAV_SHELL:-"/bin/bash"}" \
+    DEHYDRATED_VER="${DEHYDRATED_VER:-"0.7.0"}" \
+    DEHYDRATED_FILE="${DEHYDRATED_FILE:-"dehydrated-${DEHYDRATED_VER}.tar.gz"}" \
+    DEHYDRATED_URL="${DEHYDRATED_URL:-"https://github.com/dehydrated-io/dehydrated/releases/download"}" \
+    GOCROND_VER="${GOCROND_VER:-"20.7.0"}" \
+    GOCROND_FILE="${GOCROND_FILE:-"go-crond-64-linux"}" \
+    GOCROND_URL="${GOCROND_URL:-"https://github.com/webdevops/go-crond/releases/download"}" \
+    SUEXEC_URL="${SUEXEC_URL:-"https://raw.githubusercontent.com/ncopa/su-exec/master"}" \
+    SUEXEC_FILE="${SUEXEC_FILE:-"su-exec.c"}" \
+    APACHE_RUN_USER="${APACHE_RUN_USER:-${GRAV_USER}}" \
+    APACHE_RUN_GROUP="${APACHE_RUN_GROUP:-${GRAV_USER}}" \
+    APACHE_LOG_DIR="${APACHE_LOG_DIR:-"/tmp"}"
 
 # Copy runlet stubs into /usr/local/bin directory
 COPY docker/runlet-head.sh docker/runlet-tail.sh /usr/local/bin/
