@@ -25,7 +25,7 @@ ${GOCROND_URL}/${GOCROND_VER}/${GOCROND_FILE}
 chmod +x /usr/local/bin/gocrond
 echo "Create cron job for Grav maintenance scripts for ${GRAV_USER}..."
 #echo "* * * * * cd /var/www/${GRAV_NAME}; /usr/local/bin/php bin/grav scheduler 1>>/dev/null 2>&1" | crontab -u ${GRAV_USER} -
-echo "* * * * * cd /var/www/${GRAV_NAME}; /usr/local/bin/php bin/grav scheduler 1>> /dev/null 2>&1" | crontab -u ${GRAV_USER} -
+echo "* * * * * cd /var/www/${GRAV_NAME}; /usr/local/bin/php bin/grav scheduler 1>/dev/null 2>&1" | crontab -u ${GRAV_USER} -
 echo "Copy ${GRAV_USER} crontab file to ${GRAV_USER} home directory..."
 cp /var/spool/cron/crontabs/"${GRAV_USER}" /home/"${GRAV_USER}"/crontab
 chown "${GRAV_USER}":"${GRAV_USER}" /home/"${GRAV_USER}"/crontab
@@ -38,7 +38,6 @@ cp /tmp/vim/pack/themes/opt/solarized8/colors/solarized8.vim \
     /home/"${GRAV_USER}"/.vim/colors
 cp /tmp/vim/pack/themes/opt/solarized8/colors/solarized8.vim \
     /root/.vim/colors
-
 cat <<-"EOF" > /root/.vimrc
 syntax enable
 set background=dark
@@ -52,7 +51,6 @@ let g:solarized_contrast="high"
 let g:solarized_visibility="high"
 colorscheme solarized8
 EOF
-
 cp /root/.vimrc /home/"${GRAV_USER}"/.vimrc
 chown -R "${GRAV_USER}":"${GRAV_USER}" /home/"${GRAV_USER}"/.vim
 chown "${GRAV_USER}":"${GRAV_USER}" /home/"${GRAV_USER}"/.vimrc
