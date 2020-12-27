@@ -31,9 +31,6 @@ ARG \
     GRAV_UID \
     GRAV_GID \
     GRAV_SHELL \
-    DEHYDRATED_VER \
-    DEHYDRATED_FILE \
-    DEHYDRATED_URL \
     GOCROND_VER \
     GOCROND_FILE \
     GOCROND_URL \
@@ -65,9 +62,6 @@ ENV DEBIAN_FRONTEND="${DEBIAN_FRONTEND:-"noninteractive"}" \
     GRAV_UID=${GRAV_UID:-1000} \
     GRAV_GID=${GRAV_GID:-1000} \
     GRAV_SHELL="${GRAV_SHELL:-"/bin/bash"}" \
-    DEHYDRATED_VER="${DEHYDRATED_VER:-"0.7.0"}" \
-    DEHYDRATED_FILE="${DEHYDRATED_FILE:-"dehydrated-${DEHYDRATED_VER}.tar.gz"}" \
-    DEHYDRATED_URL="${DEHYDRATED_URL:-"https://github.com/dehydrated-io/dehydrated/releases/download"}" \
     GOCROND_VER="${GOCROND_VER:-"20.7.0"}" \
     GOCROND_FILE="${GOCROND_FILE:-"go-crond-64-linux"}" \
     GOCROND_URL="${GOCROND_URL:-"https://github.com/webdevops/go-crond/releases/download"}" \
