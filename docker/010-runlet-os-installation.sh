@@ -27,6 +27,7 @@ apt install -y --no-install-recommends \
     git \
     vim \
     rsync \
+    dnsutils \
     libfreetype6-dev \
     libjpeg62-turbo-dev \
     libpng-dev \
