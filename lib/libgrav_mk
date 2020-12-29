@@ -59,6 +59,62 @@ Overwrite (1), Retain (2) ")
 }
 
 #
+# Public: mk_cert() function for grav-mkcert.sh script.
+#
+function libgrav_mk::mk_cert() { #-# Public: mk_cert() function for grav-mkcert.sh script.
+   local _RC=0
+   local _GRAV_NAME="${1}"
+   local _GRAV_CERT="${2}"
+ 
+   local _GRAV_CHOICE=""
+   local _GRAV_ANSWER=""
+   local _GRAV_VERB=""
+   local _GRAV_VERB1="Created"
+   local _GRAV_VERB2="Used own"
+
+   if [[ -d "${_GRAV_CERT}" ]]; then 
+      _GRAV_CHOICE=2
+      _GRAV_ANSWER=$(libgrav_common::multi_choice ${_GRAV_CHOICE} "Data directory '${_GRAV_NAME}' in ${_GRAV_CERT} already exists.
+Overwrite (1), Retain (2) ")
+   else
+      # if does not exists, create an initial cert directory 
+      _GRAV_ANSWER=1
+   fi
+
+   while true; do
+      case "${_GRAV_ANSWER}" in
+         1) 
+            if [[ -d "${_GRAV_CERT}" ]]; then sudo rm -rf "${_GRAV_CERT}"; fi
+
+            mkdir -p ${_GRAV_CERT}
+
+            sudo docker volume create \
+               --driver local \
+               --opt type=none \
+               --opt device="${_GRAV_CERT}" \
+               --opt o=bind "grav_${_GRAV_NAME}" 1>/dev/null 2>&1
+
+            echo "GRAV_CERT=${_GRAV_CERT}" > ${CFG_DIR}/.config.cert
+
+            _GRAV_VERB="${_GRAV_VERB1}"
+            break;
+         ;;
+
+         2) 
+            _GRAV_VERB="${_GRAV_VERB2}"
+            break;
+         ;;
+      esac
+   done
+   
+   _RC=$?
+
+   if [ ${_RC} -eq 0 ]; then libgrav_common::help " Info: ${_GRAV_VERB} cert directory '${_GRAV_NAME}' in ${_GRAV_CERT}." "${NAME}"; fi
+
+   return ${_RC}
+}
+
+#
 # Public: mk_data() function for grav-mkdata.sh script.
 #
 function libgrav_mk::mk_data() { #-# Public: mk_data() function for grav-mkdata.sh script.

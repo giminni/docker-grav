@@ -14,6 +14,7 @@ function libgrav_init::mk_init() { #-# Public: mk_init() function for grav-mkini
    local _JQ_MIN="${5}"
    local _OPENSSL_MIN="${6}"
    local _GIT_MIN="${7}"
+   local _GETSSL_MIN="${8}"
 
    # Initialize directories
    if [[ ! -d "${CFG_DIR}" ]]; then mkdir -p "${CFG_DIR}"; fi
@@ -26,7 +27,8 @@ function libgrav_init::mk_init() { #-# Public: mk_init() function for grav-mkini
       "${_BUILDX_MIN}" \
       "${_JQ_MIN}" \
       "${_OPENSSL_MIN}" \
-      "${_GIT_MIN}"
+      "${_GIT_MIN}" \
+      "${_GETSSL_MIN}"
 
    case "${_GRAV_CMD}" in
       init)
@@ -46,6 +48,9 @@ function libgrav_init::mk_init() { #-# Public: mk_init() function for grav-mkini
             echo "export GRAV_HOME="${HOME_DIR}" # docker-grav #" >>  "${HOME}"/.bashrc
             echo "export GRAV_ROOT="\${GRAV_HOME}/rootfs" # docker-grav #" >>  "${HOME}"/.bashrc
             echo "export GRAV_DOCK="\${GRAV_HOME}/docker" # docker-grav #" >>  "${HOME}"/.bashrc
+            echo "export GRAV_CACHE="\${GRAV_HOME}/cache" # docker-grav #" >>  "${HOME}"/.bashrc
+            echo "export GRAV_CERT="\${GRAV_HOME}/cert" # docker-grav #" >>  "${HOME}"/.bashrc
+            echo "export GRAV_DATA="\${GRAV_HOME}/data" # docker-grav #" >>  "${HOME}"/.bashrc
             echo "export GRAV_BIN="\${GRAV_HOME}/bin" # docker-grav #" >>  "${HOME}"/.bashrc
             echo "export GRAV_CFG="\${GRAV_HOME}/cfg" # docker-grav #" >>  "${HOME}"/.bashrc
             echo "export GRAV_KEY="\${GRAV_HOME}/key" # docker-grav #" >>  "${HOME}"/.bashrc
@@ -65,6 +70,7 @@ function libgrav_init::mk_init() { #-# Public: mk_init() function for grav-mkini
          echo 'alias "grav-core"="grav-core.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
          echo 'alias "grav-mkcache"="grav-mkcache.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
          echo 'alias "grav-mkdata"="grav-mkdata.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
+         echo 'alias "grav-mkcert"="grav-mkcert.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
          echo 'alias "grav-mkinit"="grav-mkinit.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
          echo 'alias "grav-mkpass"="grav-mkpass.sh" # docker-grav #' >> "${HOME}"/.bash_aliases
          echo 'alias "grav-mkssh"="grav-mkssh.sh" # docker-grav #' >> "${HOME}"/.bash_aliases

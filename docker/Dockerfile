@@ -22,6 +22,7 @@ ARG \
     CCACHE_DIR \
     PHPCACHE_DIR \
     CACHE_DIR \
+    GRAV_DOMAIN \
     GRAV_NAME \
     GRAV_TAG \
     GRAV_USER \
@@ -31,6 +32,8 @@ ARG \
     GRAV_UID \
     GRAV_GID \
     GRAV_SHELL \
+    GETSSL_VER \
+    GETSSL_URL \
     GOCROND_VER \
     GOCROND_FILE \
     GOCROND_URL \
@@ -53,6 +56,7 @@ ENV DEBIAN_FRONTEND="${DEBIAN_FRONTEND:-"noninteractive"}" \
     CCACHE_DIR="${CCACHE_DIR:-"/tmp/cache/.ccache"}" \
     PHPCACHE_DIR="${PHPCACHE_DIR:-"/tmp/cache/.phpcache"}" \
     CACHE_DIR="${CACHE_DIR:-"/home/${CACHE_USER}/Workspace/docker-grav/cache"}" \
+    GRAV_DOMAIN="${GRAV_DOMAIN:-"example.com"}" \
     GRAV_NAME="${GRAV_NAME:-"grav-admin"}" \
     GRAV_TAG=="${GRAV_TAG:-"latest"}" \
     GRAV_USER="${GRAV_USER:-"grav"}" \
@@ -62,6 +66,8 @@ ENV DEBIAN_FRONTEND="${DEBIAN_FRONTEND:-"noninteractive"}" \
     GRAV_UID=${GRAV_UID:-1000} \
     GRAV_GID=${GRAV_GID:-1000} \
     GRAV_SHELL="${GRAV_SHELL:-"/bin/bash"}" \
+    GETSSL_VER="${GETSSL_VER:-"2.32"}" \
+    GETSSL_URL="${GETSSL_URL:-"https://github.com/srvrco/getssl/archive"}" \
     GOCROND_VER="${GOCROND_VER:-"20.7.0"}" \
     GOCROND_FILE="${GOCROND_FILE:-"go-crond-64-linux"}" \
     GOCROND_URL="${GOCROND_URL:-"https://github.com/webdevops/go-crond/releases/download"}" \

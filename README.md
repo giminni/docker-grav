@@ -45,10 +45,18 @@ This project needs the following prerequisites on the host machine:
 * Install at least jq >= 1.5
 * Install at least openssl >= 1.1.1
 * Install at least docker-ce >= 20.10
-  (See https://docs.docker.com/engine/install/)
+  (See https://docs.docker.com/engine/install)
 * Install at least docker buildx plugin >= 0.5.0
-  (See https://docs.docker.com/buildx/working-with-buildx/)
-* Install jq, openssl, uuid, git, tree, vim or vscode for development
+  (See https://docs.docker.com/buildx/working-with-buildx)
+* Install at least getssl >= 2.32
+  (See https://github.com/srvrco/getssl)
+* Install jq, openssl, uuid, git, tree, vim
+* Install vscode for development with the following extensions:
+  - Docker
+  - EditorConfig for VS Code
+  - Remote - Containers
+  - Remote - SSH
+  - Remote - SSH:Editing
 
 This prerequisites are checked automatically with `mkinit.sh init`.
 Execute it with `${GRAV_HOME}/bin/mkinit.sh init`. After that
@@ -63,13 +71,17 @@ The project consists of different directories, each one has a specific role:
 ${GRAV_HOME}
 |-- [ ]  bin            |-- (Directory for bash scripts)
 |-- [*]  cache          |-- (Directory for cache files) 
-|-- [*]  cfg            |-- (Directory for config files) 
+|-- [*]  cfg            |-- (Directory for config files)
+|-- [*]  cert           |-- (Directory for certificate files)
 |-- [*]  data           |-- (Directory for data files)  
 |-- [ ]  docker         |-- (Directory for docker files)
 |-- [*]  key            |-- (Directory for SSH & user keys)
 |-- [ ]  lib            |-- (Library for shell scripts)
 |-- [*]  rootfs         |-- (Repository for packages and files)
+|-- [*]  .context
 |-- [ ]  .dockerignore
+|-- [ ]  .editorconfig
+|-- [ ]  .gitattributes
 |-- [ ]  .gitignore
 |-- [ ]  Dockerfile -> ./docker/Dockerfile
 `-- [ ]  README.md
@@ -93,6 +105,8 @@ This project includes the following features:
 * Ability to create a named user `grav` with SSH keys for vscode development over remote SSH over port 2222
 * Ability to create a user password for SSH login securely
 * Ability to create and add the SSH keys for automatic logins and cache retrieval from local or remote host securely
+* Ability to create SSL certificates from letsencrypt.org with getssl
+* Use external certificate volume for certificate persistence
 * Use external cache volume for faster C/C++ compilation `${GRAV_HOME}/cache/.ccache`
 * Use external cache volume for faster PHP compilation `${GRAV_HOME}/cache/.phpcache`
 * Mount a docker named volume `grav_data` to a specific host directory `${GRAV_HOME}/data`
@@ -102,7 +116,7 @@ This project includes the following features:
 ## Work in progress
 
 * (WIP) Install PHP xdebug for vscode debugging over remote xdebug port
-* (WIP) Support letsencrypt with dehydrated bash script
+* (WIP) Support letsencrypt SSL keys with getssl bash script
 * (TBD) Create a multistage dockerfile with base, compile and release stage
 * (TBD) Implement multiarch images wit QEMU static support
 * (TBD) Create an alpine container for smaller footprint
@@ -124,22 +138,24 @@ This project includes the following features:
 * Create the cache directory with `grav-mkcache.sh cache`
 * Build the docker image with `grav-build.sh grav grav-admin testing` for the development version or `grav-build.sh grav` for the production version.
 * Create the data directory with `grav-mkdata.sh data`
+* Create the certificate directory with `grav-mkcert.sh cert`
 * Run the docker image with `grav-run.sh grav grav-admin testing` for the development version or `grab_run.sh grav` for the production version.
 * Enter the command line of the running grav image, with `grav-shell.sh grav-admin` for the development version or `grav-shell.sh grav` for the production version.
 
 ## Installation checklist
 
-* Check if scripts are available by entering `grav-` and pressing the TAB-key
-* Check aliases from the command line with `alias`
-* Check libraries from the command line with `func`
-* Check if the `.context` file is created in the project directory with `cat ${GRAV_HOME}/.context`
-* Check if the configuration directory `cfg` is populated with `.config.*` files with `ls -las ${GRAV_HOME}/cfg`
-* Check `grav_pass.key` file under the key directory `key` with `cat ${GRAV_HOME}/key/grav_pass.key`
+* Check if scripts are available by entering `grav-` and pressing the TAB-key.
+* Check aliases from the command line with `alias`.
+* Check libraries from the command line with `func`.
+* Check if the `.context` file is created in the project directory with `cat ${GRAV_HOME}/.context`.
+* Check if the configuration directory `cfg` is populated with `.config.*` files with `ls -las ${GRAV_HOME}/cfg`.
+* Check `grav_pass.key` file under the key directory `key` with `cat ${GRAV_HOME}/key/grav_pass.key`.
 * Check if the SSH keys exists with `ls -las ${GRAV_HOME}/key/grav_rsa*` if you are using the `rsa` algorithm. Other algorithm that can be used are `dsa` and `ecdsa`.
 * Check if the grav core file was downloaded correctly into the `rootfs` directory, with `ls -las ${GRAV_HOME}/rootfs/tmp/grav/core`.
 * Check if the cache directories exists with `ls -las ${GRAV_HOME}/cache`. A subdirectory `.ccache` and `.phpcache` must exists, otherwise the `grav-build.sh` script does not start.
-* Check if the docker grav image exists, with `sudo docker images`
-* Check if the docker grav image is running, with `sudo docker ps -a`
+* Chek if the certificate directory exists, with `ls -las ${GRAV_HOME}/cert`.
+* Check if the docker grav image exists, with `sudo docker images`.
+* Check if the docker grav image is running, with `sudo docker ps -a`.
 
 ## Using local key/value files for configuration
 
@@ -212,6 +228,7 @@ The following data is needed to be able to build or run a container:
 
 * Grav binary directory path `.config.bin`, e.g. `GRAV_BIN=${GRAV_HOME}/bin"`
 * Grav cache directory path `.config.cache`, e.g. `GRAV_CACHE="${GRAV_HOME}/cache"`
+* Grav certificate directory path `.config.cert`, e.g. `GRAV_CERT="${GRAV_HOME}/cert"`
 * Grav config directory path `.config.cfg`, e.g. `GRAV_CFG=${GRAV_HOME}/cfg"`
 * Grav data volume directory path `.config.data`, e.g. `GRAV_DATA="${GRAV_HOME}/data"`
 * Grav development core version `.config.dev`, e.g. `GRAV_DEV=1.7.0-rc.20`
@@ -230,6 +247,7 @@ This information is stored into local project connfig files that begins with `${
 * `${GRAV_HOME}/bin/grav-build.sh` = Build the grav docker image from the specified values
 * `${GRAV_HOME}/bin/grav-core.sh get`= Download the corresponding production/development core file into `${GRAV_HOME}/rootfs` directory
 * `${GRAV_HOME}/bin/grav-mkcache.sh` = Configures the local cache volume path `${GRAV_HOME}/cache/*`
+* `${GRAV_HOME}/bin/grav-mkcert.sh` = Configures the local certificate volume path `${GRAV_HOME}/cert`
 * `${GRAV_HOME}/bin/grav-mkdata.sh` = Configures the local data volume path `${GRAV_HOME}/data`
 * `${GRAV_HOME}/bin/grav-mkinit.sh` = Initialize project, must run first. (See [Installation procecure](#-installation-procedure))
 * `${GRAV_HOME}/bin/grav-mkpass.sh` = Configures the named container user and password

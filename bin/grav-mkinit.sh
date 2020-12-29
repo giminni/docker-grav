@@ -23,6 +23,7 @@ ROOT_DIR="${HOME_DIR}/rootfs"
 CACHE_DIR="${HOME_DIR}/cache"
 DATA_DIR="${HOME_DIR}/data"
 DOCK_DIR="${HOME_DIR}/docker"
+CERT_DIR="${HOME_DIR}/cert"
 BIN_DIR="${HOME_DIR}/bin"
 CFG_DIR="${HOME_DIR}/cfg"
 KEY_DIR="${HOME_DIR}/key"
@@ -59,6 +60,7 @@ function main() {
    local _JQ_MIN="1.5"
    local _OPENSSL_MIN="1.1.1"
    local _GIT_MIN="2.17"
+   local _GETSSL_MIN="2.32"
 
    if [ ${_ARGC} -lt 1 ]; then 
       libgrav_common::usage 1 \
@@ -77,7 +79,8 @@ function main() {
       "${_BUILDX_MIN}" \
       "${_JQ_MIN}" \
       "${_OPENSSL_MIN}" \
-      "${_GIT_MIN}"
+      "${_GIT_MIN}" \
+      "${_GETSSL_MIN}"
 
    _RC=$?
    
