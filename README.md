@@ -35,7 +35,7 @@ In addition other packages are included:
 * rsync
 * sudo
 * tree
-* wget 
+* wget
 
 ## Prerequisites
 
@@ -45,11 +45,11 @@ This project needs the following prerequisites on the host machine:
 * Install at least jq >= 1.5
 * Install at least openssl >= 1.1.1
 * Install at least docker-ce >= 20.10
-  (See https://docs.docker.com/engine/install)
+  (See <https://docs.docker.com/engine/install>)
 * Install at least docker buildx plugin >= 0.5.0
-  (See https://docs.docker.com/buildx/working-with-buildx)
+  (See <https://docs.docker.com/buildx/working-with-buildx>)
 * Install at least getssl >= 2.32
-  (See https://github.com/srvrco/getssl)
+  (See <https://github.com/srvrco/getssl>)
 * Install jq, openssl, uuid, git, tree, vim
 * Install vscode for development with the following extensions:
         - Docker
@@ -87,9 +87,9 @@ ${GRAV_HOME}
 `-- [ ]  README.md
 ```
 
->  Note: The files in directories marked with `[*]` are not uploaded to Git. They must be build with the appropriate `<PROJECT_ROOT>/bin/grav-mk*` script.
-
->  Note: To initialize the project, execute `./bin/grav-mkinit.sh init` first from the `${GRAV_HOME}` directory, then activate it with `source ${HOME}/.bashrc`. From this moment you can also use the short form without appending `.sh`, e.g. `grav-mkinit`.
+> **Note:** The files in directories marked with `[*]` are not uploaded to Git. They must be build with the appropriate `<PROJECT_ROOT>/bin/grav-mk*` script.
+>
+> To initialize the project, execute `./bin/grav-mkinit.sh init` first from the `${GRAV_HOME}` directory, then activate it with `source ${HOME}/.bashrc`. From this moment you can also use the short form without appending `.sh`, e.g. `grav-mkinit`.
 
 ## Project features
 
@@ -160,7 +160,7 @@ This project includes the following features:
 
 ## Using local key/value files for configuration
 
-To persist some project configuration data a couple of key/value files are created in the `${GRAV_HOME}/cfg` directory. A `${GRAV_HOME}/.context` file will be generated with `<PROJECT_HOME/bin/grav-mkinit.sh init` at init time holding the configuration directory where all configuration files are stored. 
+To persist some project configuration data a couple of key/value files are created in the `${GRAV_HOME}/cfg` directory. A `${GRAV_HOME}/.context` file will be generated with `<PROJECT_HOME/bin/grav-mkinit.sh init` at init time holding the configuration directory where all configuration files are stored.
 
 E.g. `.context` file in `${GRAV_HOME}/` directory:
 
@@ -174,7 +174,7 @@ E.g. `.config.bin` file in `${GRAV_HOME}/cfg` directory:
 GRAV_BIN="${GRAV_HOME}/bin"
 ```
 
->  Note: Every configuration files can be changed manually by expert user or use the handy local bash scripts that starts with `${GRAV_HOME}/bin/grav-mk*.sh` for novice user.
+> **Note:** Every configuration files can be changed manually by expert user or use the handy local bash scripts that starts with `${GRAV_HOME}/bin/grav-mk*.sh` for novice user.
 
 ## Using docker multiarch environment
 
@@ -192,7 +192,7 @@ The extended docker build features of `buildx` allows injecting sensitive data w
 
 The same thing occures for the SSH private and public key. The key are stored under `${GRAV_HOME}/key/grav_rsa` and `${GRAV_HOME}/key/grav_rsa.pub` respectively.
 
->  Note: Ensure that the SSH keys and user match the SSH keys of an external user on the local or remote host. Otherwise the user autologin over SSH and cache synchronization over github, rsync does not work.
+> **Note:** Ensure that the SSH keys and user match the SSH keys of an external user on the local or remote host. Otherwise the user autologin over SSH and cache synchronization over github, rsync does not work.
 
 ## Caching docker buildtime
 
@@ -206,7 +206,7 @@ To increase the overall security the privilege for required services (SSH, Cron 
 
 `CCache` and `rsync` are used to speedup the building of PHP extensions. At buildtime and before the PHP compilation is started, the external cache directory `${GRAV_HOME}/cache/.ccache` is read with `rsync` into the docker container `<CONTAINER_ROOT>/tmp/.ccache`. CCache will reroute the compiler call to this specific directory for faster compilation. Before all build artefacts are removed the cache directory `<CONTAINER_ROOT>/tmp/.ccache` is exported with `rsync` using incremental backup to preserve the compiled data for a next build  `${GRAV_HOME}/cache/.ccache`.
 
->  Note: Ensure that the SSH keys and user match the SSH keys of an external user on the local or remote host.
+> **Note:** Ensure that the SSH keys and user match the SSH keys of an external user on the local or remote host.
 
 ## Working with vscode locally or remotely
 
@@ -258,7 +258,7 @@ This information is stored into local project connfig files that begins with `${
 * `${GRAV_HOME}/bin/grav-core.sh set` = Configures the grav production/development core version string
 * `${GRAV_HOME}/bin/grav-shell.sh` = Access the container locally by opening a shell
 
->  Note: Please consult the usage information of each local bash script by executing the command without arguments.
+> **Note:** Please consult the usage information of each local bash script by executing the command without arguments.
 
 ## Downloading files to be cached into the rootfs directory
 
@@ -272,13 +272,13 @@ E.g. to download a specific version of grav-admin core `1.6.0` enter:
 ${GRAV_HOME}/bin/grav-core.sh get 1.6.0 grav-admin
 ```
 
->  Note: The files are stored into the `${GRAV_HOME}/rootfs/tmp`. To reduce the container size, remove all superfluous artefacts before starting the build.
+> **Note:** The files are stored into the `${GRAV_HOME}/rootfs/tmp`. To reduce the container size, remove all superfluous artefacts before starting the build.
 
 ## Persisting data into an external storage
 
 To save the Grav site data to the host file system (so that it persists even after the container has been removed), simply map the container's `/var/www/html` directory to a named Docker volume `data`. This named docker volume `data` is mapped into the project directory on the host `${GRAV_HOME}/data`.
 
->  Note: If the mapped directory or named volume is empty, it will be automatically populated with a fresh install of Grav the first time that the container starts. However, once the directory/volume has been populated, the data will persist and will not be overwritten the next time the container starts.
+> **Note:** If the mapped directory or named volume is empty, it will be automatically populated with a fresh install of Grav the first time that the container starts. However, once the directory/volume has been populated, the data will persist and will not be overwritten the next time the container starts.
 
 ## Building the image from Dockerfile
 
@@ -358,11 +358,11 @@ grav-run:  Help: grav-run.sh: Instantiate a docker container depending from some
 
 IF you installed the `grav-admin` package the point the browser to `http://localhost:8000/admin` and create a user account, otherwise point the browser to `http://localhost:8000/` directly.
 
->  Note: The following ports are exposed: 
-
-* `2222`: for SSH secondary access using the named user
-* `8080`: for HTTP secondary access
-* `8443`: for HTTPS secondary access (WIP)
+> **Note:** The following ports are exposed:
+>
+> * `2222`: for SSH secondary access using the named user
+> * `8080`: for HTTP secondary access
+> * `8443`: for HTTPS secondary access (WIP)
 
 The docker image has the following scheme:
 
@@ -372,5 +372,5 @@ E.g. `grav/grav:latest` for production images or `grav/grav-admin:testing` for d
 
 ## References
 
-* (Docker multiple architectures)[https://github.com/docker-library/official-images#multiple-architectures]
-* (Working with buildx)[https://docs.docker.com/buildx/working-with-buildx]
+* [Docker multiple architectures](https://github.com/docker-library/official-images#multiple-architectures)
+* [Working with buildx](https://docs.docker.com/buildx/working-with-buildx)
