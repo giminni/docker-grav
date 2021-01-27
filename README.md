@@ -52,11 +52,11 @@ This project needs the following prerequisites on the host machine:
   (See https://github.com/srvrco/getssl)
 * Install jq, openssl, uuid, git, tree, vim
 * Install vscode for development with the following extensions:
-  - Docker
-  - EditorConfig for VS Code
-  - Remote - Containers
-  - Remote - SSH
-  - Remote - SSH:Editing
+        - Docker
+        - EditorConfig for VS Code
+        - Remote - Containers
+        - Remote - SSH
+        - Remote - SSH:Editing
 
 This prerequisites are checked automatically with `mkinit.sh init`.
 Execute it with `${GRAV_HOME}/bin/mkinit.sh init`. After that
@@ -69,15 +69,15 @@ The project consists of different directories, each one has a specific role:
 
 ```bash
 ${GRAV_HOME}
-|-- [ ]  bin            |-- (Directory for bash scripts)
+|-- [ ]  bin                |-- (Directory for bash scripts)
 |-- [*]  cache          |-- (Directory for cache files) 
-|-- [*]  cfg            |-- (Directory for config files)
-|-- [*]  cert           |-- (Directory for certificate files)
-|-- [*]  data           |-- (Directory for data files)  
-|-- [ ]  docker         |-- (Directory for docker files)
-|-- [*]  key            |-- (Directory for SSH & user keys)
-|-- [ ]  lib            |-- (Library for shell scripts)
-|-- [*]  rootfs         |-- (Repository for packages and files)
+|-- [*]  cfg               |-- (Directory for config files)
+|-- [*]  cert              |-- (Directory for certificate files)
+|-- [*]  data             |-- (Directory for data files)  
+|-- [ ]  docker          |-- (Directory for docker files)
+|-- [*]  key               |-- (Directory for SSH & user keys)
+|-- [ ]  lib                  |-- (Library for shell scripts)
+|-- [*]  rootfs           |-- (Repository for packages and files)
 |-- [*]  .context
 |-- [ ]  .dockerignore
 |-- [ ]  .editorconfig
@@ -129,6 +129,7 @@ This project includes the following features:
 * Install the prerequisite software (See [Prerequisites](#-prerequisites)
 * Download the project with git `git clone https://github.com/giminni/docker-grav`
 * Change into the current project directory with `cd docker-grav`
+* `docker-grav` is now your `<PROJECT_HOME>` directory
 * Initialize the project with `<PROJECT_HOME>/bin/grav-mkinit.sh init`
 * Reload bash shell with `source ${HOME}/.bashrc`
 * Set the current grav core production and development package version with `grav-core.sh set all`, older grav core packages version can be set manually, for example with `grav-core.sh set 1.6.0` for production package version or `grav-core.sh set 1.7.0-rc.19` for development package version.
