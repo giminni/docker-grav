@@ -4,7 +4,7 @@
 FROM --platform=${BUILDPLATFORM} php:7.4-apache AS build
 
 # If needed, add here labels
-LABEL MAINTAINER="Giovanni Minniti <minniti@t-online.de> (@giminni)"
+LABEL MAINTAINER="Giovanni Minniti <minniti.de@gmail.com> (@giminni)"
 
 # Allow docker buildx build arguments to be overridden at buildtime.
 # The first two arguments are reserved for docker buildx builder.
