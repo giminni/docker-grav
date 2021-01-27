@@ -42,18 +42,42 @@ In addition other packages are included:
 This project needs the following prerequisites on the host machine:
 
 * Install at least uuid -v4
+  (MacOSX: brew install ossp-uuid)
+  (Ubuntu: sudo apt install uuid)
+  (Alpine: sudo apk add -U ossp-uuid)
 * Install at least jq >= 1.5
+  (MacOSX: brew install jq)
+  (Ubuntu: sudo apt install jq)
+  (Alpine: sudo apk add -U jq)
 * Install at least openssl >= 1.1.1
+  (MacOSX: brew install openssl@1.1)
+  (Ubuntu: sudo apt install openssl)
+  (Alpine: sudo apk add -U openssl)
 * Install at least docker-ce >= 20.10
   (See <https://docs.docker.com/engine/install>)
 * Install at least docker buildx plugin >= 0.5.0
   (See <https://docs.docker.com/buildx/working-with-buildx>)
 * Install at least getssl >= 2.32
   (See <https://github.com/srvrco/getssl>)
-* Install jq, openssl, uuid, git, tree, vim
-* Install vscode for development with the following extensions:
+  (MacOSX: curl --silent <https://raw.githubusercontent.com/srvrco/getssl/master/getssl> > getssl && chmod 700 getssl && sudo mv getssl /usr/local/bin)
+* Install at least git 2.x
+  (MacOSX: brew install git)
+  (Ubuntu: sudo apt install git)
+  (Alpine: sudo apk add -U git)
+* Install tree
+  (MacOSX: brew install tree)
+  (Ubuntu: sudo apt install tree)
+  (Alpine: sudo apk add -U tree)
+* Install vim
+  (MacOSX: brew install vim)
+  (Ubuntu: sudo apt install vim)
+  (Alpine: sudo apk add -U vim)
+* Install vscode for development
+  (MacOSX: brew install vscode)
+* Add the following vscode extensions:
         - Docker
         - EditorConfig for VS Code
+        - Remote - WSL
         - Remote - Containers
         - Remote - SSH
         - Remote - SSH:Editing
@@ -374,3 +398,7 @@ E.g. `grav/grav:latest` for production images or `grav/grav-admin:testing` for d
 
 * [Docker multiple architectures](https://github.com/docker-library/official-images#multiple-architectures)
 * [Working with buildx](https://docs.docker.com/buildx/working-with-buildx)
+* [Visual Studio Code Tips & Trics](https://code.visualstudio.com/docs/getstarted/tips-and-tricks)
+* [Visual Studio Code MacOSX Shortcuts](https://code.visualstudio.com/shortcuts/keyboard-shortcuts-macos.pdf)
+* [Visual Studio Code Linux Shortcuts](https://code.visualstudio.com/shortcuts/keyboard-shortcuts-linux.pdf)
+* [Visual Studio Code Windows Shortcuts](https://code.visualstudio.com/shortcuts/keyboard-shortcuts-windows.pdf)
