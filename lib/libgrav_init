@@ -44,7 +44,11 @@ function libgrav_init::mk_init() { #-# Public: mk_init() function for grav-mkini
 
          # Replace '# docker-grav #' entries in .bashrc file
          if [[ -e "${HOME}/.bashrc" ]] && [ "${SHELL}" == "/bin/bash" ]; then 
-            sed -i "/# docker-grav #/d" "${HOME}"/.bashrc
+               if [ "${OSTYPE:0:6}" == "darwin" ]; then
+                  sed -i "" "/# docker-grav #/d" "${HOME}"/.bashrc
+               else   
+                  sed -i "/# docker-grav #/d" "${HOME}"/.bashrc
+               fi
             echo "export GRAV_HOME="${HOME_DIR}" # docker-grav #" >>  "${HOME}"/.bashrc
             echo "export GRAV_ROOT="\${GRAV_HOME}/rootfs" # docker-grav #" >>  "${HOME}"/.bashrc
             echo "export GRAV_DOCK="\${GRAV_HOME}/docker" # docker-grav #" >>  "${HOME}"/.bashrc
@@ -62,7 +66,11 @@ function libgrav_init::mk_init() { #-# Public: mk_init() function for grav-mkini
             if [[ ! -e "${HOME}/.bash_aliases" ]]; then 
                touch ${HOME}/.bash_aliases;
             else
-               sed -i "/# docker-grav #/d" ${HOME}/.bash_aliases;
+               if [ "${OSTYPE:0:6}" == "darwin" ]; then
+                  sed -i "" "/# docker-grav #/d" ${HOME}/.bash_aliases;
+               else
+                  sed -i "/# docker-grav #/d" ${HOME}/.bash_aliases;
+               fi
             fi
          fi
 
