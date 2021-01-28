@@ -59,7 +59,7 @@ This project needs the following prerequisites on the host machine:
   (See <https://docs.docker.com/buildx/working-with-buildx>)
 * Install at least getssl >= 2.32
   (See <https://github.com/srvrco/getssl>)
-  (MacOSX: curl --silent <https://raw.githubusercontent.com/srvrco/getssl/master/getssl> > getssl && chmod 700 getssl && sudo mv getssl /usr/local/bin)
+  (MacOSX: `curl --silent https://raw.githubusercontent.com/srvrco/getssl/master/getssl > getssl && chmod 700 getssl && sudo mv getssl /usr/local/bin`)
 * Install at least git 2.x
   (MacOSX: brew install git)
   (Ubuntu: sudo apt install git)
