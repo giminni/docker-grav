@@ -61,6 +61,7 @@ function main() {
    local _OPENSSL_MIN="1.1.1"
    local _GIT_MIN="2.17"
    local _GETSSL_MIN="2.32"
+   local _WGET_MIN="1.20"
 
    if [ ${_ARGC} -lt 1 ]; then 
       libgrav_common::usage 1 \
@@ -80,7 +81,8 @@ function main() {
       "${_JQ_MIN}" \
       "${_OPENSSL_MIN}" \
       "${_GIT_MIN}" \
-      "${_GETSSL_MIN}"
+      "${_GETSSL_MIN}" \
+      "${_WGET_MIN}"
 
    _RC=$?
    

@@ -26,16 +26,18 @@ In addition other packages are included:
 * ca-certificates
 * ccache
 * iputils-ping
-* jq
-* uuid
 * net-tools
 * dropbear
 * openssh-client
-* openssl
 * rsync
 * sudo
-* tree
-* wget
+* tree (>= 1.8.0)
+* jq (>= 1.5)
+* uuid (>= -v4)
+* openssl (>= 1.1.1)
+* git (>= 2.17)
+* getssl (>= 2.32)
+* wget (>= 1.20)
 
 ## Prerequisites
 
@@ -60,11 +62,11 @@ This project needs the following prerequisites on the host machine:
 * Install at least getssl >= 2.32
   (See <https://github.com/srvrco/getssl>)
   (MacOSX: `curl --silent https://raw.githubusercontent.com/srvrco/getssl/master/getssl > getssl && chmod 700 getssl && sudo mv getssl /usr/local/bin`)
-* Install at least git 2.x
+* Install at least git 2.x >=2.17
   (MacOSX: brew install git)
   (Ubuntu: sudo apt install git)
   (Alpine: sudo apk add -U git)
-* Install tree
+* Install tree >=1.8.0
   (MacOSX: brew install tree)
   (Ubuntu: sudo apt install tree)
   (Alpine: sudo apk add -U tree)
@@ -72,6 +74,10 @@ This project needs the following prerequisites on the host machine:
   (MacOSX: brew install vim)
   (Ubuntu: sudo apt install vim)
   (Alpine: sudo apk add -U vim)
+* Install wget
+  (MacOSX: brew install wget)
+  (Ubuntu: sudo apt install wget)
+  (Alpine: sudo apk add -U wget)
 * Install vscode for development
   (MacOSX: brew install vscode)
 * Add the following vscode extensions:

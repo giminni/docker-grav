@@ -15,6 +15,7 @@ function libgrav_init::mk_init() { #-# Public: mk_init() function for grav-mkini
    local _OPENSSL_MIN="${6}"
    local _GIT_MIN="${7}"
    local _GETSSL_MIN="${8}"
+   local _WGET_MIN="${9}"
 
    # Initialize directories
    if [[ ! -d "${CFG_DIR}" ]]; then mkdir -p "${CFG_DIR}"; fi
@@ -28,7 +29,8 @@ function libgrav_init::mk_init() { #-# Public: mk_init() function for grav-mkini
       "${_JQ_MIN}" \
       "${_OPENSSL_MIN}" \
       "${_GIT_MIN}" \
-      "${_GETSSL_MIN}"
+      "${_GETSSL_MIN}" \
+      "${_WGET_MIN}"
 
    case "${_GRAV_CMD}" in
       init)
@@ -60,6 +62,9 @@ function libgrav_init::mk_init() { #-# Public: mk_init() function for grav-mkini
             echo "export GRAV_KEY="\${GRAV_HOME}/key" # docker-grav #" >>  "${HOME}"/.bashrc
             echo "export GRAV_LIB="\${GRAV_HOME}/lib" # docker-grav #" >>  "${HOME}"/.bashrc
             echo "export PATH=\${GRAV_HOME}/bin:\${PATH} # docker-grav #" >> "${HOME}"/.bashrc
+            if [ "${OSTYPE:0:6}" == "darwin" ]; then
+               echo 'export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"' >> "${HOME}"/.bashrc
+            fi
          fi
 
          if [ "${SHELL}" == "/bin/bash" ]; then

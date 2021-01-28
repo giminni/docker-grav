@@ -12,6 +12,7 @@ function libgrav_common::check_prereq() { #-# Public: check_prereq() function fo
    local _OPENSSL_MIN="${5}"
    local _GIT_MIN="${6}"
    local _GETSSL_MIN="${7}"
+   local _WGET_MIN="${8}"
 
    local _UUID_NOW="$(uuid ${_UUID_MIN} >/dev/null && echo "-v4")"
    local _OS_NOW="$(libgrav_common::os_type)"
@@ -22,6 +23,7 @@ function libgrav_common::check_prereq() { #-# Public: check_prereq() function fo
    local _OPENSSL_NOW="$(openssl version |  awk '{print $2}' | tr -dc '0-9.')"
    local _GIT_NOW="$(git --version | awk '{print $3}')"
    local _GETSSL_NOW="$(getssl | head -n 1 | awk '{print $3}')"
+   local _WGET_NOW="$(wget --version | head -n 1 | awk '{print $3}')"
 
    # Important for multi architecture detection
    local _DISTRO_NOW="$(cat /etc/*release 2>/dev/null | grep -w ID | cut -d'=' -f2)"
@@ -41,6 +43,8 @@ function libgrav_common::check_prereq() { #-# Public: check_prereq() function fo
       libgrav_common::error 2 "Error: Required version of git is not available or met.\nPlease install at least required version: ${_GIT_MIN}." "${NAME}"
    elif [ $(libgrav_common::version "${_GETSSL_NOW}") -lt $(libgrav_common::version ${_GETSSL_MIN}) ]; then 
       libgrav_common::error 2 "Error: Required version of getssl is not available or met.\nPlease install at least required version: ${_GETSSL_MIN}." "${NAME}"
+   elif [ $(libgrav_common::version "${_WGET_NOW}") -lt $(libgrav_common::version ${_WGET_MIN}) ]; then 
+      libgrav_common::error 2 "Error: Required version of getssl is not available or met.\nPlease install at least required version: ${_WGET_MIN}." "${NAME}"
    fi
 
    # Set global directory variables
