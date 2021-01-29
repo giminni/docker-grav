@@ -402,6 +402,7 @@ E.g. `grav/grav:latest` for production images or `grav/grav-admin:testing` for d
 
 ## References
 
+* [Grav v1.7 Documentation](https://learn.getgrav.org/17)
 * [Docker multiple architectures](https://github.com/docker-library/official-images#multiple-architectures)
 * [Working with buildx](https://docs.docker.com/buildx/working-with-buildx)
 * [Visual Studio Code Tips & Trics](https://code.visualstudio.com/docs/getstarted/tips-and-tricks)
