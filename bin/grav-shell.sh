@@ -54,7 +54,7 @@ function main() {
    local _GRAV_NOTE=" Note: (*) are default values, (#) are recommended values"
    local _GRAV_ARG1=" Arg1: [img-name]: any|(#)         - (#=grav)"
    local _GRAV_ARG2=" Arg2: shell-type: (*)|sh|ash|bash - (*=<current-shell>)"
-   local _GRAV_INFO=" Info: ${CMD} bash grav"
+   local _GRAV_INFO=" Info: ${CMD} grav bash"
    local _GRAV_HELP=" Help: ${CMD}: Open a named shell into the running container depending from some entered arguments. (See Note, Info and Args)"
 
    if [ ${_ARGC} -lt 1 ]; then 
