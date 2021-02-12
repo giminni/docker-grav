@@ -8,6 +8,7 @@
 **/.pycache
 **/.config**
 **/.context
+**/cert/**
 **/data/**
 **/.vscode
 **/.idea
@@ -24,6 +25,7 @@
 
 # Include pattern only in .gitignore
 !cache/.gitkeep
+!cert/.gitkeep
 !cfg/.gitkeep
 !data/.gitkeep 
 !key/.gitkeep
