@@ -56,8 +56,8 @@ function main() {
    local _GRAV_ARG2=" Arg2: [img-name]: any|(*) - (*=grav-admin)"
    local _GRAV_ARG3=" Arg3: [tag-name]: any|(*) - (*=latest)"
    local _GRAV_ARG4=" Arg4: [run-mode]: n|d|(*) - (*=(n)ormal,(d)debug)"
-   local _GRAV_ARG5=" Arg5: [vol-data]: any|(*) - (*=data)"
-   local _GRAV_ARG6=" Arg6: [vol-cert]: any|(*) - (*=cert)"
+   local _GRAV_ARG5=" Arg5: [vol-data]: any|(*) - (*=grav_data)"
+   local _GRAV_ARG6=" Arg6: [vol-cert]: any|(*) - (*=grav_cert)"
    local _GRAV_INFO=" Info: ${CMD} grav grav-admin latest n data cert"
    local _GRAV_HELP=" Help: ${CMD}: Instantiate a docker container depending from some entered arguments. (See Note, Info and Args)"
 
