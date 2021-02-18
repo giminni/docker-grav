@@ -6,9 +6,13 @@ GRAV_FILE="${GRAV_BACK##*/}"
 GRAV_ROOT="/var/www"
 GRAV_HOME="${GRAV_ROOT}/grav-admin"
 
-scp "${GRAV_BACK}" "${GRAV_ROOT}"
-rm -rf "${GRAV_HOME}/.??*"
 find "${GRAV_HOME}" -xdev -depth -mindepth 1 -exec rm -Rf {} \;
+
+
+if [ ! -e ${GRAV_ROOT}/${GRAV_FILE}.zip ]; then
+   scp "${GRAV_BACK}" "${GRAV_ROOT}"
+fi
+
 cd "${GRAV_HOME}"
 unzip ../"${GRAV_FILE}".zip
 find ./ -type d -exec chmod 750 {} \;
