@@ -78,7 +78,7 @@ ENV DEBIAN_FRONTEND="${DEBIAN_FRONTEND:-"noninteractive"}" \
     APACHE_LOG_DIR="${APACHE_LOG_DIR:-"/tmp"}"
 
 # Copy runlet stubs into /usr/local/bin directory
-COPY docker/runlet-head.sh docker/runlet-tail.sh /usr/local/bin/
+COPY docker/runlet-head.sh docker/runlet-tail.sh bin/grav-restore.sh /usr/local/bin/
 
 # Create local APT installation cache
 RUN --mount=type=cache,id=apt,target=/var/cache/apt \
