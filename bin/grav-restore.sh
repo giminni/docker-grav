@@ -5,6 +5,7 @@ GRAV_ARG1="${1:-""}"
 GRAV_BACK="${GRAV_ARG1##*/}"
 GRAV_ROOT="/var/www"
 GRAV_HOME="${GRAV_ROOT}/grav-admin"
+GRAV_LINK="${GRAV_ROOT}/html"
 
 if [ -e "${GRAV_ROOT}/${GRAV_BACK}".zip ]; then
 	GRAV_FILE="$(ls ${GRAV_ROOT}/${GRAV_BACK} | sed -r 's/^.+\///')"
@@ -42,4 +43,12 @@ echo "Change file permissions to 660..."
 find ./ -type f -exec chmod 660 {} \;
 echo "Set execute flag in ${GRAV_HOME}/bin directory..."
 chmod +x "${GRAV_HOME}"/bin/*
+
+if [ ! -h "${GRAV_LINK}" ]; then
+   echo "Link ${GRAV_LINK} added..."
+   ln -s "${GRAV_HOME}" "${GRAV_LINK}"
+else
+   echo "Link ${GRAV_LINK} exists..."
+fi
+
 echo "... restore operation done!"
