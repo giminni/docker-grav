@@ -48,7 +48,13 @@ if [ ! -h "${GRAV_LINK}" ]; then
    echo "Link ${GRAV_LINK} added..."
    ln -s "${GRAV_HOME}" "${GRAV_LINK}"
 else
-   echo "Link ${GRAV_LINK} exists..."
+   if [ ! -e "${GRAV_LINK}/user/config/site.yaml" ]; then
+     echo "Link ${GRAV_LINK} readded..."
+     rm -rf "${GRAV_LINK}"
+     ln -s "${GRAV_HOME}" "${GRAV_LINK}"
+   else
+     echo "Link ${GRAV_LINK} exists..."
+  fi
 fi
 
 echo "... restore operation done!"
