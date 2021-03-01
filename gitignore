@@ -1,0 +1,32 @@
+# Exclude pattern for GitHub context
+**/.aptcache
+**/.apkcache
+**/.ccache
+**/.dcache
+**/.gocache
+**/.phpcache
+**/.pycache
+**/.config**
+**/.context
+**/cert/**
+**/data/**
+**/.vscode
+**/.idea
+**/.DS_store
+**/node_modules
+**/*.org
+**/*.swp
+
+# Exclude pattern only in .gitignore
+**/*.c
+**/*_rsa**
+**/*.key
+**/*zip
+
+# Include pattern only in .gitignore
+!cache/.gitkeep
+!cert/.gitkeep
+!cfg/.gitkeep
+!data/.gitkeep 
+!key/.gitkeep
+!rootfs/tmp/grav/core/.gitkeep
