@@ -1,16 +1,28 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-GRAV_ARG1="${1:-""}"
-GRAV_BACK="${GRAV_ARG1##*/}"
+GRAV_FILE="${1-"Undefined"}"
+GRAV_HOST="${2:-"172.17.0.1"}"
+GRAV_PATH="${3:-"/Users/de067018/Shared/Documents/Bea/WG29/Website/Baselines"}"
+GRAV_PORT="${4:-22}"
+GRAV_USER="${5:-"de067018"}"
+
+GRAV_BACK="${GRAV_FILE##*/}"
 GRAV_ROOT="/var/www"
 GRAV_HOME="${GRAV_ROOT}/grav-admin"
 GRAV_LINK="${GRAV_ROOT}/html"
 
+if [ "${GRAV_FILE}" == "Undefined" ]; then
+        echo "  Error: Filename not found!"
+        echo "  Usage: ${0} <file_name> [host_name=${GRAV_HOST}] [file_path=${GRAV_PATH}] [host_port=${GRAV_PORT}] [user_name=${GRAV_USER}]"
+        echo "Example: ${0} *20210311* ${GRAV_HOST} ${GRAV_PATH} ${GRAV_PORT} ${GRAV_USER}"
+        exit
+fi
+
 if [ -e "${GRAV_ROOT}/${GRAV_BACK}".zip ]; then
-	GRAV_FILE="$(ls ${GRAV_ROOT}/${GRAV_BACK} | sed -r 's/^.+\///')"
+        GRAV_FILE="$(ls ${GRAV_ROOT}/${GRAV_BACK} | sed -r 's/^.+\///')"
 else
-	GRAV_FILE="${GRAV_BACK}".zip
+        GRAV_FILE="${GRAV_BACK}".zip
 fi
 
 echo "Start restore operation..."
@@ -26,7 +38,7 @@ fi
 
 if [ ! -e ${GRAV_ROOT}/${GRAV_FILE} ]; then
    echo "Download ${GRAV_ROOT}/${GRAV_FILE} file..."
-   scp "${GRAV_ARG1}" "${GRAV_ROOT}"
+   scp -P ${GRAV_PORT} -i "${HOME}/.ssh/id_rsa" "${GRAV_USER}@${GRAV_HOST}:${GRAV_PATH}/${GRAV_FILE}" "${GRAV_ROOT}"
 else
    echo "Zip file ${GRAV_ROOT}/${GRAV_FILE} file exists..."
 fi
