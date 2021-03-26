@@ -125,23 +125,23 @@ function libgrav_docker::run() { #-# Public: run() function for grav-run.sh scri
    # Run container in normal or debug mode
    if [ "${_GRAV_MODE}" == "n" ]; then
       _GRAV_OPER="-d"
-      _GRAV_RUN="init"
+      _GRAV_RUN="init ${_GRAV_USER}"
    else
       _GRAV_OPER="-ti"
-      _GRAV_RUN="bash"
+      _GRAV_RUN="bash ${_GRAV_USER}"
    fi
 
    sudo docker run ${_GRAV_OPER} \
       --init \
-      --name ${_GRAV_NAME} \
-      --hostname ${_GRAV_NAME}p01 \
+      --name "${_GRAV_NAME}" \
+      --hostname "${_GRAV_NAME}"p01 \
       --restart always \
       --publish 0.0.0.0:8080:80/tcp \
       --publish 0.0.0.0:8443:443/tcp \
       --publish 0.0.0.0:2222:22/tcp \
-      --mount type=volume,src=${_GRAV_DATA},dst=/var/www/html \
-      --mount type=volume,src=${_GRAV_CERT},dst=/var/www/cert \
-      ${_GRAV_USER}/${_GRAV_NAME}:${_GRAV_TAG} "${_GRAV_RUN}"
+      --mount type=volume,src="${_GRAV_DATA}",dst=/var/www/html \
+      --mount type=volume,src="${_GRAV_CERT}",dst=/var/www/cert \
+      "${_GRAV_USER}/${_GRAV_NAME}:${_GRAV_TAG}" "${_GRAV_RUN}"
 
       _RC=$?
 
@@ -157,8 +157,8 @@ function libgrav_docker::shell() { #-# Public: shell() function for grav-shell.s
    local _GRAV_SHELL="${2}"
 
    sudo docker exec -ti \
-      ${_GRAV_NAME} \
-      ${_GRAV_SHELL}
+      "${_GRAV_NAME}" \
+      "${_GRAV_SHELL}"
 
    _RC=$?
 
