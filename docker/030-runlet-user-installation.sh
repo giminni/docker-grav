@@ -14,8 +14,8 @@ useradd \
      --home-dir /home/${GRAV_USER} \
      --comment "Standard SSH user (DO NOT REMOVE)" \
 ${GRAV_USER}
-echo "Adding ${GRAV_USER} to user group www-data..."
-usermod -a -G www-data ${GRAV_USER}
+echo "Adding ${GRAV_USER} to user group www-data and tty..."
+usermod -a -G www-data,tty ${GRAV_USER}
 echo "Creating ${GRAV_USER} SSH directory..."
 mkdir -vp /home/${GRAV_USER}/.ssh
 touch /home/${GRAV_USER}/.ssh/known_hosts
